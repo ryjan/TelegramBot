@@ -1,5 +1,4 @@
-package org.ryjan.telegram.misc;
-
+package org.ryjan.telegram.json.parsing;
 
 import javax.json.Json;
 import javax.json.JsonObject;
@@ -7,12 +6,12 @@ import javax.json.JsonReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
-public class Misc {
+public class DatabaseJsonParse {
 
     public static String getConnectionString() {
-        ClassLoader classLoader = Misc.class.getClassLoader();
+        ClassLoader classLoader = DatabaseJsonParse.class.getClassLoader();
 
-        try (InputStream inputStream = classLoader.getResourceAsStream("databaseJsons/config.json")) {
+        try (InputStream inputStream = classLoader.getResourceAsStream("botSettings/config.json")) {
             if (inputStream == null) {
                 System.out.println("No config.json found");
             }
