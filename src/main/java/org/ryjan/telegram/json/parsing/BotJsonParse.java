@@ -39,4 +39,20 @@ public class BotJsonParse {
         }
         return "";
     }
+
+    public static String getOwner() {
+        ClassLoader classLoader = DatabaseJsonParse.class.getClassLoader();
+
+        try (InputStream inputStream = classLoader.getResourceAsStream("botSettings/config.json")) {
+            if (inputStream == null) {
+                System.out.println("No config.json found");
+            }
+            JsonReader jsonReader = Json.createReader(new InputStreamReader(inputStream));
+            JsonObject jsonObject = jsonReader.readObject();
+            return jsonObject.getJsonObject("Bot").getString("owner");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return "";
+    }
 }
