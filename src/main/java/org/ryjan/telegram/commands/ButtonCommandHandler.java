@@ -10,6 +10,7 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMa
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow;
+import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -20,12 +21,12 @@ public class ButtonCommandHandler { // сделать IBotCommand абстрак
 
     private final BotMain bot;
     private final Map<String, IBotCommand> commands;
-
+    // сделать List buttons и сделать все по удобному
     public ButtonCommandHandler(BotMain bot) {
         this.bot = bot;
         this.commands = new HashMap<>();
 
-        commands.put("/start", new StartCommand());
+        commands.put("start", new StartCommand());
     }
 
     public void sendMenu(String chatId) {
@@ -41,12 +42,19 @@ public class ButtonCommandHandler { // сделать IBotCommand абстрак
         InlineKeyboardButton button = new InlineKeyboardButton();
         button.setText("Нажми");
         button.setCallbackData("start"); // до сюда
+
         row.add(button);
 
         keyboard.add(row);
         keyboardMarkup.setKeyboard(keyboard);
 
         message.setReplyMarkup(keyboardMarkup);
+
+        try {
+            bot.execute(message);
+        } catch (TelegramApiException e) {
+            e.printStackTrace();
+        }
     }
 
     public void handleCommand(Update update) {
