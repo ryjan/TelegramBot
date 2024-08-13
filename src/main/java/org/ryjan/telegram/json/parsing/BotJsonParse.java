@@ -8,51 +8,31 @@ import java.io.InputStreamReader;
 
 public class BotJsonParse {
 
-    public static String getBotName() {
+    private static String getStringFromJson(String path, String object, String str) {
         ClassLoader classLoader = DatabaseJsonParse.class.getClassLoader();
 
-        try (InputStream inputStream = classLoader.getResourceAsStream("botSettings/config.json")) {
+        try (InputStream inputStream = classLoader.getResourceAsStream(path)) {
             if (inputStream == null) {
                 System.out.println("No config.json found");
             }
             JsonReader jsonReader = Json.createReader(new InputStreamReader(inputStream));
             JsonObject jsonObject = jsonReader.readObject();
-            return jsonObject.getJsonObject("Bot").getString("name");
+            return jsonObject.getJsonObject(object).getString(str);
         } catch (Exception e) {
             e.printStackTrace();
         }
         return "";
+    }
+
+    public static String getBotName() {
+        return getStringFromJson("botSettings/config.json", "Bot", "name");
     }
 
     public static String getBotToken() {
-        ClassLoader classLoader = DatabaseJsonParse.class.getClassLoader();
-
-        try (InputStream inputStream = classLoader.getResourceAsStream("botSettings/config.json")) {
-            if (inputStream == null) {
-                System.out.println("No config.json found");
-            }
-            JsonReader jsonReader = Json.createReader(new InputStreamReader(inputStream));
-            JsonObject jsonObject = jsonReader.readObject();
-            return jsonObject.getJsonObject("Bot").getString("token");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return "";
+        return getStringFromJson("botSettings/config.json", "Bot", "token");
     }
 
     public static String getOwner() {
-        ClassLoader classLoader = DatabaseJsonParse.class.getClassLoader();
-
-        try (InputStream inputStream = classLoader.getResourceAsStream("botSettings/config.json")) {
-            if (inputStream == null) {
-                System.out.println("No config.json found");
-            }
-            JsonReader jsonReader = Json.createReader(new InputStreamReader(inputStream));
-            JsonObject jsonObject = jsonReader.readObject();
-            return jsonObject.getJsonObject("Bot").getString("owner");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return "";
+        return getStringFromJson("botSettings/config.json", "Bot", "owner");
     }
 }

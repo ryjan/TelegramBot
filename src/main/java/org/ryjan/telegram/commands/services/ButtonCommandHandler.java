@@ -1,15 +1,13 @@
-package org.ryjan.telegram.commands;
+package org.ryjan.telegram.commands.services;
 
-import org.ryjan.telegram.commands.user.StartCommand;
-import org.ryjan.telegram.interfaces.IBotCommand;
+import org.ryjan.telegram.commands.button.user.OwnerCommand;
+import org.ryjan.telegram.commands.button.user.StartCommand;
+import org.ryjan.telegram.commands.interfaces.IBotCommand;
 import org.ryjan.telegram.main.BotMain;
 
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 import java.util.ArrayList;
@@ -20,13 +18,19 @@ import java.util.Map;
 public class ButtonCommandHandler { // сделать IBotCommand абстрактным классом
 
     private final BotMain bot;
+    private final Map<String, IBotCommand>  nonButtonCommands;
     private final Map<String, IBotCommand> commands;
+
     // сделать List buttons и сделать все по удобному
     public ButtonCommandHandler(BotMain bot) {
         this.bot = bot;
+        this.nonButtonCommands = new HashMap<>();
         this.commands = new HashMap<>();
 
-        commands.put("start", new StartCommand());
+        nonButtonCommands.put("/start", new StartCommand());
+        nonButtonCommands.put("/owner", new OwnerCommand());
+
+        commands.put("owner", new OwnerCommand());
     }
 
     public void sendMenu(String chatId) {
@@ -34,21 +38,14 @@ public class ButtonCommandHandler { // сделать IBotCommand абстрак
         message.setChatId(chatId);
         message.setText("Выберите опцию: ");
 
-        InlineKeyboardMarkup keyboardMarkup = new InlineKeyboardMarkup();
+        InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
 
-        List<List<InlineKeyboardButton>> keyboard = new ArrayList<>();
+        KeyboardBuilder.KeyboardLayer keyboard = new KeyboardBuilder.KeyboardLayer()
+                        .addRow(new KeyboardBuilder.ButtonRow().addButton("Владелец", "owner"));
+        inlineKeyboardMarkup.setKeyboard(keyboard.build());
 
-        List<InlineKeyboardButton> row = new ArrayList<>(); // отсюда(создание кнопки)
-        InlineKeyboardButton button = new InlineKeyboardButton();
-        button.setText("Нажми");
-        button.setCallbackData("start"); // до сюда
 
-        row.add(button);
-
-        keyboard.add(row);
-        keyboardMarkup.setKeyboard(keyboard);
-
-        message.setReplyMarkup(keyboardMarkup);
+        message.setReplyMarkup(inlineKeyboardMarkup);
 
         try {
             bot.execute(message);
@@ -65,14 +62,20 @@ public class ButtonCommandHandler { // сделать IBotCommand абстрак
             IBotCommand command = commands.get(callbackData);
 
             if (command != null) {
-                command.execute(chatId, bot);
+                command.execute(chatId, bot, this);
             } else {
                 bot.sendMessage(chatId, "Неизвестная команда!");
             }
         } else {
             String chatId = update.getMessage().getChatId().toString();
-            IBotCommand command = new StartCommand();
-            command.execute(chatId, bot);
+            String message = update.getMessage().getText();
+            IBotCommand command = nonButtonCommands.get(message);
+
+            if (command != null) {
+                command.execute(chatId, bot, this);
+            } else {
+                bot.sendMessage(chatId, "Неизвестная команда!");
+            }
         }
     }
 

@@ -2,7 +2,7 @@ package org.ryjan.telegram.main;
 
 
 import com.sun.tools.javac.Main;
-import org.ryjan.telegram.commands.ButtonCommandHandler;
+import org.ryjan.telegram.commands.services.ButtonCommandHandler;
 import org.ryjan.telegram.config.BotConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
