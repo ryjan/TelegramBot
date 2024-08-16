@@ -2,8 +2,11 @@ package org.ryjan.telegram.main;
 
 
 import com.sun.tools.javac.Main;
-import org.ryjan.telegram.commands.services.ButtonCommandHandler;
+import org.ryjan.telegram.commands.utils.ButtonCommandHandler;
 import org.ryjan.telegram.config.BotConfig;
+import org.ryjan.telegram.database.User;
+import org.ryjan.telegram.interfaces.UserDAO;
+import org.ryjan.telegram.services.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
@@ -29,6 +32,10 @@ public class BotMain extends TelegramLongPollingBot {
         try {
             TelegramBotsApi botsApi = new TelegramBotsApi(DefaultBotSession.class);
             botsApi.registerBot(new BotMain());
+            UserService userService = new UserService();
+            User user = new User("Ryjan4ik", "Owner");
+            userService.save(user);
+
             LOGGER.info("Bot started successfully!");
         } catch (TelegramApiException e) {
             LOGGER.error("Error occurred while initializing Bot", e);

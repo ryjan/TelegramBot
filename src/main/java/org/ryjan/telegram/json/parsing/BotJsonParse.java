@@ -35,4 +35,12 @@ public class BotJsonParse {
     public static String getOwner() {
         return getStringFromJson("botSettings/config.json", "Bot", "owner");
     }
+
+    public static String getChatGPTToken() {
+        return getStringFromJson("botSettings/config.json", "ChatGPT", "token");
+    }
+
+    public static String getChatGPTUrl() {
+        return getStringFromJson("botSettings/config.json", "ChatGPT", "url");
+    }
 }

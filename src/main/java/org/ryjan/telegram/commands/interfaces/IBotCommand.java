@@ -1,6 +1,6 @@
 package org.ryjan.telegram.commands.interfaces;
 
-import org.ryjan.telegram.commands.services.ButtonCommandHandler;
+import org.ryjan.telegram.commands.utils.ButtonCommandHandler;
 import org.ryjan.telegram.main.BotMain;
 
 public interface IBotCommand {

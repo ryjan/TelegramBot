@@ -1,4 +1,4 @@
-package org.ryjan.telegram.commands.services;
+package org.ryjan.telegram.commands.utils;
 
 import org.ryjan.telegram.commands.button.user.OwnerCommand;
 import org.ryjan.telegram.commands.button.user.StartCommand;
@@ -10,9 +10,7 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class ButtonCommandHandler { // сделать IBotCommand абстрактным классом
