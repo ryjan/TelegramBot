@@ -13,30 +13,42 @@ import java.util.List;
 public class Bank {
 
     @Id
-    @GeneratedValue (strategy = GenerationType.SEQUENCE, generator = "user_seq")
     @Column (name = "id")
     private int id;
+    @Column(name = "tag")
+    private String tag;
     @Column (name = "gems")
     private BigDecimal gems;
     @Column (name = "coins")
     private BigDecimal coins;
 
     @OneToOne
-    @JoinColumn(name = "id")
+    @MapsId
+    @JoinColumn(name = "id", referencedColumnName = "id")
     private User user;
 
     public Bank() {
 
     }
 
+    public Bank(String tag) {
+        this.tag = tag;
+        this.gems = new BigDecimal(0);
+        this.coins = new BigDecimal(0);
+    }
+
     public Bank(BigDecimal gems, BigDecimal coins) {
         this.gems = gems;
         this.coins = coins;
-        user = new User();
+        this.user = new User();
     }
 
     public int getId() {
         return id;
+    }
+
+    public String getTag() {
+        return tag;
     }
 
     public BigDecimal getGems() {
@@ -51,6 +63,10 @@ public class Bank {
         return user;
     }
 
+    public void setTag(String tag) {
+        this.tag = tag;
+    }
+
     public void setGems(BigDecimal gems) {
         this.gems = gems;
     }
@@ -61,6 +77,13 @@ public class Bank {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public Bank createBank(User user) {
+        Bank bank = new Bank();
+        bank.setUser(user);
+        bank.setTag(user.getUserTag());
+        return bank;
     }
 
     @Override

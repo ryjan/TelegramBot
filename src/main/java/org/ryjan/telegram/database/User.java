@@ -19,7 +19,7 @@ public class User {
     @Column (name = "user_group")
     private String userGroup;
 
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "user")
+    @OneToOne(mappedBy = "user" ,cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Bank bank;
 
     public User() {
@@ -29,6 +29,8 @@ public class User {
     public User(String userTag, String userGroup) {
         this.userTag = userTag;
         this.userGroup = userGroup;
+        this.bank = new Bank(userTag);
+        setBank(bank);
     }
 
     public int getId() {
@@ -57,6 +59,7 @@ public class User {
 
     public void setBank(Bank bank) {
         this.bank = bank;
+        bank.setUser(this);
     }
 
     @Override
