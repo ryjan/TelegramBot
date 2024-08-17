@@ -8,9 +8,9 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 public class OwnerCommand implements IBotCommand {
 
     @Override
-    public void execute(String charId, BotMain bot, ButtonCommandHandler commandHandler) {
+    public void execute(String chatId, BotMain bot, ButtonCommandHandler commandHandler) {
         SendMessage sendMessage = new SendMessage();
-        sendMessage.setChatId(charId);
+        sendMessage.setChatId(chatId);
         sendMessage.setText("Создатель : @Ryjan4ik");
 
         try {

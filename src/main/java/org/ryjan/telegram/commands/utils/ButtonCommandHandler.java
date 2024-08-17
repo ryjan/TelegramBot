@@ -1,6 +1,7 @@
 package org.ryjan.telegram.commands.utils;
 
 import org.ryjan.telegram.commands.button.user.OwnerCommand;
+import org.ryjan.telegram.commands.button.user.QuestionChatGPTCommand;
 import org.ryjan.telegram.commands.button.user.StartCommand;
 import org.ryjan.telegram.commands.interfaces.IBotCommand;
 import org.ryjan.telegram.main.BotMain;
@@ -27,8 +28,10 @@ public class ButtonCommandHandler { // сделать IBotCommand абстрак
 
         nonButtonCommands.put("/start", new StartCommand());
         nonButtonCommands.put("/owner", new OwnerCommand());
+        nonButtonCommands.put("/askchatgpt", new QuestionChatGPTCommand());
 
         commands.put("owner", new OwnerCommand());
+        commands.put("askchatgpt", new QuestionChatGPTCommand());
     }
 
     public void sendMenu(String chatId) {
@@ -39,7 +42,9 @@ public class ButtonCommandHandler { // сделать IBotCommand абстрак
         InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
 
         KeyboardBuilder.KeyboardLayer keyboard = new KeyboardBuilder.KeyboardLayer()
-                        .addRow(new KeyboardBuilder.ButtonRow().addButton("Владелец", "owner"));
+                        .addRow(new KeyboardBuilder.ButtonRow()
+                                .addButton("Владелец", "owner")
+                                .addButton("ChatGPT-4", "askchatgpt"));
         inlineKeyboardMarkup.setKeyboard(keyboard.build());
 
 

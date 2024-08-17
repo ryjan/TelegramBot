@@ -4,5 +4,5 @@ import org.ryjan.telegram.commands.utils.ButtonCommandHandler;
 import org.ryjan.telegram.main.BotMain;
 
 public interface IBotCommand {
-    void execute(String charId, BotMain bot, ButtonCommandHandler buttonCommandHandler);
+    void execute(String chatId, BotMain bot, ButtonCommandHandler buttonCommandHandler);
 }
