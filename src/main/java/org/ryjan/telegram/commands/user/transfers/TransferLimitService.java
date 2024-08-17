@@ -1,9 +1,7 @@
-package org.ryjan.telegram.services;
+package org.ryjan.telegram.commands.user.transfers;
 
-import org.ryjan.telegram.commands.TransferLimit;
 import org.ryjan.telegram.config.BotConfig;
 import org.ryjan.telegram.database.UserDatabase;
-import org.ryjan.telegram.repository.TransferLimitRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -42,7 +40,7 @@ public class TransferLimitService {
     }
 
     private TransferLimit getOrCreateLimit(UserDatabase userDatabase) {
-        TransferLimit limit = transferLimitRepository.findByUser(userDatabase);
+        TransferLimit limit = transferLimitRepository.findByUserDatabase(userDatabase);
         if (limit == null) {
             limit = new TransferLimit();
             limit.setUserDatabase(userDatabase);

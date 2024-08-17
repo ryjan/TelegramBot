@@ -1,11 +1,13 @@
-package org.ryjan.telegram.commands.utils;
+package org.ryjan.telegram.handler;
 
+import org.ryjan.telegram.commands.user.SendCoins;
 import org.ryjan.telegram.commands.user.button.OwnerCommand;
 import org.ryjan.telegram.commands.user.button.QuestionChatGPTCommand;
 import org.ryjan.telegram.commands.user.button.StartCommand;
 import org.ryjan.telegram.commands.interfaces.IBotCommand;
 import org.ryjan.telegram.commands.owner.OwnerCommandsList;
 import org.ryjan.telegram.commands.owner.SetCoins;
+import org.ryjan.telegram.commands.utils.KeyboardBuilder;
 import org.ryjan.telegram.main.BotMain;
 
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
@@ -30,14 +32,7 @@ public class ButtonCommandHandler { // сделать IBotCommand абстрак
         this.nonButtonCommands = new HashMap<>();
         this.commands = new HashMap<>();
 
-        nonButtonCommands.put("/start", new StartCommand());
-        nonButtonCommands.put("/owner", new OwnerCommand());
-//        nonButtonCommands.put("/askchatgpt", new QuestionChatGPTCommand());
-        nonButtonCommands.put("/setcoins", new SetCoins());
-        nonButtonCommands.put("/helpowner", new OwnerCommandsList());
-
-        commands.put("owner", new OwnerCommand());
-        commands.put("askchatgpt", new QuestionChatGPTCommand());
+        initializeCommands();
     }
 
     public void sendMenu(String chatId) {
@@ -96,6 +91,17 @@ public class ButtonCommandHandler { // сделать IBotCommand абстрак
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    private void initializeCommands() {
+        nonButtonCommands.put("/start", new StartCommand());
+        nonButtonCommands.put("/owner", new OwnerCommand());
+        nonButtonCommands.put("/setcoins", new SetCoins());
+        nonButtonCommands.put("/helpowner", new OwnerCommandsList());
+        nonButtonCommands.put("/sendcoins", new SendCoins());
+
+        commands.put("owner", new OwnerCommand());
+        commands.put("askchatgpt", new QuestionChatGPTCommand());
     }
 
     public boolean containsCommand(String command) {

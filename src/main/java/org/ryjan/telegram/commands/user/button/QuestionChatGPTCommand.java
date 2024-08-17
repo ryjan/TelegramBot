@@ -1,7 +1,7 @@
 package org.ryjan.telegram.commands.user.button;
 
 import org.ryjan.telegram.commands.interfaces.IBotCommand;
-import org.ryjan.telegram.commands.utils.ButtonCommandHandler;
+import org.ryjan.telegram.handler.ButtonCommandHandler;
 import org.ryjan.telegram.main.BotMain;
 import org.ryjan.telegram.services.ChatGPTService;
 import org.ryjan.telegram.utils.UpdateContext;

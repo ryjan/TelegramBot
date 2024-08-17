@@ -1,7 +1,7 @@
 package org.ryjan.telegram.commands.owner;
 
 import org.ryjan.telegram.commands.interfaces.IBotCommand;
-import org.ryjan.telegram.commands.utils.ButtonCommandHandler;
+import org.ryjan.telegram.handler.ButtonCommandHandler;
 import org.ryjan.telegram.database.BankDatabase;
 import org.ryjan.telegram.database.UserDatabase;
 import org.ryjan.telegram.main.BotMain;

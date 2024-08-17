@@ -2,7 +2,7 @@ package org.ryjan.telegram.commands.owner;
 
 import org.ryjan.telegram.commands.user.button.OwnerCommand;
 import org.ryjan.telegram.commands.interfaces.IBotCommand;
-import org.ryjan.telegram.commands.utils.ButtonCommandHandler;
+import org.ryjan.telegram.handler.ButtonCommandHandler;
 import org.ryjan.telegram.main.BotMain;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 

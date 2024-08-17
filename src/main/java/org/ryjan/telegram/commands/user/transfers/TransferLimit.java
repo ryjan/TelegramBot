@@ -1,10 +1,9 @@
-package org.ryjan.telegram.commands;
+package org.ryjan.telegram.commands.user.transfers;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToOne;
 import org.ryjan.telegram.database.UserDatabase;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
