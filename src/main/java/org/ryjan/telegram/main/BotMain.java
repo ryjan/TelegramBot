@@ -2,20 +2,24 @@ package org.ryjan.telegram.main;
 
 
 import com.sun.tools.javac.Main;
+
 import org.ryjan.telegram.commands.utils.ButtonCommandHandler;
 import org.ryjan.telegram.config.BotConfig;
-import org.ryjan.telegram.database.Bank;
-import org.ryjan.telegram.database.User;
-import org.ryjan.telegram.interfaces.UserDAO;
+import org.ryjan.telegram.database.BankDatabase;
+import org.ryjan.telegram.database.UserDatabase;
 import org.ryjan.telegram.services.UserService;
+
+import org.ryjan.telegram.utils.UserGroup;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.TelegramBotsApi;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.telegram.telegrambots.updatesreceivers.DefaultBotSession;
+import org.telegram.telegrambots.meta.api.objects.User;
 
 import java.math.BigDecimal;
 
@@ -35,11 +39,14 @@ public class BotMain extends TelegramLongPollingBot {
         try {
             TelegramBotsApi botsApi = new TelegramBotsApi(DefaultBotSession.class);
             botsApi.registerBot(new BotMain());
+
             UserService userService = new UserService();
-            User user = new User("Ryjan4ik", "Owner");
-            Bank userBank = user.getBank();
-            userBank.setGems(BigDecimal.valueOf(99999));
-            userService.save(user);
+            UserDatabase user = userService.findById(8);
+            BankDatabase userBank = user.getBank();
+            userBank.setGems(BigDecimal.valueOf(-123));
+            user.setUserTag("Ryjan");
+            user.setUserGroup(UserGroup.FAMILY);
+            userService.update(user);
 
             LOGGER.info("Bot started successfully!");
         } catch (TelegramApiException e) {

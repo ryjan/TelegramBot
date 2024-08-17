@@ -4,13 +4,11 @@ package org.ryjan.telegram.database;
 import jakarta.persistence.*;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @SequenceGenerator(name = "user_seq", sequenceName = "user_id_seq", allocationSize = 1)
 @Table (name = "bank")
-public class Bank {
+public class BankDatabase {
 
     @Id
     @Column (name = "id")
@@ -25,22 +23,23 @@ public class Bank {
     @OneToOne
     @MapsId
     @JoinColumn(name = "id", referencedColumnName = "id")
-    private User user;
+    private UserDatabase userDatabase;
 
-    public Bank() {
-
+    public BankDatabase() {
+        this.gems = new BigDecimal(0);
+        this.coins = new BigDecimal(0);
     }
 
-    public Bank(String tag) {
+    public BankDatabase(String tag) {
         this.tag = tag;
         this.gems = new BigDecimal(0);
         this.coins = new BigDecimal(0);
     }
 
-    public Bank(BigDecimal gems, BigDecimal coins) {
+    public BankDatabase(BigDecimal gems, BigDecimal coins) {
         this.gems = gems;
         this.coins = coins;
-        this.user = new User();
+        this.userDatabase = new UserDatabase();
     }
 
     public int getId() {
@@ -59,8 +58,8 @@ public class Bank {
         return coins;
     }
 
-    public User getUser() {
-        return user;
+    public UserDatabase getUser() {
+        return userDatabase;
     }
 
     public void setTag(String tag) {
@@ -75,15 +74,15 @@ public class Bank {
         this.coins = coins;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setUser(UserDatabase userDatabase) {
+        this.userDatabase = userDatabase;
     }
 
-    public Bank createBank(User user) {
-        Bank bank = new Bank();
-        bank.setUser(user);
-        bank.setTag(user.getUserTag());
-        return bank;
+    public BankDatabase createBank(UserDatabase userDatabase) {
+        BankDatabase bankDatabase = new BankDatabase();
+        bankDatabase.setUser(userDatabase);
+        bankDatabase.setTag(userDatabase.getUserTag());
+        return bankDatabase;
     }
 
     @Override

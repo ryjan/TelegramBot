@@ -3,6 +3,7 @@ target/
 !**/src/main/**/target/
 !**/src/test/**/target/
 src/main/resources/botSettings/config.json
+hibernate.cfg.xml
 
 ### IntelliJ IDEA ###
 .idea/modules.xml

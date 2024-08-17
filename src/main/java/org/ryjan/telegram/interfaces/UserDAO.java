@@ -1,12 +1,12 @@
 package org.ryjan.telegram.interfaces;
 
-import org.ryjan.telegram.database.Bank;
-import org.ryjan.telegram.database.User;
+import org.ryjan.telegram.database.BankDatabase;
+import org.ryjan.telegram.database.UserDatabase;
 
 public interface UserDAO {
-    public User findById(int id);
-    public Bank findBankById(int id);
-    public void save(User user);
-    public void update(User user);
-    public void delete(User user);
+    public UserDatabase findById(int id);
+    public BankDatabase findBankById(int id);
+    public void save(UserDatabase userDatabase);
+    public void update(UserDatabase userDatabase);
+    public void delete(UserDatabase userDatabase);
 }
