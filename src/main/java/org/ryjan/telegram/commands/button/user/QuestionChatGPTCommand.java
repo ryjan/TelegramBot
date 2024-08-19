@@ -11,12 +11,14 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
+import java.io.IOException;
+
 @Component
 public class QuestionChatGPTCommand implements IBotCommand {
     private final ChatGPTService chatGPTService = new ChatGPTService();
 
     @Override
-    public void execute(String chatId, BotMain bot, ButtonCommandHandler buttonCommandHandler) {
+    public void execute(String chatId, BotMain bot, ButtonCommandHandler buttonCommandHandler) throws IOException {
         Update update = UpdateContext.getInstance().getUpdate();
 
         bot.sendMessage(chatId, "Введите вопрос, который хотите задать:");

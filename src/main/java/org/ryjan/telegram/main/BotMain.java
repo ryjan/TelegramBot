@@ -76,6 +76,7 @@ public class BotMain extends TelegramLongPollingBot {
             String receivedMessage = update.getMessage().getText();
             Long chatId = update.getMessage().getChatId();
             UpdateContext.getInstance().setUpdate(update);
+            User user = update.getMessage().getFrom();
         }
 
         try {

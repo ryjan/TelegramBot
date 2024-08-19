@@ -1,43 +1,70 @@
 package org.ryjan.telegram.services;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.auth.oauth2.GoogleCredentials;
+import com.google.cloud.aiplatform.v1.*;
+import com.google.cloud.aiplatform.v1.schema.predict.prediction.TextExtractionPredictionResult;
+import com.google.cloud.aiplatform.v1.schema.predict.prediction.TextSentimentPredictionResult;
+import com.google.cloud.aiplatform.v1beta1.PredictResponse;
+
 import org.ryjan.telegram.config.BotConfig;
 
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import com.google.cloud.aiplatform.v1beta1.PredictionServiceClient;
+import com.google.cloud.aiplatform.v1beta1.PredictionServiceSettings;
+import com.google.protobuf.Value;
+import com.google.protobuf.util.JsonFormat;
+
+import java.io.IOException;
+import java.util.*;
 
 @Service
-public class ChatGPTService {
-    private final String API_URL = BotConfig.CHATGPT_API_URL;
+public class ChatGPTService { // ВЪЕБАНА ПАРА ДНЕЙ ВПУСТУЮ, НУЖНЫ ЕБУЧИЕ ДЕНЬГИ
+    private final String PROJECT_ID = BotConfig.CHATGPT_API_URL;
+    private final String LOCATION = "us-central1";
+    private final String MODEL_ID = "gemini-flash";
+    private final String PUBLISHER = "google";
+
     private final String API_KEY = BotConfig.CHATGPT_API_TOKEN;
 
-    public String askQuestion(String question) {
-        String testQuestion = "How to use chatgpt4?";
+    public String askQuestion(String question) throws IOException {
+        String endpoint = String.format("%s-aiplatform.googleapis.com:443", LOCATION);
+        PredictionServiceSettings predictionServiceSettings = PredictionServiceSettings.newBuilder()
+                .setEndpoint(endpoint)
+                .build();
 
-        ObjectMapper mapper = new ObjectMapper();
+        try (PredictionServiceClient predictionServiceClient = PredictionServiceClient.create(predictionServiceSettings)) {
+            Content content = Content.newBuilder()
+                    .addParts(Part.newBuilder().setText(question).build())
+                    .build();
+            GenerateContentRequest request = GenerateContentRequest.newBuilder()
+                    .setModel(MODEL_ID)
+                    .setContents(0, content)
+                    .build();
+            /*String modelFullId = String.format("projects/%s/locations/%s/publishers/%s/models/%s",
+                    PROJECT_ID, LOCATION, PUBLISHER, MODEL_ID);
+            EndpointName endpointName = EndpointName.of(PROJECT_ID, LOCATION, MODEL_ID);
 
-        RestTemplate restTemplate = new RestTemplate();
+            String publisher = "google";
+            String model = MODEL_ID;
 
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
-        headers.set("Authorization", "Bearer " + API_KEY);
+            Value.Builder instanceValue = Value.newBuilder();
+            JsonFormat.parser().merge(String.format("{\"content\": \"%s\"}", question), instanceValue);
 
-        Map<String, Object> requestBody = Map.of(
-                "model", "gpt-3.5-turbo",
-                "messages", List.of(Map.of("role", "user", "content", question))
-        );
-        HttpEntity<Map<String, Object>> entity = new HttpEntity<>(requestBody, headers);
+            Value.Builder parametersValue = Value.newBuilder();
+            JsonFormat.parser().merge("{\"temperature\": 0.2, \"maxOutputTokens\": 256, \"topP\": 0.8, \"topK\": 40}", parametersValue);
 
-        ResponseEntity<String> response = restTemplate.exchange(API_URL, HttpMethod.POST, entity, String.class);
+            PredictResponse response = predictionServiceClient.predict(
+                    modelFullId,
+                    List.of(instanceValue.build()),
+                    parametersValue.build()
+            );
 
-        return response.getBody();
+            return response.getPredictions(0).getStructValue().getFieldsOrThrow("content").getStringValue(); */
+        }
+        return null;
     }
-
-
 }

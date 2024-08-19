@@ -12,7 +12,7 @@ public class BankDatabase {
 
     @Id
     @Column (name = "id")
-    private int id;
+    private long id;
     @Column(name = "tag")
     private String tag;
     @Column (name = "gems")
@@ -42,7 +42,7 @@ public class BankDatabase {
         this.userDatabase = new UserDatabase();
     }
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 

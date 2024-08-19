@@ -9,22 +9,23 @@ import org.ryjan.telegram.utils.UserGroup;
 public class UserDatabase {
 
     @Id
-    @GeneratedValue (strategy = GenerationType.SEQUENCE, generator = "user_seq") // сделать присвоение через telegram.user.getId
+    //@GeneratedValue (strategy = GenerationType.SEQUENCE, generator = "user_seq") // сделать присвоение через telegram.user.getId
     @Column (name = "user_id")
-    private int id;
+    private long id;
     @Column (name = "user_tag")
     private String userTag;
     @Column (name = "user_group")
     private String userGroup;
 
-    @OneToOne(mappedBy = "userDatabase" ,cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToOne(mappedBy = "userDatabase" ,cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     private BankDatabase bankDatabase;
 
     public UserDatabase() {
 
     }
 
-    public UserDatabase(String userTag, UserGroup userGroup) {
+    public UserDatabase(long id ,String userTag, UserGroup userGroup) {
+        this.id = id;
         this.userTag = userTag;
         this.userGroup = userGroup.getDisplayname();
         this.bankDatabase = new BankDatabase();
@@ -32,7 +33,7 @@ public class UserDatabase {
         bankDatabase.setTag(this.userTag);
     }
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 

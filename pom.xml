@@ -95,5 +95,17 @@
             <artifactId>httpclient</artifactId>
             <version>4.5.14</version>
         </dependency>
+        <dependency>
+            <groupId>com.google.cloud</groupId>
+            <artifactId>google-cloud-aiplatform</artifactId>
+            <version>3.31.0</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/com.google.api.grpc/proto-google-cloud-aiplatform-v1 -->
+        <dependency>
+            <groupId>com.google.api.grpc</groupId>
+            <artifactId>proto-google-cloud-aiplatform-v1</artifactId>
+            <version>3.48.0</version>
+        </dependency>
+
     </dependencies>
 </project>

@@ -4,6 +4,7 @@ import org.ryjan.telegram.commands.button.user.OwnerCommand;
 import org.ryjan.telegram.commands.button.user.QuestionChatGPTCommand;
 import org.ryjan.telegram.commands.button.user.StartCommand;
 import org.ryjan.telegram.commands.interfaces.IBotCommand;
+import org.ryjan.telegram.commands.owner.SetCoins;
 import org.ryjan.telegram.main.BotMain;
 
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
@@ -11,6 +12,7 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -29,6 +31,7 @@ public class ButtonCommandHandler { // сделать IBotCommand абстрак
         nonButtonCommands.put("/start", new StartCommand());
         nonButtonCommands.put("/owner", new OwnerCommand());
         nonButtonCommands.put("/askchatgpt", new QuestionChatGPTCommand());
+        nonButtonCommands.put("/setcoins", new SetCoins());
 
         commands.put("owner", new OwnerCommand());
         commands.put("askchatgpt", new QuestionChatGPTCommand());
@@ -57,7 +60,7 @@ public class ButtonCommandHandler { // сделать IBotCommand абстрак
         }
     }
 
-    public void handleCommand(Update update) {
+    public void handleCommand(Update update) throws IOException {
         if (update.getCallbackQuery() != null) {
             String callbackData = update.getCallbackQuery().getData();
             String chatId = update.getCallbackQuery().getMessage().getChatId().toString();

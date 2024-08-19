@@ -10,12 +10,12 @@ public class UserService implements UserDAO {
     private UserDAO userDAO = new UserDAOImpl();
 
     @Override
-    public UserDatabase findById(int id) {
+    public UserDatabase findById(long id) {
         return userDAO.findById(id);
     }
 
     @Override
-    public BankDatabase findBankById(int id) {
+    public BankDatabase findBankById(long id) {
         return userDAO.findBankById(id);
     }
 

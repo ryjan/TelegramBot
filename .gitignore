@@ -3,7 +3,8 @@ target/
 !**/src/main/**/target/
 !**/src/test/**/target/
 src/main/resources/botSettings/config.json
-hibernate.cfg.xml
+src/main/resources/hibernate.cfg.xml
+src/main/resources/gen-lang-client.json
 
 ### IntelliJ IDEA ###
 .idea/modules.xml

@@ -7,6 +7,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.telegram.telegrambots.meta.api.objects.Chat;
 
+import java.io.IOException;
+
 @RestController
 public class ChatGPTController {
 
@@ -14,7 +16,7 @@ public class ChatGPTController {
     private ChatGPTService chatGPTService;
 
     @PostMapping({"askchatgpt", "/askchatgpt"})
-    public String askСhatGPT(@RequestBody String question) {
+    public String askСhatGPT(@RequestBody String question) throws IOException {
         return chatGPTService.askQuestion(question);
     }
 }

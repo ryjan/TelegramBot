@@ -10,12 +10,12 @@ import org.ryjan.telegram.utils.HibernateSessionFactory;
 public class UserDAOImpl implements UserDAO {
 
     @Override
-    public UserDatabase findById(int id) {
+    public UserDatabase findById(long id) {
         return HibernateSessionFactory.getSessionFactory().openSession().get(UserDatabase.class, id);
     }
 
     @Override
-    public BankDatabase findBankById(int id) {
+    public BankDatabase findBankById(long id) {
         return HibernateSessionFactory.getSessionFactory().openSession().get(BankDatabase.class, id);
     }
 
@@ -27,6 +27,7 @@ public class UserDAOImpl implements UserDAO {
         tx.commit();
         session.close();
     }
+
 
     @Override
     public void update(UserDatabase userDatabase) {
