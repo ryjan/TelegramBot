@@ -11,6 +11,8 @@ import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.User;
 
+import java.util.Objects;
+
 @Component
 public class StartCommand implements IBotCommand {
     @Override
@@ -18,8 +20,14 @@ public class StartCommand implements IBotCommand {
         UserService userService = new UserService();
         Update update = UpdateContext.getInstance().getUpdate();
         User user = update.getMessage().getFrom();
-        UserDatabase userDatabase = new UserDatabase(user.getId() ,user.getUserName(), UserGroup.USER);
-        userService.update(userDatabase);
+
+        if (userService.userIsExist(user.getId())) {
+            UserDatabase userDatabase = userService.findById(user.getId());
+            if (!userDatabase.getUserTag().equals(user.getUserName())) {
+                userDatabase.setUserTag(user.getUserName());
+                userService.update(userDatabase);
+            }
+        }
         bot.sendMessage(chatId, "Выберите из меню:");
         commandHandler.sendMenu(chatId);
     }

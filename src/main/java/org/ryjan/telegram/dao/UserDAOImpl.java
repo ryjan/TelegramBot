@@ -19,6 +19,7 @@ public class UserDAOImpl implements UserDAO {
         return HibernateSessionFactory.getSessionFactory().openSession().get(BankDatabase.class, id);
     }
 
+
     @Override
     public void save(UserDatabase userDatabase) {
         Session session = HibernateSessionFactory.getSessionFactory().openSession();

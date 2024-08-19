@@ -9,4 +9,7 @@ public interface UserDAO {
     public void save(UserDatabase userDatabase);
     public void update(UserDatabase userDatabase);
     public void delete(UserDatabase userDatabase);
+    public default Boolean userIsExist(long id) {
+        return findById(id) != null;
+    }
 }

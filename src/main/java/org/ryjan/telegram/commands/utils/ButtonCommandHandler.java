@@ -21,6 +21,7 @@ public class ButtonCommandHandler { // сделать IBotCommand абстрак
     private final BotMain bot;
     private final Map<String, IBotCommand>  nonButtonCommands;
     private final Map<String, IBotCommand> commands;
+    private String lastMessage;
 
     // сделать List buttons и сделать все по удобному
     public ButtonCommandHandler(BotMain bot) {
@@ -75,7 +76,9 @@ public class ButtonCommandHandler { // сделать IBotCommand абстрак
         } else {
             String chatId = update.getMessage().getChatId().toString();
             String message = update.getMessage().getText();
-            IBotCommand command = nonButtonCommands.get(message);
+            lastMessage = message;
+            String commandKey = message.split(" ")[0];
+            IBotCommand command = nonButtonCommands.get(commandKey);
 
             if (command != null) {
                 command.execute(chatId, bot, this);
@@ -87,6 +90,10 @@ public class ButtonCommandHandler { // сделать IBotCommand абстрак
 
     public boolean containsCommand(String command) {
         return commands.containsKey(command);
+    }
+
+    public String getLastMessage() {
+        return this.lastMessage;
     }
 
 }
