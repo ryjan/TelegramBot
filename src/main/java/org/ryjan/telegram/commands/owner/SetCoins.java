@@ -21,21 +21,24 @@ public class SetCoins implements IBotCommand {
         Update update = UpdateContext.getInstance().getUpdate();
         String receivedMessage = update.getMessage().getText();
 
-        String messageToSend = buttonCommandHandler.getLastMessage().replace("/setcoins", "").trim();
+        //long id = Long.parseLong(buttonCommandHandler.getLastMessage().replace("/setcoins ", "").split(" ")[0]);
+        String id = buttonCommandHandler.getLastMessage().replace("/setcoins ", "").split(" ")[0];
+        String coinsValue = buttonCommandHandler.getLastMessage().replace("/setcoins ", "").split(" ")[1];
 
         SendMessage message = new SendMessage();
         message.setChatId(chatId);
 
         User user = update.getMessage().getFrom();
-        UserDatabase userDatabase = userService.findById(user.getId());
+        UserDatabase userDatabase = userService.findByUsername(id);
         BankDatabase bankDatabase = userDatabase.getBank();
 
-        BigDecimal coins = BigDecimal.valueOf(Long.parseLong(messageToSend));
+        BigDecimal coins = BigDecimal.valueOf(Long.parseLong(coinsValue));
+
 
         bankDatabase.setCoins(coins);
         userService.update(userDatabase);
 
-        message.setText("User'у @" + user.getUserName() + " выставлено " + coins + " монет.");
+        message.setText("User'у @" + userDatabase.getUserTag() + " выставлено " + coins + " монет.");
 
         try {
             bot.execute(message);

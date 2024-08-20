@@ -5,6 +5,7 @@ import org.ryjan.telegram.database.UserDatabase;
 
 public interface UserDAO {
     public UserDatabase findById(long id);
+    public UserDatabase findByUsername(String username);
     public BankDatabase findBankById(long id);
     public void save(UserDatabase userDatabase);
     public void update(UserDatabase userDatabase);

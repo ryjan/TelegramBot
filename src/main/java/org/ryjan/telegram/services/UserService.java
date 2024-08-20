@@ -15,6 +15,11 @@ public class UserService implements UserDAO {
     }
 
     @Override
+    public UserDatabase findByUsername(String username) {
+        return userDAO.findByUsername(username);
+    }
+
+    @Override
     public BankDatabase findBankById(long id) {
         return userDAO.findBankById(id);
     }

@@ -15,6 +15,11 @@ public class UserDAOImpl implements UserDAO {
     }
 
     @Override
+    public UserDatabase findByUsername(String username) {
+        return HibernateSessionFactory.getSessionFactory().openSession().get()
+    }
+
+    @Override
     public BankDatabase findBankById(long id) {
         return HibernateSessionFactory.getSessionFactory().openSession().get(BankDatabase.class, id);
     }
