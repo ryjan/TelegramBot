@@ -20,13 +20,17 @@ public class StartCommand implements IBotCommand {
         UserService userService = new UserService();
         Update update = UpdateContext.getInstance().getUpdate();
         User user = update.getMessage().getFrom();
+        UserDatabase userDatabase;
 
         if (userService.userIsExist(user.getId())) {
-            UserDatabase userDatabase = userService.findById(user.getId());
+            userDatabase = userService.findUser(user.getId());
             if (!userDatabase.getUserTag().equals(user.getUserName())) {
                 userDatabase.setUserTag(user.getUserName());
                 userService.update(userDatabase);
             }
+        } else {
+            userDatabase = new UserDatabase(user.getId(), user.getUserName());
+            userService.update(userDatabase);
         }
         bot.sendMessage(chatId, "Выберите из меню:");
         commandHandler.sendMenu(chatId);

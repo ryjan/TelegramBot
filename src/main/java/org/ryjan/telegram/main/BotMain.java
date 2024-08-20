@@ -43,15 +43,16 @@ public class BotMain extends TelegramLongPollingBot {
         try {
             TelegramBotsApi botsApi = new TelegramBotsApi(DefaultBotSession.class);
             botsApi.registerBot(new BotMain());
-
-        /*  UserService userService = new UserService();
-            UserDatabase user = userService.findById(5454081605L);
-            BankDatabase userBank = user.getBank();
-            userBank.setGems(BigDecimal.valueOf(-123));
-            user.setUserTag("Ryjan");
-            user.setUserGroup(UserGroup.USER);
-            userService.update(user);
-        */
+///*
+            UserService userService = new UserService();
+            UserDatabase user =  userService.findUser("Yaroslavryj");
+            userService.delete(user);
+           // BankDatabase userBank = user.getBank();
+            //userBank.setGems(BigDecimal.valueOf(-123));
+           // user.setUserGroup(UserGroup.USER);
+           // userService.update(user);
+           // System.out.println(userService.isOwner(user.getId()));
+//*/
             LOGGER.info("Bot started successfully!");
         } catch (TelegramApiException e) {
             LOGGER.error("Error occurred while initializing Bot", e);

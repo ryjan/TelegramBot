@@ -4,37 +4,40 @@ import org.ryjan.telegram.dao.UserDAOImpl;
 import org.ryjan.telegram.database.BankDatabase;
 import org.ryjan.telegram.database.UserDatabase;
 import org.ryjan.telegram.interfaces.UserDAO;
+import org.ryjan.telegram.utils.HibernateSessionFactory;
 
-public class UserService implements UserDAO {
+public class UserService {
 
     private UserDAO userDAO = new UserDAOImpl();
 
-    @Override
-    public UserDatabase findById(long id) {
-        return userDAO.findById(id);
+    public UserDatabase findUser(long id) {
+        return userDAO.findUser(id);
     }
 
-    @Override
-    public UserDatabase findByUsername(String username) {
-        return userDAO.findByUsername(username);
+    public UserDatabase findUser(String username) {
+        return userDAO.findUser(username);
     }
 
-    @Override
-    public BankDatabase findBankById(long id) {
-        return userDAO.findBankById(id);
+    public BankDatabase findBank(long id) {
+        return userDAO.findBank(id);
     }
 
-    @Override
+    public boolean userIsExist(long id) {
+        return findUser(id) != null;
+    }
+
+    public boolean isOwner(long id) {
+        return userDAO.isOwner(id);
+    }
+
     public void save(UserDatabase userDatabase) {
         userDAO.save(userDatabase);
     }
 
-    @Override
     public void update(UserDatabase userDatabase) {
         userDAO.update(userDatabase);
     }
 
-    @Override
     public void delete(UserDatabase userDatabase) {
         userDAO.delete(userDatabase);
     }

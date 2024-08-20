@@ -24,10 +24,10 @@ public class UserDatabase {
 
     }
 
-    public UserDatabase(long id ,String userTag, UserGroup userGroup) {
+    public UserDatabase(long id, String userTag) {
         this.id = id;
         this.userTag = userTag;
-        this.userGroup = userGroup.getDisplayname();
+        this.userGroup = UserGroup.USER.getDisplayname();
         this.bankDatabase = new BankDatabase();
         setBank(bankDatabase);
         bankDatabase.setTag(this.userTag);

@@ -29,7 +29,7 @@ public class SetCoins implements IBotCommand {
         message.setChatId(chatId);
 
         User user = update.getMessage().getFrom();
-        UserDatabase userDatabase = userService.findByUsername(id);
+        UserDatabase userDatabase = userService.findUser(id);
         BankDatabase bankDatabase = userDatabase.getBank();
 
         BigDecimal coins = BigDecimal.valueOf(Long.parseLong(coinsValue));
