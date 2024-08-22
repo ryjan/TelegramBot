@@ -34,7 +34,7 @@ public class BotMain extends TelegramLongPollingBot {
 
     private static final String OWNER_ID = "2323";
 
-    public BotMain() {
+    private BotMain() {
         buttonCommandHandler = new ButtonCommandHandler(this);
     }
 
@@ -43,7 +43,7 @@ public class BotMain extends TelegramLongPollingBot {
         try {
             TelegramBotsApi botsApi = new TelegramBotsApi(DefaultBotSession.class);
             botsApi.registerBot(new BotMain());
-///*
+/*
             UserService userService = new UserService();
             UserDatabase user =  userService.findUser("Yaroslavryj");
             userService.delete(user);
@@ -52,7 +52,7 @@ public class BotMain extends TelegramLongPollingBot {
            // user.setUserGroup(UserGroup.USER);
            // userService.update(user);
            // System.out.println(userService.isOwner(user.getId()));
-//*/
+*/
             LOGGER.info("Bot started successfully!");
         } catch (TelegramApiException e) {
             LOGGER.error("Error occurred while initializing Bot", e);

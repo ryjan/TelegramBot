@@ -2,8 +2,10 @@ package org.ryjan.telegram.database;
 
 
 import jakarta.persistence.*;
+import org.ryjan.telegram.utils.UserGroup;
 
 import java.math.BigDecimal;
+import java.util.Objects;
 
 @Entity
 @SequenceGenerator(name = "user_seq", sequenceName = "user_id_seq", allocationSize = 1)
@@ -83,6 +85,21 @@ public class BankDatabase {
         bankDatabase.setUser(userDatabase);
         bankDatabase.setTag(userDatabase.getUserTag());
         return bankDatabase;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, tag, gems, coins, userDatabase);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null || this.getClass() != obj.getClass()) return false;
+
+        BankDatabase bankDatabase = (BankDatabase) obj;
+        return Objects.equals(id, bankDatabase.id) && Objects.equals(tag, bankDatabase.tag) && Objects.equals(gems, bankDatabase.gems) &&
+                Objects.equals(coins, bankDatabase.coins) && Objects.equals(userDatabase, bankDatabase.userDatabase);
     }
 
     @Override

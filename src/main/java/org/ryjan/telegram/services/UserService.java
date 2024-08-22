@@ -26,10 +26,6 @@ public class UserService {
         return findUser(id) != null;
     }
 
-    public boolean isOwner(long id) {
-        return userDAO.isOwner(id);
-    }
-
     public void save(UserDatabase userDatabase) {
         userDAO.save(userDatabase);
     }

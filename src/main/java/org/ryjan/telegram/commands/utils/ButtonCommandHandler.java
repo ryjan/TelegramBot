@@ -88,6 +88,14 @@ public class ButtonCommandHandler { // сделать IBotCommand абстрак
         }
     }
 
+    public void sendMessageForCommand(BotMain bot, SendMessage message) {
+        try {
+            bot.execute(message);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     public boolean containsCommand(String command) {
         return commands.containsKey(command);
     }

@@ -36,24 +36,6 @@ public class UserDAOImpl implements UserDAO {
         return findUser(username).getBank();
     }
 
-    @Override
-    public boolean isOwner(long id) {
-       /* Session session = HibernateSessionFactory.getSessionFactory().openSession();
-        String hql = "SELECT CASE WHEN u.userGroup = 'Owner' THEN true ELSE false END " +
-                "FROM UserDatabase u WHERE u.id = :id";
-        Query<Boolean> query = session.createQuery(hql, Boolean.class);
-        query.setParameter("id", id);
-        return query.uniqueResult();
-        */
-        UserDatabase user = findUser(id);
-        return user.getUserGroup().equals("Owner");
-    }
-
-    @Override
-    public boolean isOwner(String username) {
-        return false;
-    }
-
 
     @Override
     public void save(UserDatabase userDatabase) {

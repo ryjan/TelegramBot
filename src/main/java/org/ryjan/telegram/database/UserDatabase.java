@@ -3,6 +3,8 @@ package org.ryjan.telegram.database;
 import jakarta.persistence.*;
 import org.ryjan.telegram.utils.UserGroup;
 
+import java.util.Objects;
+
 @Entity
 @SequenceGenerator(name = "user_seq", sequenceName = "user_id_seq", allocationSize = 1)
 @Table (name = "users")
@@ -61,6 +63,25 @@ public class UserDatabase {
     public void setBank(BankDatabase bankDatabase) {
         this.bankDatabase = bankDatabase;
         bankDatabase.setUser(this);
+    }
+
+    public boolean isOwner() {
+        return UserGroup.OWNER.getDisplayname().equals(this.userGroup);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, userTag, userGroup, bankDatabase);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+
+        UserDatabase other = (UserDatabase) obj;
+        return  Objects.equals(id, other.id) && Objects.equals(userTag, other.userTag) &&
+                Objects.equals(userGroup, other.userGroup) && Objects.equals(bankDatabase, other.bankDatabase);
     }
 
     @Override
