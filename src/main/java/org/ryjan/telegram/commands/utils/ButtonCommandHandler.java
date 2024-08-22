@@ -4,6 +4,7 @@ import org.ryjan.telegram.commands.button.user.OwnerCommand;
 import org.ryjan.telegram.commands.button.user.QuestionChatGPTCommand;
 import org.ryjan.telegram.commands.button.user.StartCommand;
 import org.ryjan.telegram.commands.interfaces.IBotCommand;
+import org.ryjan.telegram.commands.owner.OwnerCommandsList;
 import org.ryjan.telegram.commands.owner.SetCoins;
 import org.ryjan.telegram.main.BotMain;
 
@@ -31,8 +32,9 @@ public class ButtonCommandHandler { // сделать IBotCommand абстрак
 
         nonButtonCommands.put("/start", new StartCommand());
         nonButtonCommands.put("/owner", new OwnerCommand());
-        nonButtonCommands.put("/askchatgpt", new QuestionChatGPTCommand());
+//        nonButtonCommands.put("/askchatgpt", new QuestionChatGPTCommand());
         nonButtonCommands.put("/setcoins", new SetCoins());
+        nonButtonCommands.put("/helpowner", new OwnerCommandsList());
 
         commands.put("owner", new OwnerCommand());
         commands.put("askchatgpt", new QuestionChatGPTCommand());
