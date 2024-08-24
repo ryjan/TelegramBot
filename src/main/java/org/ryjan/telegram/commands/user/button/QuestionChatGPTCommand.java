@@ -1,15 +1,13 @@
-package org.ryjan.telegram.commands.button.user;
+package org.ryjan.telegram.commands.user.button;
 
 import org.ryjan.telegram.commands.interfaces.IBotCommand;
 import org.ryjan.telegram.commands.utils.ButtonCommandHandler;
 import org.ryjan.telegram.main.BotMain;
 import org.ryjan.telegram.services.ChatGPTService;
 import org.ryjan.telegram.utils.UpdateContext;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
-import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 import java.io.IOException;
 

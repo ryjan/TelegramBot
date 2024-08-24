@@ -1,8 +1,8 @@
 package org.ryjan.telegram.commands.utils;
 
-import org.ryjan.telegram.commands.button.user.OwnerCommand;
-import org.ryjan.telegram.commands.button.user.QuestionChatGPTCommand;
-import org.ryjan.telegram.commands.button.user.StartCommand;
+import org.ryjan.telegram.commands.user.button.OwnerCommand;
+import org.ryjan.telegram.commands.user.button.QuestionChatGPTCommand;
+import org.ryjan.telegram.commands.user.button.StartCommand;
 import org.ryjan.telegram.commands.interfaces.IBotCommand;
 import org.ryjan.telegram.commands.owner.OwnerCommandsList;
 import org.ryjan.telegram.commands.owner.SetCoins;

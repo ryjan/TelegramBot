@@ -1,4 +1,4 @@
-package org.ryjan.telegram.commands.button.user;
+package org.ryjan.telegram.commands.user.button;
 
 import org.ryjan.telegram.commands.utils.ButtonCommandHandler;
 import org.ryjan.telegram.commands.interfaces.IBotCommand;

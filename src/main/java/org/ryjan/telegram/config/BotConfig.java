@@ -2,6 +2,8 @@ package org.ryjan.telegram.config;
 
 import org.ryjan.telegram.json.parsing.BotJsonParse;
 
+import java.math.BigDecimal;
+
 public class BotConfig {
     public static final String BOT_TOKEN = BotJsonParse.getBotToken();
     public static final String BOT_NAME = BotJsonParse.getBotName();
@@ -9,7 +11,8 @@ public class BotConfig {
 
     public static final String OWNER_ID = BotJsonParse.getOwner();
     // API
-
     public static final String CHATGPT_API_URL = BotJsonParse.getChatGPTUrl();
     public static final String CHATGPT_API_TOKEN = BotJsonParse.getChatGPTToken();
+    //Transfer
+    public static final BigDecimal DAILY_LIMIT = new BigDecimal("100");
 }
