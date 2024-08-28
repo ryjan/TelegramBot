@@ -10,6 +10,8 @@ import org.ryjan.telegram.commands.owner.SetCoins;
 import org.ryjan.telegram.commands.utils.KeyboardBuilder;
 import org.ryjan.telegram.main.BotMain;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
@@ -19,8 +21,10 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+@Component
 public class ButtonCommandHandler { // сделать IBotCommand абстрактным классом
-
+    @Autowired
+    SendCoins sendCoins;
     private final BotMain bot;
     private final Map<String, IBotCommand>  nonButtonCommands;
     private final Map<String, IBotCommand> commands;
@@ -32,7 +36,7 @@ public class ButtonCommandHandler { // сделать IBotCommand абстрак
         this.nonButtonCommands = new HashMap<>();
         this.commands = new HashMap<>();
 
-        initializeCommands();
+        //initializeCommands();
     }
 
     public void sendMenu(String chatId) {
@@ -94,6 +98,7 @@ public class ButtonCommandHandler { // сделать IBotCommand абстрак
     }
 
     private void initializeCommands() {
+
         nonButtonCommands.put("/start", new StartCommand());
         nonButtonCommands.put("/owner", new OwnerCommand());
         nonButtonCommands.put("/setcoins", new SetCoins());

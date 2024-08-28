@@ -1,23 +1,25 @@
 package org.ryjan.telegram.commands.user;
 
 import org.ryjan.telegram.commands.BaseCommand;
-import org.ryjan.telegram.commands.interfaces.IBotCommand;
 import org.ryjan.telegram.commands.user.transfers.TransferService;
 import org.ryjan.telegram.database.UserDatabase;
 import org.ryjan.telegram.handler.ButtonCommandHandler;
 import org.ryjan.telegram.main.BotMain;
-import org.ryjan.telegram.services.UserService;
 import org.ryjan.telegram.utils.UpdateContext;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.User;
-import org.telegram.telegrambots.meta.api.objects.commands.BotCommand;
 
-import java.io.IOException;
 import java.math.BigDecimal;
 
+@Component
 public class SendCoins extends BaseCommand {
-    UserService userService = super.userService;
+
+    public SendCoins() {
+        super("/sendcoins", "Отправить пользователю свои монеты🪙");
+    }
 
     @Override
     public void executeCommand(String chatId, BotMain bot, ButtonCommandHandler buttonCommandHandler) {

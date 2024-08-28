@@ -1,19 +1,37 @@
 package org.ryjan.telegram.commands;
 
 import org.ryjan.telegram.commands.interfaces.IBotCommand;
+import org.ryjan.telegram.commands.user.UserDatabaseRepository;
 import org.ryjan.telegram.database.UserDatabase;
 import org.ryjan.telegram.handler.ButtonCommandHandler;
 import org.ryjan.telegram.main.BotMain;
-import org.ryjan.telegram.services.UserService;
+import org.ryjan.telegram.commands.user.UserService;
 import org.ryjan.telegram.utils.UpdateContext;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
+@Component
 public abstract class BaseCommand implements IBotCommand {
-    protected UserService userService;
+    private final String commandName;
+    private final String description;
 
-    protected BaseCommand() {
-        this.userService = new UserService();
+    @Autowired
+    protected UserDatabaseRepository userDatabaseRepository;
+
+
+    protected BaseCommand(String commandName, String description) {
+        this.commandName = commandName;
+        this.description = description;
+    }
+
+    public String getCommandName() {
+        return commandName;
+    }
+
+    public String getDescription() {
+        return description;
     }
 
     protected Update getUpdate() {
@@ -21,19 +39,15 @@ public abstract class BaseCommand implements IBotCommand {
     }
 
     protected UserDatabase getFromUserDatabase() {
-        return userService.findUser(getUpdate().getMessage().getFrom().getId());
+        return userDatabaseRepository.findUserDatabaseById(getUpdate().getMessage().getFrom().getId());
     }
 
     protected UserDatabase getToUserDatabase(String username) {
-        return userService.findUser(username);
+        return userDatabaseRepository.findUserDatabaseByUserTag(username);
     }
 
     protected UserDatabase getToUserDatabase(long id) {
-        return userService.findUser(id);
-    }
-
-    protected UserService getUserService() {
-        return userService;
+        return userDatabaseRepository.findUserDatabaseById(id);
     }
 
     protected long getChatId() {
@@ -67,8 +81,6 @@ public abstract class BaseCommand implements IBotCommand {
     }
 
     protected abstract void executeCommand(String chatId, BotMain bot, ButtonCommandHandler buttonCommandHandler);
-    public abstract String getCommand();
-    public abstract String getDescription();
 
     @Override
     public void execute(String chatId, BotMain bot, ButtonCommandHandler buttonCommandHandler) {

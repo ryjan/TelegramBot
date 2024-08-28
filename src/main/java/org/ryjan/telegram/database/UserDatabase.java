@@ -1,7 +1,7 @@
 package org.ryjan.telegram.database;
 
 import jakarta.persistence.*;
-import org.ryjan.telegram.utils.UserGroup;
+import org.ryjan.telegram.commands.user.UserGroup;
 
 import java.util.Objects;
 

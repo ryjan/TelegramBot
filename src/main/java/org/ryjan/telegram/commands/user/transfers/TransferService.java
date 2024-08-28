@@ -2,7 +2,7 @@ package org.ryjan.telegram.commands.user.transfers;
 
 import org.ryjan.telegram.database.BankDatabase;
 import org.ryjan.telegram.database.UserDatabase;
-import org.ryjan.telegram.services.UserService;
+import org.ryjan.telegram.commands.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -10,7 +10,8 @@ import java.math.BigDecimal;
 
 @Service
 public class TransferService {
-    private final UserService userService = new UserService();
+    @Autowired
+    private UserService userService;
     @Autowired
     private TransferLimitService transferLimitService;
 

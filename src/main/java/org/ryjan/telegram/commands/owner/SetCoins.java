@@ -5,7 +5,7 @@ import org.ryjan.telegram.handler.ButtonCommandHandler;
 import org.ryjan.telegram.database.BankDatabase;
 import org.ryjan.telegram.database.UserDatabase;
 import org.ryjan.telegram.main.BotMain;
-import org.ryjan.telegram.services.UserService;
+import org.ryjan.telegram.commands.user.UserService;
 import org.ryjan.telegram.utils.UpdateContext;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;

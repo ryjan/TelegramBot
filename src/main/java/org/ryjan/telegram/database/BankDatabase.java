@@ -2,7 +2,6 @@ package org.ryjan.telegram.database;
 
 
 import jakarta.persistence.*;
-import org.ryjan.telegram.utils.UserGroup;
 
 import java.math.BigDecimal;
 import java.util.Objects;

@@ -1,6 +1,5 @@
 package org.ryjan.telegram.dao;
 
-import org.apache.catalina.User;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
@@ -8,9 +7,8 @@ import org.ryjan.telegram.database.BankDatabase;
 import org.ryjan.telegram.database.UserDatabase;
 import org.ryjan.telegram.interfaces.UserDAO;
 import org.ryjan.telegram.utils.HibernateSessionFactory;
-import org.ryjan.telegram.utils.UserGroup;
 
-public class UserDAOImpl implements UserDAO {
+public class UserDAOImpl implements UserDAO { // Это просто удалить, перенести отсюда все методы в репозиторий
 
     @Override
     public UserDatabase findUser(long id) {
