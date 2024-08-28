@@ -1,4 +1,4 @@
-package org.ryjan.telegram.main;
+package org.ryjan.telegram;
 
 
 import com.sun.tools.javac.Main;
@@ -10,7 +10,9 @@ import org.ryjan.telegram.utils.UpdateContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import org.springframework.stereotype.Service;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.TelegramBotsApi;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
@@ -19,16 +21,17 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.telegram.telegrambots.updatesreceivers.DefaultBotSession;
 import org.telegram.telegrambots.meta.api.objects.User;
 
-@Service
+@SpringBootApplication
 public class BotMain extends TelegramLongPollingBot {
-    private final ButtonCommandHandler buttonCommandHandler;
+    @Autowired
+    private ButtonCommandHandler buttonCommandHandler;
 
     public static final Logger LOGGER = LoggerFactory.getLogger(Main.class);
 
     private static final String OWNER_ID = "2323";
 
     private BotMain() {
-        buttonCommandHandler = new ButtonCommandHandler(this);
+
     }
 
     public static void main(String[] args) {

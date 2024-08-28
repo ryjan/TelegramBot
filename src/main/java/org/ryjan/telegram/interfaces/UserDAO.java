@@ -1,7 +1,7 @@
 package org.ryjan.telegram.interfaces;
 
-import org.ryjan.telegram.database.BankDatabase;
-import org.ryjan.telegram.database.UserDatabase;
+import org.ryjan.telegram.domain.BankDatabase;
+import org.ryjan.telegram.domain.UserDatabase;
 
 public interface UserDAO {
     public UserDatabase findUser(long id);

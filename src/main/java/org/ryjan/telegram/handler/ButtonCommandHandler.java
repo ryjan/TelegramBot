@@ -3,12 +3,12 @@ package org.ryjan.telegram.handler;
 import org.ryjan.telegram.commands.user.SendCoins;
 import org.ryjan.telegram.commands.user.button.OwnerCommand;
 import org.ryjan.telegram.commands.user.button.QuestionChatGPTCommand;
-import org.ryjan.telegram.commands.user.button.StartCommand;
+//import org.ryjan.telegram.commands.user.button.StartCommand;
 import org.ryjan.telegram.commands.interfaces.IBotCommand;
 import org.ryjan.telegram.commands.owner.OwnerCommandsList;
-import org.ryjan.telegram.commands.owner.SetCoins;
+//import org.ryjan.telegram.commands.owner.SetCoins;
 import org.ryjan.telegram.commands.utils.KeyboardBuilder;
-import org.ryjan.telegram.main.BotMain;
+import org.ryjan.telegram.BotMain;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -23,20 +23,26 @@ import java.util.Map;
 
 @Component
 public class ButtonCommandHandler { // сделать IBotCommand абстрактным классом
-    @Autowired
-    SendCoins sendCoins;
     private final BotMain bot;
     private final Map<String, IBotCommand>  nonButtonCommands;
     private final Map<String, IBotCommand> commands;
     private String lastMessage;
 
     // сделать List buttons и сделать все по удобному
-    public ButtonCommandHandler(BotMain bot) {
+    @Autowired
+    public ButtonCommandHandler(BotMain bot, SendCoins sendCoins) {
         this.bot = bot;
         this.nonButtonCommands = new HashMap<>();
         this.commands = new HashMap<>();
+        nonButtonCommands.put(sendCoins.getCommandName(), sendCoins);
 
         //initializeCommands();
+    }
+
+    public ButtonCommandHandler() {
+        this.nonButtonCommands = new HashMap<>();
+        this.commands = new HashMap<>();
+        nonButtonCommands.put(sendCoins.getCommandName(), sendCoins);
     }
 
     public void sendMenu(String chatId) {
@@ -99,11 +105,10 @@ public class ButtonCommandHandler { // сделать IBotCommand абстрак
 
     private void initializeCommands() {
 
-        nonButtonCommands.put("/start", new StartCommand());
+      //  nonButtonCommands.put("/start", new StartCommand());
         nonButtonCommands.put("/owner", new OwnerCommand());
-        nonButtonCommands.put("/setcoins", new SetCoins());
+     //   nonButtonCommands.put("/setcoins", new SetCoins());
         nonButtonCommands.put("/helpowner", new OwnerCommandsList());
-        nonButtonCommands.put("/sendcoins", new SendCoins());
 
         commands.put("owner", new OwnerCommand());
         commands.put("askchatgpt", new QuestionChatGPTCommand());

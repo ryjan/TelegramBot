@@ -1,7 +1,7 @@
 package org.ryjan.telegram.commands.interfaces;
 
 import org.ryjan.telegram.handler.ButtonCommandHandler;
-import org.ryjan.telegram.main.BotMain;
+import org.ryjan.telegram.BotMain;
 
 import java.io.IOException;
 

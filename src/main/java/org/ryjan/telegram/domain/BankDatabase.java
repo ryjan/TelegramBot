@@ -1,4 +1,4 @@
-package org.ryjan.telegram.database;
+package org.ryjan.telegram.domain;
 
 
 import jakarta.persistence.*;
@@ -13,7 +13,7 @@ public class BankDatabase {
 
     @Id
     @Column (name = "id")
-    private long id;
+    private Long id;
     @Column(name = "tag")
     private String tag;
     @Column (name = "gems")
@@ -23,7 +23,7 @@ public class BankDatabase {
 
     @OneToOne
     @MapsId
-    @JoinColumn(name = "id", referencedColumnName = "id")
+    @JoinColumn(name = "id", referencedColumnName = "user_id")
     private UserDatabase userDatabase;
 
     public BankDatabase() {

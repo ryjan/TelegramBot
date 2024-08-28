@@ -16,7 +16,7 @@
         <property name="hibernate.format_sql">true</property>
 
         <!-- Add mapped classes -->
-        <mapping class="org.ryjan.telegram.database.UserDatabase"/>
-        <mapping class="org.ryjan.telegram.database.BankDatabase"/>
+        <mapping class="org.ryjan.telegram.domain.UserDatabase"/>
+        <mapping class="org.ryjan.telegram.domain.BankDatabase"/>
     </session-factory>
 </hibernate-configuration>

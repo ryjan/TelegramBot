@@ -1,10 +1,10 @@
-package org.ryjan.telegram.commands.owner;
+/*package org.ryjan.telegram.commands.owner;
 
 import org.ryjan.telegram.commands.interfaces.IBotCommand;
 import org.ryjan.telegram.handler.ButtonCommandHandler;
 import org.ryjan.telegram.database.BankDatabase;
 import org.ryjan.telegram.database.UserDatabase;
-import org.ryjan.telegram.main.BotMain;
+import org.ryjan.telegram.BotMain;
 import org.ryjan.telegram.commands.user.UserService;
 import org.ryjan.telegram.utils.UpdateContext;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
@@ -68,3 +68,5 @@ public class SetCoins implements IBotCommand {
        // userService.update(userDatabase);
     }
 }
+
+ */

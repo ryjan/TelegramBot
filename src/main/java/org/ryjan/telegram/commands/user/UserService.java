@@ -1,39 +1,38 @@
 package org.ryjan.telegram.commands.user;
 
-import org.ryjan.telegram.dao.UserDAOImpl;
-import org.ryjan.telegram.database.BankDatabase;
-import org.ryjan.telegram.database.UserDatabase;
-import org.ryjan.telegram.interfaces.UserDAO;
+import org.ryjan.telegram.domain.BankDatabase;
+import org.ryjan.telegram.domain.UserDatabase;
+import org.ryjan.telegram.repos.BankDatabaseRepository;
+import org.ryjan.telegram.repos.UserDatabaseRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class UserService { // сделать Jpa repository к сервису и все будет работать
-    private final UserDatabaseRepository userDatabaseRepository;
-
     @Autowired
-    public UserService(UserDatabaseRepository userDatabaseRepository) {
-        this.userDatabaseRepository = userDatabaseRepository;
-    }
-
-    public UserDatabase findUser(long id) {
-        return userDatabaseRepository.findUserDatabaseById(id);
-    }
+    private UserDatabaseRepository userDatabaseRepository;
+    @Autowired
+    private BankDatabaseRepository bankDatabaseRepository;
 
     public UserDatabase findUser(String username) {
         return userDatabaseRepository.findUserDatabaseByUserTag(username);
     }
 
+    public UserDatabase findUser(Long id) {
+        return userDatabaseRepository.findById(id).orElse(null);
+    }
+
     public BankDatabase findBank(long id) {
-        return userDatabaseRepository.findBankDatabaseById(id);
+        return null;
     }
 
     public boolean userIsExist(long id) {
-        return userDatabaseRepository.existsUserDatabaseById(id);
+        return userDatabaseRepository.existsById(id);
     }
 
     public boolean userIsExist(String username) {
-        return userDatabaseRepository.existsUserDatabaseByUserTag(username);
+        return userDatabaseRepository.existsByUserTag(username);
     }
 
     public void update(UserDatabase userDatabase) {
@@ -42,5 +41,11 @@ public class UserService { // сделать Jpa repository к сервису и
 
     public void delete(UserDatabase userDatabase) {
         userDatabaseRepository.delete(userDatabase);
+    }
+
+    @Transactional
+    public UserDatabase createUser(long id, String username) {
+        UserDatabase userDatabase = new UserDatabase(id, username);
+        return userDatabaseRepository.save(userDatabase);
     }
 }

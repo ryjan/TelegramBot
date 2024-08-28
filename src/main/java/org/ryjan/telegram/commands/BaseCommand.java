@@ -1,11 +1,10 @@
 package org.ryjan.telegram.commands;
 
 import org.ryjan.telegram.commands.interfaces.IBotCommand;
-import org.ryjan.telegram.commands.user.UserDatabaseRepository;
-import org.ryjan.telegram.database.UserDatabase;
-import org.ryjan.telegram.handler.ButtonCommandHandler;
-import org.ryjan.telegram.main.BotMain;
 import org.ryjan.telegram.commands.user.UserService;
+import org.ryjan.telegram.domain.UserDatabase;
+import org.ryjan.telegram.handler.ButtonCommandHandler;
+import org.ryjan.telegram.BotMain;
 import org.ryjan.telegram.utils.UpdateContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -18,7 +17,7 @@ public abstract class BaseCommand implements IBotCommand {
     private final String description;
 
     @Autowired
-    protected UserDatabaseRepository userDatabaseRepository;
+    protected UserService userService;
 
 
     protected BaseCommand(String commandName, String description) {
@@ -39,15 +38,15 @@ public abstract class BaseCommand implements IBotCommand {
     }
 
     protected UserDatabase getFromUserDatabase() {
-        return userDatabaseRepository.findUserDatabaseById(getUpdate().getMessage().getFrom().getId());
+        return userService.findUser(getUpdate().getMessage().getFrom().getId());
     }
 
     protected UserDatabase getToUserDatabase(String username) {
-        return userDatabaseRepository.findUserDatabaseByUserTag(username);
+        return userService.findUser(username);
     }
 
     protected UserDatabase getToUserDatabase(long id) {
-        return userDatabaseRepository.findUserDatabaseById(id);
+        return null;
     }
 
     protected long getChatId() {

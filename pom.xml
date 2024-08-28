@@ -82,12 +82,13 @@
             <artifactId>spring-boot-starter-web</artifactId>
             <version>3.3.2</version>
         </dependency>
-        <!-- Spring Data JPA -->
+        <!-- Spring Data JPA МБ НЕ ТОТ JPA ЮЗАЮ -->
         <dependency>
-            <groupId>org.springframework.data</groupId>
-            <artifactId>spring-data-jpa</artifactId>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-jpa</artifactId>
             <version>3.3.3</version>
         </dependency>
+
 
 
         <!-- JSON processing -->

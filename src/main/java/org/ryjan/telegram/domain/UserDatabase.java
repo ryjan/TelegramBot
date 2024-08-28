@@ -1,4 +1,4 @@
-package org.ryjan.telegram.database;
+package org.ryjan.telegram.domain;
 
 import jakarta.persistence.*;
 import org.ryjan.telegram.commands.user.UserGroup;
@@ -13,7 +13,7 @@ public class UserDatabase {
     @Id
     //@GeneratedValue (strategy = GenerationType.SEQUENCE, generator = "user_seq") // сделать присвоение через telegram.user.getId
     @Column (name = "user_id")
-    private long id;
+    private Long id;
     @Column (name = "user_tag")
     private String userTag;
     @Column (name = "user_group")

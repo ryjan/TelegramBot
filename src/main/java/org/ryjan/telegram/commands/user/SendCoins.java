@@ -2,20 +2,22 @@ package org.ryjan.telegram.commands.user;
 
 import org.ryjan.telegram.commands.BaseCommand;
 import org.ryjan.telegram.commands.user.transfers.TransferService;
-import org.ryjan.telegram.database.UserDatabase;
+import org.ryjan.telegram.domain.UserDatabase;
 import org.ryjan.telegram.handler.ButtonCommandHandler;
-import org.ryjan.telegram.main.BotMain;
+import org.ryjan.telegram.BotMain;
 import org.ryjan.telegram.utils.UpdateContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
-import org.telegram.telegrambots.meta.api.objects.User;
 
 import java.math.BigDecimal;
 
 @Component
 public class SendCoins extends BaseCommand {
+    @Autowired
+    TransferService transferService;
+
 
     public SendCoins() {
         super("/sendcoins", "Отправить пользователю свои монеты🪙");
@@ -24,12 +26,11 @@ public class SendCoins extends BaseCommand {
     @Override
     public void executeCommand(String chatId, BotMain bot, ButtonCommandHandler buttonCommandHandler) {
         Update update = UpdateContext.getInstance().getUpdate();
-        TransferService transferService = new TransferService();
         UserDatabase fromUser = getFromUserDatabase();
         UserDatabase toUser;
         SendMessage message = createSendMessage();
 
-        String[] parts = getParts(getCommand(), 2);
+        String[] parts = getParts(getCommandName(), 2);
         if (parts.length != 2 || !parts[0].startsWith("@")) {
             message.setText("Введена неверная команда!\nПример: /sendcoins @Ryjan4ik 999");
             sendMessageForCommand(bot, message);
@@ -53,15 +54,5 @@ public class SendCoins extends BaseCommand {
         }
 
         sendMessageForCommand(bot, message);
-    }
-
-    @Override
-    public String getCommand() {
-        return "/sendcoins";
-    }
-
-    @Override
-    public String getDescription() {
-        return "Поделиться монетами🪙";
     }
 }
