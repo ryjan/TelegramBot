@@ -28,32 +28,12 @@ import org.telegram.telegrambots.meta.api.objects.User;
 public class BotMain extends TelegramLongPollingBot {
     @Autowired
     private UserService userService;
-
-    private final ButtonCommandHandler buttonCommandHandler = new ButtonCommandHandler(this);
+    @Autowired
+    private ButtonCommandHandler buttonCommandHandler;
 
     public static final Logger LOGGER = LoggerFactory.getLogger(Main.class);
 
     private static final String OWNER_ID = "2323";
-
-    public static void main(String[] args) {
-        SpringApplication.run(BotMain.class, args);
-        LOGGER.info("Starting Bot...");
-        try {
-            TelegramBotsApi botsApi = new TelegramBotsApi(DefaultBotSession.class);
-            botsApi.registerBot(new BotMain());
-       //     UserDatabase user =  userService.findUser("Yaroslavryj");
-        //    userService.delete(user);
-           // BankDatabase userBank = user.getBank();
-            //userBank.setGems(BigDecimal.valueOf(-123));
-           // user.setUserGroup(UserGroup.USER);
-           // userService.update(user);
-           // System.out.println(userService.isOwner(user.getId()));
-
-            LOGGER.info("Bot started successfully!");
-        } catch (TelegramApiException e) {
-            LOGGER.error("Error occurred while initializing Bot", e);
-        }
-    }
 
     public void sendMessage(String chatId, String text) {
         SendMessage message = new SendMessage();
@@ -92,5 +72,9 @@ public class BotMain extends TelegramLongPollingBot {
     @Override
     public String getBotToken() {
         return BotConfig.BOT_TOKEN;
+    }
+
+    public Logger getLogger() {
+        return LOGGER;
     }
 }
