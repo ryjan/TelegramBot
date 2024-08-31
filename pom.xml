@@ -94,6 +94,13 @@
             <artifactId>spring-boot-starter</artifactId>
             <version>3.3.3</version>
         </dependency>
+        <!-- https://mvnrepository.com/artifact/ch.qos.logback/logback-classic -->
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+            <version>1.5.7</version>
+            <scope>test</scope>
+        </dependency>
         <!-- Spring Boot Test (для тестирования) -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
