@@ -8,7 +8,6 @@ import org.ryjan.telegram.commands.interfaces.IBotCommand;
 import org.ryjan.telegram.commands.utils.KeyboardBuilder;
 import org.ryjan.telegram.BotMain;
 
-import org.ryjan.telegram.services.BotService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
@@ -26,13 +25,12 @@ public class ButtonCommandHandler {
     @Autowired
     private SendCoins sendCoins;
     @Autowired
-    private BotService bot;
+    @Lazy
+    private BotMain bot;
 
     private final Map<String, IBotCommand>  nonButtonCommands;
     private final Map<String, IBotCommand> commands;
     private String lastMessage;
-    @Autowired
-    private BotService botService;
 
     // сделать List buttons и сделать все по удобному
     public ButtonCommandHandler() {
@@ -58,7 +56,11 @@ public class ButtonCommandHandler {
 
         message.setReplyMarkup(inlineKeyboardMarkup);
 
-        botService.handleExecute(message);
+        try {
+            bot.execute(message);
+        } catch (TelegramApiException e) {
+            e.printStackTrace();
+        }
     }
 
     public void handleCommand(Update update) throws IOException {
@@ -71,7 +73,7 @@ public class ButtonCommandHandler {
             if (command != null) {
                 command.execute(chatId, bot, this);
             } else {
-                bot.handleSendMessage(chatId, "Неизвестная команда!");
+                bot.sendMessage(chatId, "Неизвестная команда!");
             }
         } else {
             String chatId = update.getMessage().getChatId().toString();
@@ -83,7 +85,7 @@ public class ButtonCommandHandler {
             if (command != null) {
                 command.execute(chatId, bot, this);
             } else {
-                bot.handleSendMessage(chatId, "Неизвестная команда!");
+                bot.sendMessage(chatId, "Неизвестная команда!");
             }
         }
     }
