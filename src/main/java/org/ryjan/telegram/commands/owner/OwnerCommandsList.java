@@ -1,4 +1,4 @@
-package org.ryjan.telegram.commands.owner;
+/*package org.ryjan.telegram.commands.owner;
 
 import org.ryjan.telegram.commands.user.button.OwnerCommand;
 import org.ryjan.telegram.commands.interfaces.IBotCommand;
@@ -45,4 +45,4 @@ public class OwnerCommandsList implements IBotCommand {
             commands.put()
         }
     }
-*/}
+} */

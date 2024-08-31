@@ -3,7 +3,7 @@ package org.ryjan.telegram.commands.user.transfers;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToOne;
-import org.ryjan.telegram.domain.UserDatabase;
+import org.ryjan.telegram.model.UserDatabase;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;

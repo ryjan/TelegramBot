@@ -1,4 +1,4 @@
-package org.ryjan.telegram.domain;
+package org.ryjan.telegram.model;
 
 import jakarta.persistence.*;
 import org.ryjan.telegram.commands.user.UserGroup;

@@ -3,8 +3,8 @@ package org.ryjan.telegram.utils;
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
-import org.ryjan.telegram.domain.BankDatabase;
-import org.ryjan.telegram.domain.UserDatabase;
+import org.ryjan.telegram.model.BankDatabase;
+import org.ryjan.telegram.model.UserDatabase;
 
 public class HibernateSessionFactory {
     private static SessionFactory sessionFactory;

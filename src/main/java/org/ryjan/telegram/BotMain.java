@@ -3,6 +3,7 @@ package org.ryjan.telegram;
 
 import com.sun.tools.javac.Main;
 
+import org.ryjan.telegram.commands.user.UserService;
 import org.ryjan.telegram.handler.ButtonCommandHandler;
 import org.ryjan.telegram.config.BotConfig;
 
@@ -11,7 +12,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.TelegramBotsApi;
@@ -21,34 +21,30 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.telegram.telegrambots.updatesreceivers.DefaultBotSession;
 import org.telegram.telegrambots.meta.api.objects.User;
 
-@SpringBootApplication
+@Component
 public class BotMain extends TelegramLongPollingBot {
     @Autowired
-    private ButtonCommandHandler buttonCommandHandler;
+    private UserService userService;
+
+    private final ButtonCommandHandler buttonCommandHandler = new ButtonCommandHandler(this);
 
     public static final Logger LOGGER = LoggerFactory.getLogger(Main.class);
 
     private static final String OWNER_ID = "2323";
-
-    private BotMain() {
-
-    }
 
     public static void main(String[] args) {
         LOGGER.info("Starting Bot...");
         try {
             TelegramBotsApi botsApi = new TelegramBotsApi(DefaultBotSession.class);
             botsApi.registerBot(new BotMain());
-/*
-            UserService userService = new UserService();
-            UserDatabase user =  userService.findUser("Yaroslavryj");
-            userService.delete(user);
+       //     UserDatabase user =  userService.findUser("Yaroslavryj");
+        //    userService.delete(user);
            // BankDatabase userBank = user.getBank();
             //userBank.setGems(BigDecimal.valueOf(-123));
            // user.setUserGroup(UserGroup.USER);
            // userService.update(user);
            // System.out.println(userService.isOwner(user.getId()));
-*/
+
             LOGGER.info("Bot started successfully!");
         } catch (TelegramApiException e) {
             LOGGER.error("Error occurred while initializing Bot", e);

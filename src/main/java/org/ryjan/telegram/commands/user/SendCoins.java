@@ -2,7 +2,7 @@ package org.ryjan.telegram.commands.user;
 
 import org.ryjan.telegram.commands.BaseCommand;
 import org.ryjan.telegram.commands.user.transfers.TransferService;
-import org.ryjan.telegram.domain.UserDatabase;
+import org.ryjan.telegram.model.UserDatabase;
 import org.ryjan.telegram.handler.ButtonCommandHandler;
 import org.ryjan.telegram.BotMain;
 import org.ryjan.telegram.utils.UpdateContext;
