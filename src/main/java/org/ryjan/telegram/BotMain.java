@@ -56,7 +56,6 @@ public class BotMain extends TelegramLongPollingBot {
            // user.setUserGroup(UserGroup.USER);
            // userService.update(user);
            // System.out.println(userService.isOwner(user.getId()));
->>>>>>> 1497e62 (Spring boot is working!)
 
     @Autowired
     private UserService userService;
