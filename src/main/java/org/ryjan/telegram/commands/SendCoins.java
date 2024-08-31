@@ -1,6 +1,5 @@
-package org.ryjan.telegram.commands.user;
+package org.ryjan.telegram.commands;
 
-import org.ryjan.telegram.commands.BaseCommand;
 import org.ryjan.telegram.commands.user.transfers.TransferService;
 import org.ryjan.telegram.model.UserDatabase;
 import org.ryjan.telegram.handler.ButtonCommandHandler;
@@ -12,6 +11,7 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 
 @Component
 public class SendCoins extends BaseCommand {
@@ -47,7 +47,7 @@ public class SendCoins extends BaseCommand {
 
         try {
             BigDecimal amount = new BigDecimal(amountString);
-            String result = transferService.transferCoins(getUsername(), toUser.getUserTag(), new BigDecimal(30)) ? "Операция прошла успешно🤙" : "Что-то пошло не так(";
+            String result = transferService.transferCoins(getUsername(), toUser.getUserTag(), amount.setScale(2, RoundingMode.HALF_UP));
             message.setText(result);
         } catch (Exception e) {
             e.printStackTrace();

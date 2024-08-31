@@ -3,13 +3,14 @@ package org.ryjan.telegram.model;
 
 import jakarta.persistence.*;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Objects;
 
 @Entity
 @SequenceGenerator(name = "user_seq", sequenceName = "user_id_seq", allocationSize = 1)
 @Table (name = "bank")
-public class BankDatabase {
+public class BankDatabase implements Comparable<BankDatabase> {
 
     @Id
     @Column (name = "id")
@@ -102,7 +103,12 @@ public class BankDatabase {
     }
 
     @Override
+    public int compareTo(BankDatabase o) {
+        return 0;
+    }
+
+    @Override
     public String toString() {
-        return "Bank [id=" + id + ",\n gems=" + gems + ",\n coins=" + coins + "]";
+        return "Bank:\n id=" + id + "\n gems=" + gems + "\n coins=" + coins + "]";
     }
 }

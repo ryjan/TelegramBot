@@ -15,23 +15,23 @@ public class TransferService {
     @Autowired
     private TransferLimitService transferLimitService;
 
-    public boolean transferCoins(String fromUsername, String toUsername, BigDecimal amount) {
+    public String transferCoins(String fromUsername, String toUsername, BigDecimal amount) {
         UserDatabase fromUser = userService.findUser(fromUsername);
         UserDatabase toUser = userService.findUser(toUsername);
 
         if (fromUser == null || toUser == null) {
-            return false;
+            return fromUser == null ? "FromUser пуст!" : "Пользователь не найден!";
         }
 
-       // if (!transferLimitService.canTransfer(fromUser, amount)) {
-           // return false;
-        //}
+        if (!transferLimitService.canTransfer(fromUser, amount)) {
+            return "!canTransfer";
+        }
 
         BankDatabase fromBank = fromUser.getBank();
         BankDatabase toBank = toUser.getBank();
 
         if (fromBank.getCoins().compareTo(amount) < 0) {
-            return false;
+            return "У вас недостаточно монет 😥";
         }
 
         fromBank.setCoins(fromBank.getCoins().subtract(amount));
@@ -42,6 +42,6 @@ public class TransferService {
         userService.update(fromUser);
         userService.update(toUser);
 
-        return true;
+        return "Успешно!";
     }
 }

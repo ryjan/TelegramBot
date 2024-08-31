@@ -16,7 +16,7 @@ public class UserService { // сделать Jpa repository к сервису и
     private BankDatabaseRepository bankDatabaseRepository;
 
     public UserDatabase findUser(String username) {
-        return userDatabaseRepository.findUserDatabaseByUserTag(username);
+        return userDatabaseRepository.findByUserTag(username);
     }
 
     public UserDatabase findUser(Long id) {

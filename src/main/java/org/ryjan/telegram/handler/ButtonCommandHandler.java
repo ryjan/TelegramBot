@@ -1,6 +1,6 @@
 package org.ryjan.telegram.handler;
 
-import org.ryjan.telegram.commands.user.SendCoins;
+import org.ryjan.telegram.commands.SendCoins;
 import org.ryjan.telegram.commands.user.button.OwnerCommand;
 //import org.ryjan.telegram.commands.user.button.StartCommand;
 import org.ryjan.telegram.commands.interfaces.IBotCommand;
@@ -22,7 +22,7 @@ import java.util.Map;
 
 @Component
 public class ButtonCommandHandler {
-    @Autowired
+
     private SendCoins sendCoins;
     @Autowired
     @Lazy
@@ -32,11 +32,12 @@ public class ButtonCommandHandler {
     private final Map<String, IBotCommand> commands;
     private String lastMessage;
 
-    // сделать List buttons и сделать все по удобному
-    public ButtonCommandHandler() {
+    @Autowired
+    public ButtonCommandHandler(SendCoins sendCoins) {
         this.nonButtonCommands = new HashMap<>();
         this.commands = new HashMap<>();
-        nonButtonCommands.put("/sendcoins", sendCoins);
+        this.sendCoins = sendCoins;
+        nonButtonCommands.put(sendCoins.getCommandName(), sendCoins);
         //initializeCommands();
     }
 

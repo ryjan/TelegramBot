@@ -13,6 +13,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.stereotype.Component;
@@ -30,6 +31,10 @@ public class BotMain extends TelegramLongPollingBot {
     private UserService userService;
     @Autowired
     private ButtonCommandHandler buttonCommandHandler;
+    @Value("${bot.token}")
+    private String token;
+    @Value("${bot.username}")
+    private String username;
 
     public static final Logger LOGGER = LoggerFactory.getLogger(Main.class);
 
@@ -58,7 +63,7 @@ public class BotMain extends TelegramLongPollingBot {
 
         try {
             UserDatabase userDatabase = userService.findUser("Ryjan4ik");
-            //buttonCommandHandler.handleCommand(update);
+            buttonCommandHandler.handleCommand(update);
         } catch (Exception e) {
             LOGGER.error("Error occurred while sending message(onUpdateReceived)", e);
         }
@@ -66,12 +71,12 @@ public class BotMain extends TelegramLongPollingBot {
 
     @Override
     public String getBotUsername() {
-        return BotConfig.BOT_NAME;
+        return username;
     }
 
     @Override
     public String getBotToken() {
-        return BotConfig.BOT_TOKEN;
+        return token;
     }
 
     public Logger getLogger() {

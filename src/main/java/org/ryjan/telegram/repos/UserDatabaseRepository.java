@@ -5,7 +5,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 public interface UserDatabaseRepository extends JpaRepository<UserDatabase, Long> {
-    UserDatabase findUserDatabaseByUserTag(String username);
     UserDatabase findByUserTag(String tag);
 
     boolean existsByUserTag(String username);
