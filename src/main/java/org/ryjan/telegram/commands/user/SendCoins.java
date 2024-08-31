@@ -5,6 +5,7 @@ import org.ryjan.telegram.commands.user.transfers.TransferService;
 import org.ryjan.telegram.model.UserDatabase;
 import org.ryjan.telegram.handler.ButtonCommandHandler;
 import org.ryjan.telegram.BotMain;
+import org.ryjan.telegram.services.BotService;
 import org.ryjan.telegram.utils.UpdateContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -24,7 +25,7 @@ public class SendCoins extends BaseCommand {
     }
 
     @Override
-    public void executeCommand(String chatId, BotMain bot, ButtonCommandHandler buttonCommandHandler) {
+    public void executeCommand(String chatId, BotService bot, ButtonCommandHandler buttonCommandHandler) {
         Update update = UpdateContext.getInstance().getUpdate();
         UserDatabase fromUser = getFromUserDatabase();
         UserDatabase toUser;

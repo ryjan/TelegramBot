@@ -5,6 +5,7 @@ import org.ryjan.telegram.commands.user.UserService;
 import org.ryjan.telegram.model.UserDatabase;
 import org.ryjan.telegram.handler.ButtonCommandHandler;
 import org.ryjan.telegram.BotMain;
+import org.ryjan.telegram.services.BotService;
 import org.ryjan.telegram.utils.UpdateContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -71,18 +72,18 @@ public abstract class BaseCommand implements IBotCommand {
         return getUpdate().getMessage().getText().replace(command, "").trim().split(" ", expectedParts);
     }
 
-    protected void sendMessageForCommand(BotMain bot, SendMessage message) {
+    protected void sendMessageForCommand(BotService bot, SendMessage message) {
         try {
-            bot.execute(message);
+            bot.handleExecute(message);
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    protected abstract void executeCommand(String chatId, BotMain bot, ButtonCommandHandler buttonCommandHandler);
+    protected abstract void executeCommand(String chatId, BotService bot, ButtonCommandHandler buttonCommandHandler);
 
     @Override
-    public void execute(String chatId, BotMain bot, ButtonCommandHandler buttonCommandHandler) {
+    public void execute(String chatId, BotService bot, ButtonCommandHandler buttonCommandHandler) {
         try {
             executeCommand(chatId, bot, buttonCommandHandler);
         } catch (Exception e) {

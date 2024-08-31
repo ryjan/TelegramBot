@@ -2,14 +2,15 @@ package org.ryjan.telegram.handler;
 
 import org.ryjan.telegram.commands.user.SendCoins;
 import org.ryjan.telegram.commands.user.button.OwnerCommand;
-import org.ryjan.telegram.commands.user.button.QuestionChatGPTCommand;
 //import org.ryjan.telegram.commands.user.button.StartCommand;
 import org.ryjan.telegram.commands.interfaces.IBotCommand;
 //import org.ryjan.telegram.commands.owner.SetCoins;
 import org.ryjan.telegram.commands.utils.KeyboardBuilder;
 import org.ryjan.telegram.BotMain;
 
+import org.ryjan.telegram.services.BotService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
@@ -20,18 +21,24 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-public class ButtonCommandHandler { // сделать IBotCommand абстрактным классом
-    private final BotMain bot;
+@Component
+public class ButtonCommandHandler {
+    @Autowired
+    private SendCoins sendCoins;
+    @Autowired
+    private BotService bot;
+
     private final Map<String, IBotCommand>  nonButtonCommands;
     private final Map<String, IBotCommand> commands;
     private String lastMessage;
+    @Autowired
+    private BotService botService;
 
     // сделать List buttons и сделать все по удобному
-    public ButtonCommandHandler(BotMain bot) {
-        this.bot = bot;
+    public ButtonCommandHandler() {
         this.nonButtonCommands = new HashMap<>();
         this.commands = new HashMap<>();
-
+        nonButtonCommands.put("/sendcoins", sendCoins);
         //initializeCommands();
     }
 
@@ -51,11 +58,7 @@ public class ButtonCommandHandler { // сделать IBotCommand абстрак
 
         message.setReplyMarkup(inlineKeyboardMarkup);
 
-        try {
-            bot.execute(message);
-        } catch (TelegramApiException e) {
-            e.printStackTrace();
-        }
+        botService.handleExecute(message);
     }
 
     public void handleCommand(Update update) throws IOException {
@@ -68,7 +71,7 @@ public class ButtonCommandHandler { // сделать IBotCommand абстрак
             if (command != null) {
                 command.execute(chatId, bot, this);
             } else {
-                bot.sendMessage(chatId, "Неизвестная команда!");
+                bot.handleSendMessage(chatId, "Неизвестная команда!");
             }
         } else {
             String chatId = update.getMessage().getChatId().toString();
@@ -80,7 +83,7 @@ public class ButtonCommandHandler { // сделать IBotCommand абстрак
             if (command != null) {
                 command.execute(chatId, bot, this);
             } else {
-                bot.sendMessage(chatId, "Неизвестная команда!");
+                bot.handleSendMessage(chatId, "Неизвестная команда!");
             }
         }
     }
@@ -100,7 +103,6 @@ public class ButtonCommandHandler { // сделать IBotCommand абстрак
      //   nonButtonCommands.put("/setcoins", new SetCoins());
 
         commands.put("owner", new OwnerCommand());
-        commands.put("askchatgpt", new QuestionChatGPTCommand());
     }
 
     public boolean containsCommand(String command) {
