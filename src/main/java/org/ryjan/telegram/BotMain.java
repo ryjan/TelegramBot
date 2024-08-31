@@ -6,13 +6,21 @@ import com.sun.tools.javac.Main;
 import org.ryjan.telegram.commands.user.UserService;
 import org.ryjan.telegram.handler.ButtonCommandHandler;
 import org.ryjan.telegram.config.BotConfig;
+<<<<<<< HEAD
 import org.ryjan.telegram.services.BotService;
+=======
+
+import org.ryjan.telegram.model.UserDatabase;
+>>>>>>> 1497e62 (Spring boot is working!)
 import org.ryjan.telegram.utils.UpdateContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.springframework.beans.factory.annotation.Autowired;
+<<<<<<< HEAD
 import org.springframework.beans.factory.annotation.Value;
+=======
+>>>>>>> 1497e62 (Spring boot is working!)
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.stereotype.Component;
@@ -24,7 +32,7 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.telegram.telegrambots.updatesreceivers.DefaultBotSession;
 import org.telegram.telegrambots.meta.api.objects.User;
 
-@Component
+@SpringBootApplication
 public class BotMain extends TelegramLongPollingBot {
     @Value("${bot.token}")
     private String botToken;
@@ -32,7 +40,23 @@ public class BotMain extends TelegramLongPollingBot {
     private String botUsername;
     private static final String OWNER_ID = "2323";
 
+<<<<<<< HEAD
     private static final Logger LOGGER = LoggerFactory.getLogger(Main.class);
+=======
+    public static void main(String[] args) {
+        SpringApplication.run(BotMain.class, args);
+        LOGGER.info("Starting Bot...");
+        try {
+            TelegramBotsApi botsApi = new TelegramBotsApi(DefaultBotSession.class);
+            botsApi.registerBot(new BotMain());
+       //     UserDatabase user =  userService.findUser("Yaroslavryj");
+        //    userService.delete(user);
+           // BankDatabase userBank = user.getBank();
+            //userBank.setGems(BigDecimal.valueOf(-123));
+           // user.setUserGroup(UserGroup.USER);
+           // userService.update(user);
+           // System.out.println(userService.isOwner(user.getId()));
+>>>>>>> 1497e62 (Spring boot is working!)
 
     @Autowired
     private UserService userService;
@@ -61,7 +85,12 @@ public class BotMain extends TelegramLongPollingBot {
         }
 
         try {
+<<<<<<< HEAD
             botService.handleUpdate(update);
+=======
+            UserDatabase userDatabase = userService.findUser("Ryjan4ik");
+            //buttonCommandHandler.handleCommand(update);
+>>>>>>> 1497e62 (Spring boot is working!)
         } catch (Exception e) {
             LOGGER.error("Error occurred while sending message(onUpdateReceived)", e);
         }
