@@ -4,6 +4,8 @@ import org.ryjan.telegram.handler.ButtonCommandHandler;
 import org.ryjan.telegram.main.BotMain;
 import org.ryjan.telegram.model.BankDatabase;
 import org.ryjan.telegram.model.UserDatabase;
+import org.ryjan.telegram.services.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 
@@ -11,6 +13,8 @@ import java.math.BigDecimal;
 
 @Component
 public class SetCoins extends BaseCommand {
+    @Autowired
+    UserService userService;
 
     public SetCoins() {
         super("/setcoins", "Установить монеты пользователю");
@@ -41,17 +45,11 @@ public class SetCoins extends BaseCommand {
             BigDecimal amount = new BigDecimal(amountString);
             BankDatabase bankDatabase = userDatabase.getBank();
             bankDatabase.setCoins(amount);
+            userService.update(userDatabase);
             message.setText("Успешно🤙\nПользователю " + username + " выставлено " + amount + "🪙");
         } catch (IllegalArgumentException e) {
             message.setText(invalidAmount(amountString));
         }
         sendMessageForCommand(bot, message);
-    }
-
-    @Override
-    protected SendMessage createSendMessage() {
-        SendMessage sendMessage = new SendMessage();
-        sendMessage.setChatId(getChatId());
-        return sendMessage;
     }
 }

@@ -57,7 +57,6 @@ public class BotMain extends TelegramLongPollingBot {
         }
 
         try {
-            UserDatabase userDatabase = userService.findUser("Ryjan4ik");
             buttonCommandHandler.handleCommand(update);
         } catch (Exception e) {
             LOGGER.error("Error occurred while sending message(onUpdateReceived)", e);
