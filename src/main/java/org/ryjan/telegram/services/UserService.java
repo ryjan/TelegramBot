@@ -1,4 +1,4 @@
-package org.ryjan.telegram.commands.user;
+package org.ryjan.telegram.services;
 
 import org.ryjan.telegram.model.BankDatabase;
 import org.ryjan.telegram.model.UserDatabase;
@@ -23,11 +23,11 @@ public class UserService { // сделать Jpa repository к сервису и
         return userDatabaseRepository.findById(id).orElse(null);
     }
 
-    public BankDatabase findBank(long id) {
+    public BankDatabase findBank(Long id) {
         return null;
     }
 
-    public boolean userIsExist(long id) {
+    public boolean userIsExist(Long id) {
         return userDatabaseRepository.existsById(id);
     }
 

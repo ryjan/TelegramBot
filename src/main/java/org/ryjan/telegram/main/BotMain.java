@@ -1,28 +1,23 @@
-package org.ryjan.telegram;
+package org.ryjan.telegram.main;
 
 
 import com.sun.tools.javac.Main;
 
-import org.ryjan.telegram.commands.user.UserService;
-import org.ryjan.telegram.handler.ButtonCommandHandler;
-import org.ryjan.telegram.config.BotConfig;
-
 import org.ryjan.telegram.model.UserDatabase;
+import org.ryjan.telegram.services.UserService;
+import org.ryjan.telegram.handler.ButtonCommandHandler;
+
 import org.ryjan.telegram.utils.UpdateContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
-import org.telegram.telegrambots.meta.TelegramBotsApi;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
-import org.telegram.telegrambots.updatesreceivers.DefaultBotSession;
 import org.telegram.telegrambots.meta.api.objects.User;
 
 @SpringBootApplication

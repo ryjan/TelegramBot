@@ -1,6 +1,6 @@
 package org.ryjan.telegram.utils;
 
-import org.ryjan.telegram.BotMain;
+import org.ryjan.telegram.main.BotMain;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;

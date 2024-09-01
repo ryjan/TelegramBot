@@ -2,7 +2,7 @@ package org.ryjan.telegram.commands.user.transfers;
 
 import org.ryjan.telegram.model.BankDatabase;
 import org.ryjan.telegram.model.UserDatabase;
-import org.ryjan.telegram.commands.user.UserService;
+import org.ryjan.telegram.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -37,7 +37,7 @@ public class TransferService {
         fromBank.setCoins(fromBank.getCoins().subtract(amount));
         toBank.setCoins(toBank.getCoins().add(amount));
 
-       // transferLimitService.recordTransfer(fromUser, amount);
+        transferLimitService.recordTransfer(fromUser, amount); //
 
         userService.update(fromUser);
         userService.update(toUser);

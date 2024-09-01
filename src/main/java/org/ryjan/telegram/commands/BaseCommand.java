@@ -1,10 +1,10 @@
 package org.ryjan.telegram.commands;
 
 import org.ryjan.telegram.commands.interfaces.IBotCommand;
-import org.ryjan.telegram.commands.user.UserService;
+import org.ryjan.telegram.services.UserService;
 import org.ryjan.telegram.model.UserDatabase;
 import org.ryjan.telegram.handler.ButtonCommandHandler;
-import org.ryjan.telegram.BotMain;
+import org.ryjan.telegram.main.BotMain;
 import org.ryjan.telegram.utils.UpdateContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -41,8 +41,12 @@ public abstract class BaseCommand implements IBotCommand {
         return userService.findUser(getUpdate().getMessage().getFrom().getId());
     }
 
-    protected UserDatabase getToUserDatabase(String username) {
+    protected UserDatabase findUserDatabase(String username) {
         return userService.findUser(username);
+    }
+
+    protected boolean userIsExist(String username) {
+        return userService.findUser(username) != null;
     }
 
     protected UserDatabase getToUserDatabase(long id) {
@@ -57,13 +61,15 @@ public abstract class BaseCommand implements IBotCommand {
         return getUpdate().getMessage().getFrom().getUserName();
     }
 
-    protected String userNotFound(String username) {
-        return "Пользователь " + username + " не найден😥";
-    }
-
     protected SendMessage createSendMessage() {
         SendMessage sendMessage = new SendMessage();
         sendMessage.setChatId(getChatId());
+        return sendMessage;
+    }
+
+    protected SendMessage createSendMessage(String chatId) {
+        SendMessage sendMessage = new SendMessage();
+        sendMessage.setChatId(chatId);
         return sendMessage;
     }
 
@@ -88,5 +94,17 @@ public abstract class BaseCommand implements IBotCommand {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    protected String userNotFound(String username) {
+        return "Пользователь " + username + " не найден😥";
+    }
+
+    protected String wrongCommand(String example) {
+        return "Введена неверная команда!\nПример: " + getCommandName() + " " + example;
+    }
+
+    protected String invalidAmount(String amount) {
+        return "Введено неверное число😥";
     }
 }

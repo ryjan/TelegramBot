@@ -1,12 +1,13 @@
 package org.ryjan.telegram.handler;
 
 import org.ryjan.telegram.commands.SendCoins;
+import org.ryjan.telegram.commands.SetCoins;
 import org.ryjan.telegram.commands.user.button.OwnerCommand;
 //import org.ryjan.telegram.commands.user.button.StartCommand;
 import org.ryjan.telegram.commands.interfaces.IBotCommand;
-//import org.ryjan.telegram.commands.owner.SetCoins;
+//import org.ryjan.telegram.commands.SetCoins;
 import org.ryjan.telegram.commands.utils.KeyboardBuilder;
-import org.ryjan.telegram.BotMain;
+import org.ryjan.telegram.main.BotMain;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
@@ -23,7 +24,9 @@ import java.util.Map;
 @Component
 public class ButtonCommandHandler {
 
-    private SendCoins sendCoins;
+    private final SendCoins sendCoins;
+    private final SetCoins setCoins;
+
     @Autowired
     @Lazy
     private BotMain bot;
@@ -33,12 +36,12 @@ public class ButtonCommandHandler {
     private String lastMessage;
 
     @Autowired
-    public ButtonCommandHandler(SendCoins sendCoins) {
+    public ButtonCommandHandler(SendCoins sendCoins, SetCoins setCoins) {
         this.nonButtonCommands = new HashMap<>();
         this.commands = new HashMap<>();
         this.sendCoins = sendCoins;
-        nonButtonCommands.put(sendCoins.getCommandName(), sendCoins);
-        //initializeCommands();
+        this.setCoins = setCoins;
+        initializeCommands();
     }
 
     public void sendMenu(String chatId) {
@@ -103,7 +106,8 @@ public class ButtonCommandHandler {
 
       //  nonButtonCommands.put("/start", new StartCommand());
         nonButtonCommands.put("/owner", new OwnerCommand());
-     //   nonButtonCommands.put("/setcoins", new SetCoins());
+        nonButtonCommands.put(setCoins.getCommandName(), setCoins);
+        nonButtonCommands.put(sendCoins.getCommandName(), sendCoins);
 
         commands.put("owner", new OwnerCommand());
     }

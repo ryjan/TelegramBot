@@ -3,7 +3,7 @@
 import org.ryjan.telegram.commands.user.button.OwnerCommand;
 import org.ryjan.telegram.commands.interfaces.IBotCommand;
 import org.ryjan.telegram.handler.ButtonCommandHandler;
-import org.ryjan.telegram.BotMain;
+import org.ryjan.telegram.main.BotMain;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 
 import java.io.IOException;

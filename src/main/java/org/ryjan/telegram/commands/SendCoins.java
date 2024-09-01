@@ -3,7 +3,7 @@ package org.ryjan.telegram.commands;
 import org.ryjan.telegram.commands.user.transfers.TransferService;
 import org.ryjan.telegram.model.UserDatabase;
 import org.ryjan.telegram.handler.ButtonCommandHandler;
-import org.ryjan.telegram.BotMain;
+import org.ryjan.telegram.main.BotMain;
 import org.ryjan.telegram.utils.UpdateContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -38,7 +38,7 @@ public class SendCoins extends BaseCommand {
         }
         String username = parts[0];
         String amountString = parts[1];
-        toUser = getToUserDatabase(username.substring(1));
+        toUser = findUserDatabase(username.substring(1));
         if (toUser == null) {
             message.setText(userNotFound(username));
             sendMessageForCommand(bot, message);
