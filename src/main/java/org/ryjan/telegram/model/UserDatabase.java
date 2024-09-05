@@ -19,14 +19,14 @@ public class UserDatabase {
     @Column (name = "user_group")
     private String userGroup;
 
-    @OneToOne(mappedBy = "userDatabase" ,cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+    @OneToOne(mappedBy = "userDatabase", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     private BankDatabase bankDatabase;
 
     public UserDatabase() {
 
     }
 
-    public UserDatabase(long id, String userTag) {
+    public UserDatabase(Long id, String userTag) {
         this.id = id;
         this.userTag = userTag;
         this.userGroup = UserGroup.USER.getDisplayname();

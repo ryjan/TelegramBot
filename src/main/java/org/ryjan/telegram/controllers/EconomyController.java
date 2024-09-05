@@ -1,6 +1,6 @@
 package org.ryjan.telegram.controllers;
 
-import org.ryjan.telegram.commands.SetCoins;
+import org.ryjan.telegram.controllers.commands.SetCoinsRest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

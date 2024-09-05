@@ -12,7 +12,7 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
 @Component
-public abstract class BaseCommand implements IBotCommand {
+public abstract class BaseCommand extends Translation implements IBotCommand {
     private final String commandName;
     private final String description;
 
@@ -94,17 +94,5 @@ public abstract class BaseCommand implements IBotCommand {
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }
-
-    protected String userNotFound(String username) {
-        return "Пользователь " + username + " не найден😥";
-    }
-
-    protected String wrongCommand(String example) {
-        return "Введена неверная команда!\nПример: " + getCommandName() + " " + example;
-    }
-
-    protected String invalidAmount(String amount) {
-        return "Введено неверное число😥";
     }
 }

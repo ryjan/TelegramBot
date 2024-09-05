@@ -19,6 +19,10 @@ public class TransferLimit {
     private BigDecimal dailyTransferAmount;
     private LocalDate lastTransferDate;
 
+    public Long getId() {
+        return this.id;
+    }
+
     public BigDecimal getDailyTransferAmount() {
         return this.dailyTransferAmount;
     }

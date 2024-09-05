@@ -3,7 +3,9 @@ package org.ryjan.telegram.main;
 
 import com.sun.tools.javac.Main;
 
+import org.ryjan.telegram.model.Groups;
 import org.ryjan.telegram.model.UserDatabase;
+import org.ryjan.telegram.services.GroupService;
 import org.ryjan.telegram.services.UserService;
 import org.ryjan.telegram.handler.ButtonCommandHandler;
 
@@ -24,8 +26,13 @@ import org.telegram.telegrambots.meta.api.objects.User;
 public class BotMain extends TelegramLongPollingBot {
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private GroupService groupService;
+
     @Autowired
     private ButtonCommandHandler buttonCommandHandler;
+
     @Value("${bot.token}")
     private String token;
     @Value("${bot.username}")

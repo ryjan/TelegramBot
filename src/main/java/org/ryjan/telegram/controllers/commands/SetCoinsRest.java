@@ -1,10 +1,9 @@
-package org.ryjan.telegram.controllers;
+package org.ryjan.telegram.controllers.commands;
 
 import org.ryjan.telegram.model.BankDatabase;
 import org.ryjan.telegram.model.UserDatabase;
 import org.ryjan.telegram.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;

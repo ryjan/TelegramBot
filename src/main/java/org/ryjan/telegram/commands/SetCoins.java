@@ -1,5 +1,6 @@
 package org.ryjan.telegram.commands;
 
+import org.ryjan.telegram.commands.user.UserGroup;
 import org.ryjan.telegram.handler.ButtonCommandHandler;
 import org.ryjan.telegram.main.BotMain;
 import org.ryjan.telegram.model.BankDatabase;
@@ -8,6 +9,7 @@ import org.ryjan.telegram.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
+import org.telegram.telegrambots.meta.api.objects.Update;
 
 import java.math.BigDecimal;
 
@@ -23,11 +25,18 @@ public class SetCoins extends BaseCommand {
     @Override
     protected void executeCommand(String chatId, BotMain bot, ButtonCommandHandler buttonCommandHandler) {
         SendMessage message = createSendMessage(chatId);
+        UserDatabase fromUser = userService.findUser(getUpdate().getMessage().getFrom().getId());
+
+        if (!fromUser.isOwner()) {
+            message.setText(noPermission(getCommandName(), UserGroup.OWNER));
+            sendMessageForCommand(bot, message);
+            return;
+        }
 
         String[] parts = getParts(getCommandName(), 2);
 
         if (parts.length != 2 || !parts[0].startsWith("@")) {
-            message.setText(wrongCommand("@Ryjan4ik 123"));
+            message.setText(wrongCommand("@Ryjan4ik 123", getCommandName()));
             sendMessageForCommand(bot, message);
             return;
         }
