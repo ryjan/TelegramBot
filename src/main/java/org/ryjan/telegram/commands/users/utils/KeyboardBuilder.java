@@ -1,4 +1,4 @@
-package org.ryjan.telegram.commands.utils;
+package org.ryjan.telegram.commands.users.utils;
 
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 

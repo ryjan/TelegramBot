@@ -1,12 +1,12 @@
 package org.ryjan.telegram.handler;
 
-import org.ryjan.telegram.commands.SendCoins;
-import org.ryjan.telegram.commands.SetCoins;
-import org.ryjan.telegram.commands.user.button.OwnerCommand;
+import org.ryjan.telegram.commands.users.SendCoins;
+import org.ryjan.telegram.commands.users.SetCoins;
+import org.ryjan.telegram.commands.users.user.button.OwnerCommand;
 //import org.ryjan.telegram.commands.user.button.StartCommand;
 import org.ryjan.telegram.commands.interfaces.IBotCommand;
-//import org.ryjan.telegram.commands.SetCoins;
-import org.ryjan.telegram.commands.utils.KeyboardBuilder;
+//import org.ryjan.telegram.commands.users.SetCoins;
+import org.ryjan.telegram.commands.users.utils.KeyboardBuilder;
 import org.ryjan.telegram.main.BotMain;
 
 import org.springframework.beans.factory.annotation.Autowired;

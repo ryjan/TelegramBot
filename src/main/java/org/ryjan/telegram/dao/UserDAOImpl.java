@@ -1,4 +1,4 @@
-package org.ryjan.telegram.dao;
+/*package org.ryjan.telegram.dao;
 
 import org.hibernate.Session;
 import org.hibernate.Transaction;
@@ -63,3 +63,4 @@ public class UserDAOImpl implements UserDAO { // Это просто удали�
         session.close();
     }
 }
+*/

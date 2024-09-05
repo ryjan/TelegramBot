@@ -1,6 +1,6 @@
-package org.ryjan.telegram.commands;
+package org.ryjan.telegram.commands.users;
 
-import org.ryjan.telegram.commands.user.UserGroup;
+import org.ryjan.telegram.commands.users.user.UserGroup;
 import org.ryjan.telegram.handler.ButtonCommandHandler;
 import org.ryjan.telegram.main.BotMain;
 import org.ryjan.telegram.model.BankDatabase;
@@ -9,7 +9,6 @@ import org.ryjan.telegram.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
-import org.telegram.telegrambots.meta.api.objects.Update;
 
 import java.math.BigDecimal;
 

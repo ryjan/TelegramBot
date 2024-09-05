@@ -1,6 +1,6 @@
-package org.ryjan.telegram.commands;
+package org.ryjan.telegram.commands.users;
 
-import org.ryjan.telegram.commands.user.UserGroup;
+import org.ryjan.telegram.commands.users.user.UserGroup;
 
 public class Translation {
     protected String userNotFound(String username) {

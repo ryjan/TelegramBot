@@ -3,6 +3,7 @@ package org.ryjan.telegram.main;
 
 import com.sun.tools.javac.Main;
 
+import org.ryjan.telegram.handler.GroupCommandHandler;
 import org.ryjan.telegram.model.Groups;
 import org.ryjan.telegram.model.UserDatabase;
 import org.ryjan.telegram.services.GroupService;
@@ -33,10 +34,15 @@ public class BotMain extends TelegramLongPollingBot {
     @Autowired
     private ButtonCommandHandler buttonCommandHandler;
 
+    @Autowired
+    private GroupCommandHandler groupCommandHandler;
+
     @Value("${bot.token}")
     private String token;
     @Value("${bot.username}")
     private String username;
+    @Value("${bot.tag}")
+    private String tag;
 
     public static final Logger LOGGER = LoggerFactory.getLogger(Main.class);
 
@@ -64,10 +70,19 @@ public class BotMain extends TelegramLongPollingBot {
         }
 
         try {
-            buttonCommandHandler.handleCommand(update);
+            if (update.getMessage().getChat().isUserChat()) {
+                buttonCommandHandler.handleCommand(update);
+            } else {
+                groupCommandHandler.handleCommand(update);
+            }
+
         } catch (Exception e) {
             LOGGER.error("Error occurred while sending message(onUpdateReceived)", e);
         }
+    }
+
+    public String getBotTag() {
+        return tag;
     }
 
     @Override

@@ -1,4 +1,4 @@
-package org.ryjan.telegram.commands.user.transfers;
+package org.ryjan.telegram.commands.users.user.transfers;
 
 import org.ryjan.telegram.config.BotConfig;
 import org.ryjan.telegram.model.UserDatabase;

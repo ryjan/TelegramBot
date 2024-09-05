@@ -1,6 +1,7 @@
 package org.ryjan.telegram.model;
 
 import jakarta.persistence.*;
+import org.ryjan.telegram.commands.groups.Privileges;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,6 +13,7 @@ public class Groups {
     @Id
     private Long id;
     private String groupName;
+    private String privileges;
 
     @OneToMany(mappedBy = "group", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     private List<ChatSettings> chatSettings = new ArrayList<>();
@@ -20,13 +22,18 @@ public class Groups {
 
     }
 
-    public Groups(Long id, String groupName) {
+    public Groups(Long id, String groupName, Privileges privileges) {
         this.id = id;
         this.groupName = groupName;
+        this.privileges = privileges.getDisplayName();
     }
 
     public Long getId() {
         return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getGroupName() {
@@ -37,8 +44,12 @@ public class Groups {
         this.groupName = groupName;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public String getPrivileges() {
+        return privileges;
+    }
+
+    public void setPrivileges(Privileges privileges) {
+        this.privileges = privileges.getDisplayName();
     }
 
     public List<ChatSettings> getChatSettings() {

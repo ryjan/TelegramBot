@@ -1,4 +1,4 @@
-package org.ryjan.telegram.commands.user;
+package org.ryjan.telegram.commands.users.user;
 
 public enum UserGroup {
     OWNER("Owner"),

@@ -1,4 +1,4 @@
-package org.ryjan.telegram.commands;
+package org.ryjan.telegram.commands.users;
 
 import org.ryjan.telegram.commands.interfaces.IBotCommand;
 import org.ryjan.telegram.services.UserService;
@@ -53,7 +53,7 @@ public abstract class BaseCommand extends Translation implements IBotCommand {
         return null;
     }
 
-    protected long getChatId() {
+    protected Long getChatId() {
         return getUpdate().getMessage().getFrom().getId();
     }
 
