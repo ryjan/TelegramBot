@@ -1,4 +1,4 @@
-package org.ryjan.telegram.model;
+package org.ryjan.telegram.model.groups;
 
 import jakarta.persistence.*;
 
@@ -19,6 +19,11 @@ public class ChatSettings {
 
     public ChatSettings() {
 
+    }
+
+    public void addSetting(String settingKey, String settingValue) {
+        this.settingKey = settingKey;
+        this.settingValue = settingValue;
     }
 
     public Long getId() {

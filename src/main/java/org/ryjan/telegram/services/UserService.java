@@ -1,7 +1,7 @@
 package org.ryjan.telegram.services;
 
-import org.ryjan.telegram.model.BankDatabase;
-import org.ryjan.telegram.model.UserDatabase;
+import org.ryjan.telegram.model.users.BankDatabase;
+import org.ryjan.telegram.model.users.UserDatabase;
 import org.ryjan.telegram.repos.BankDatabaseRepository;
 import org.ryjan.telegram.repos.UserDatabaseRepository;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -4,8 +4,6 @@ package org.ryjan.telegram.main;
 import com.sun.tools.javac.Main;
 
 import org.ryjan.telegram.handler.GroupCommandHandler;
-import org.ryjan.telegram.model.Groups;
-import org.ryjan.telegram.model.UserDatabase;
 import org.ryjan.telegram.services.GroupService;
 import org.ryjan.telegram.services.UserService;
 import org.ryjan.telegram.handler.ButtonCommandHandler;

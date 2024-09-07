@@ -3,8 +3,8 @@
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
-import org.ryjan.telegram.model.BankDatabase;
-import org.ryjan.telegram.model.UserDatabase;
+import org.ryjan.telegram.model.users.BankDatabase;
+import org.ryjan.telegram.model.users.UserDatabase;
 import org.ryjan.telegram.interfaces.UserDAO;
 import org.ryjan.telegram.utils.HibernateSessionFactory;
 

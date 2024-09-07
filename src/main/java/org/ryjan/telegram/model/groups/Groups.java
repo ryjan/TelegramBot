@@ -1,4 +1,4 @@
-package org.ryjan.telegram.model;
+package org.ryjan.telegram.model.groups;
 
 import jakarta.persistence.*;
 import org.ryjan.telegram.commands.groups.Privileges;
@@ -21,7 +21,8 @@ public class Groups {
     @OneToMany(mappedBy = "group", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     private List<ChatSettings> chatSettings = new ArrayList<>();
 
-
+    @OneToMany(mappedBy = "group", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+    private List<Blacklist> blacklists = new ArrayList<>();
 
     public Groups() {
 
@@ -55,8 +56,16 @@ public class Groups {
         return privileges;
     }
 
-    public void setPrivileges(Privileges privileges) {
-        this.privileges = privileges.getDisplayName();
+    public void setPrivileges(String privileges) {
+        this.privileges = privileges;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
     }
 
     public List<ChatSettings> getChatSettings() {
@@ -65,5 +74,13 @@ public class Groups {
 
     public void setChatSettings(List<ChatSettings> chatSettings) {
         this.chatSettings = chatSettings;
+    }
+
+    public List<Blacklist> getBlacklists() {
+        return blacklists;
+    }
+
+    public void setBlacklists(List<Blacklist> blacklists) {
+        this.blacklists = blacklists;
     }
 }

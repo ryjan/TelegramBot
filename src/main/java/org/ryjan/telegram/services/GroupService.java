@@ -1,8 +1,7 @@
 package org.ryjan.telegram.services;
 
 import jakarta.persistence.EntityManager;
-import org.ryjan.telegram.model.Groups;
-import org.ryjan.telegram.model.UserDatabase;
+import org.ryjan.telegram.model.groups.Groups;
 import org.ryjan.telegram.repos.BlacklistRepository;
 import org.ryjan.telegram.repos.ChatSettingsRepository;
 import org.ryjan.telegram.repos.GroupsRepository;
@@ -23,6 +22,14 @@ public class GroupService {
 
     @Autowired
     BlacklistRepository blacklistRepository;
+
+    public boolean groupIsExist(String groupName) {
+        return groupsRepository.existsByGroupName(groupName);
+    }
+
+    public boolean groupIsExist(Long id) {
+        return groupsRepository.existsById(id);
+    }
 
     public void update(Groups group) {
         groupsRepository.save(group);

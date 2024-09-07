@@ -1,6 +1,6 @@
 package org.ryjan.telegram.commands.users.user.transfers;
 
-import org.ryjan.telegram.model.UserDatabase;
+import org.ryjan.telegram.model.users.UserDatabase;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

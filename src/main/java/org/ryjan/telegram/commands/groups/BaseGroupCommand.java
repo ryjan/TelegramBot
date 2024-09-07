@@ -23,6 +23,18 @@ public abstract class BaseGroupCommand implements IBotGroupCommand {
         return description;
     }
 
+    protected SendMessage createSendMessage(Long chatId) {
+        SendMessage sendMessage = new SendMessage();
+        sendMessage.setChatId(chatId.toString());
+        return sendMessage;
+    }
+
+    protected SendMessage createSendMessage(String chatId) {
+        SendMessage sendMessage = new SendMessage();
+        sendMessage.setChatId(chatId);
+        return sendMessage;
+    }
+
     protected void sendMessageForCommand(BotMain bot, SendMessage message) {
         try {
             bot.execute(message);

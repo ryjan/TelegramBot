@@ -1,12 +1,10 @@
 package org.ryjan.telegram.commands.groups.administration;
 
 import org.ryjan.telegram.commands.groups.BaseGroupCommand;
-import org.ryjan.telegram.commands.users.BaseCommand;
 import org.ryjan.telegram.commands.groups.Privileges;
-import org.ryjan.telegram.handler.ButtonCommandHandler;
 import org.ryjan.telegram.handler.GroupCommandHandler;
 import org.ryjan.telegram.main.BotMain;
-import org.ryjan.telegram.model.Groups;
+import org.ryjan.telegram.model.groups.Groups;
 import org.ryjan.telegram.services.GroupService;
 import org.ryjan.telegram.utils.UpdateContext;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,10 +12,9 @@ import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
-import java.time.LocalDateTime;
-
 @Component
 public class StartGroupCommand extends BaseGroupCommand {
+
     @Autowired
     private GroupService groupService;
 
@@ -28,9 +25,15 @@ public class StartGroupCommand extends BaseGroupCommand {
     @Override
     protected void executeCommand(String chatId, BotMain bot, GroupCommandHandler groupCommandHandler) {
         Update update = UpdateContext.getInstance().getUpdate();
-        SendMessage message = new SendMessage();
-        message.setChatId(chatId);
+        SendMessage message = createSendMessage(chatId);
         //String groupName = update.getMessage().getLeftChatMember();
+
+        if (groupService.groupIsExist(update.getMessage().getChatId())) {
+            message.setText("Группа уже зарегистрирована😊");
+            sendMessageForCommand(bot, message);
+            return;
+        }
+
         String groupName = update.getMessage().getChat().getTitle();
         Groups groups = new Groups(Long.valueOf(chatId), groupName, Privileges.BASE);
 

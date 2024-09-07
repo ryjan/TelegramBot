@@ -1,7 +1,7 @@
 package org.ryjan.telegram.commands.users.user.transfers;
 
 import jakarta.persistence.*;
-import org.ryjan.telegram.model.UserDatabase;
+import org.ryjan.telegram.model.users.UserDatabase;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;

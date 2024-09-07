@@ -1,11 +1,11 @@
-package org.ryjan.telegram.model;
+package org.ryjan.telegram.model.groups;
 
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
 
 @Entity
-@Table(schema = "#{T(org.ryjan.telegram.config.SchemaContextHolder).getSchemaName()}")
+@Table(schema = "groups")
 public class Blacklist {
 
     @Id

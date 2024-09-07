@@ -1,8 +1,7 @@
 package org.ryjan.telegram.repos;
 
-import org.ryjan.telegram.model.UserDatabase;
+import org.ryjan.telegram.model.users.UserDatabase;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
 
 public interface UserDatabaseRepository extends JpaRepository<UserDatabase, Long> {
     UserDatabase findByUserTag(String tag);
