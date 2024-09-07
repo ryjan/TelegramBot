@@ -8,6 +8,7 @@ public class ChatSettings {
 
     @Id
     private Long id;
+    @Column(unique = true)
     private String settingKey;
     private String settingValue;
 

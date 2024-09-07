@@ -7,7 +7,6 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 
 @Entity
-@Table(name = "transfer_limit")
 public class TransferLimit {
     @Id
     private Long id;

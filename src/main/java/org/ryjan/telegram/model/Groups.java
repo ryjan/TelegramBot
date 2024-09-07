@@ -3,6 +3,8 @@ package org.ryjan.telegram.model;
 import jakarta.persistence.*;
 import org.ryjan.telegram.commands.groups.Privileges;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,9 +16,12 @@ public class Groups {
     private Long id;
     private String groupName;
     private String privileges;
+    private LocalDateTime createdAt;
 
     @OneToMany(mappedBy = "group", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     private List<ChatSettings> chatSettings = new ArrayList<>();
+
+
 
     public Groups() {
 
@@ -26,6 +31,8 @@ public class Groups {
         this.id = id;
         this.groupName = groupName;
         this.privileges = privileges.getDisplayName();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
+        this.createdAt = LocalDateTime.parse(LocalDateTime.now().format(formatter), formatter);
     }
 
     public Long getId() {
