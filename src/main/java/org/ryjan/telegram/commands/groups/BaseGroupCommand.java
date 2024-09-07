@@ -4,7 +4,9 @@ import org.ryjan.telegram.commands.interfaces.IBotGroupCommand;
 import org.ryjan.telegram.handler.ButtonCommandHandler;
 import org.ryjan.telegram.handler.GroupCommandHandler;
 import org.ryjan.telegram.main.BotMain;
+import org.ryjan.telegram.utils.UpdateContext;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
+import org.telegram.telegrambots.meta.api.objects.Update;
 
 public abstract class BaseGroupCommand implements IBotGroupCommand {
     private final String commandName;
@@ -21,6 +23,10 @@ public abstract class BaseGroupCommand implements IBotGroupCommand {
 
     public String getDescription() {
         return description;
+    }
+
+    protected Update getUpdate() {
+        return UpdateContext.getInstance().getUpdate();
     }
 
     protected SendMessage createSendMessage(Long chatId) {
@@ -41,6 +47,10 @@ public abstract class BaseGroupCommand implements IBotGroupCommand {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    protected String[] getParts(String command, int expectedParts) {
+        return getUpdate().getMessage().getText().replace(command, "").trim().split(" ", expectedParts);
     }
 
     protected abstract void executeCommand(String chatId, BotMain bot, GroupCommandHandler groupCommandHandler);

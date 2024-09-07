@@ -7,6 +7,8 @@ import org.ryjan.telegram.handler.GroupCommandHandler;
 import org.ryjan.telegram.services.GroupService;
 import org.ryjan.telegram.services.UserService;
 import org.ryjan.telegram.handler.ButtonCommandHandler;
+import org.telegram.telegrambots.meta.api.methods.groupadministration.BanChatMember;
+import org.telegram.telegrambots.meta.api.methods.groupadministration.LeaveChat;
 
 import org.ryjan.telegram.utils.UpdateContext;
 import org.slf4j.Logger;
@@ -16,8 +18,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
+import org.telegram.telegrambots.meta.api.methods.groupadministration.GetChatMember;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
+import org.telegram.telegrambots.meta.api.objects.chatmember.ChatMember;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.telegram.telegrambots.meta.api.objects.User;
 
@@ -63,12 +67,13 @@ public class BotMain extends TelegramLongPollingBot {
         if (update.hasMessage() && update.getMessage().hasText()) {
             String receivedMessage = update.getMessage().getText();
             Long chatId = update.getMessage().getChatId();
-            UpdateContext.getInstance().setUpdate(update);
             User user = update.getMessage().getFrom();
         }
+        System.out.println(update.hasMessage());
+        UpdateContext.getInstance().setUpdate(update);
 
         try {
-            if (update.getMessage().getChat().isUserChat()) {
+            if (update.hasMessage() && update.getMessage().getChat().isUserChat()) {
                 buttonCommandHandler.handleCommand(update);
             } else {
                 groupCommandHandler.handleCommand(update);
@@ -76,6 +81,42 @@ public class BotMain extends TelegramLongPollingBot {
 
         } catch (Exception e) {
             LOGGER.error("Error occurred while sending message(onUpdateReceived)", e);
+        }
+    }
+
+    public ChatMember getChatMember(Long chatId, Long userId) {
+        GetChatMember chatMember = new GetChatMember();
+        chatMember.setChatId(chatId);
+        chatMember.setUserId(userId);
+        try {
+            return execute(chatMember);
+        } catch (Exception e) {
+            LOGGER.error("Error occurred while getting chat member", e);
+        }
+        return null;
+    }
+
+    public void banUser(Long chatId, Long userId) {
+        BanChatMember banChatMember = new BanChatMember();
+        banChatMember.setChatId(chatId);
+        banChatMember.setUserId(userId);
+
+        try {
+            execute(banChatMember);
+        } catch (Exception e) {
+            LOGGER.error("Error occurred while banning user", e);
+        }
+    }
+
+    public void banUser(String chatId, Long userId) {
+        BanChatMember banChatMember = new BanChatMember();
+        banChatMember.setChatId(chatId);
+        banChatMember.setUserId(userId);
+
+        try {
+            execute(banChatMember);
+        } catch (Exception e) {
+            LOGGER.error("Error occurred while banning user", e);
         }
     }
 

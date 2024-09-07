@@ -10,10 +10,10 @@ public class KeyboardBuilder {
     public static class ButtonRow {
         private final List<InlineKeyboardButton> buttons = new ArrayList<>();
 
-        public ButtonRow addButton(String text, String name) {
+        public ButtonRow addButton(String text, String callBackDataName) {
             InlineKeyboardButton button = new InlineKeyboardButton();
             button.setText(text);
-            button.setCallbackData(name);
+            button.setCallbackData(callBackDataName);
             buttons.add(button);
             return this;
         }

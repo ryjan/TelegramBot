@@ -24,6 +24,9 @@ public class Groups {
     @OneToMany(mappedBy = "group", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     private List<Blacklist> blacklists = new ArrayList<>();
 
+    @OneToMany(mappedBy = "group", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+    private List<GroupMemberList> groupMemberLists = new ArrayList<>();
+
     public Groups() {
 
     }
@@ -82,5 +85,13 @@ public class Groups {
 
     public void setBlacklists(List<Blacklist> blacklists) {
         this.blacklists = blacklists;
+    }
+
+    public List<GroupMemberList> getGroupMemberLists() {
+        return groupMemberLists;
+    }
+
+    public void setGroupMemberLists(List<GroupMemberList> groupMemberLists) {
+        this.groupMemberLists = groupMemberLists;
     }
 }

@@ -1,13 +1,17 @@
 package org.ryjan.telegram.handler;
 
-import org.ryjan.telegram.commands.groups.administration.StartGroupCommand;
-import org.ryjan.telegram.commands.interfaces.IBotCommand;
+import org.ryjan.telegram.commands.groups.administration.BlacklistSwitch;
+import org.ryjan.telegram.commands.groups.administration.StartGroup;
 import org.ryjan.telegram.commands.interfaces.IBotGroupCommand;
+import org.ryjan.telegram.commands.users.utils.KeyboardBuilder;
 import org.ryjan.telegram.main.BotMain;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
+import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
+import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -16,7 +20,8 @@ import java.util.Map;
 @Component
 public class GroupCommandHandler {
 
-    private final StartGroupCommand startGroupCommand;
+    private final StartGroup startGroupCommand;
+    private final BlacklistSwitch blacklistSwitch;
 
     private final Map<String, IBotGroupCommand> commands;
     private final Map<String, IBotGroupCommand> buttonCommands;
@@ -26,8 +31,10 @@ public class GroupCommandHandler {
     @Lazy
     private BotMain bot;
 
-    public GroupCommandHandler(StartGroupCommand startGroupCommand) {
+    public GroupCommandHandler(StartGroup startGroupCommand, BlacklistSwitch blacklistSwitch) {
         this.startGroupCommand = startGroupCommand;
+        this.blacklistSwitch = blacklistSwitch;
+
         this.commands = new HashMap<>();
         this.buttonCommands = new HashMap<>();
 
@@ -44,28 +51,31 @@ public class GroupCommandHandler {
             if (command != null) {
                 command.execute(chatId, bot, this);
             } else {
-                bot.sendMessage(chatId, "Неизвестная команда!");
+                bot.sendMessage(chatId, "Неизвестная команда1!");
             }
         } else {
             String chatId = update.getMessage().getChatId().toString();
             String message = update.getMessage().getText();
             lastMessage = message;
-            String commandKey = message.split(" ")[0].replace(bot.getBotTag(), "");
-            System.out.println(bot.getBotUsername());
-            System.out.println(commandKey);
-            IBotGroupCommand command = commands.get(commandKey);
-            System.out.println(command);
+            if (message.startsWith("/")) {
+                String commandKey = message.split(" ")[0].replace(bot.getBotTag(), "");
+                System.out.println(bot.getBotUsername());
+                System.out.println(commandKey);
+                IBotGroupCommand command = commands.get(commandKey);
+                System.out.println(command);
 
-            if (command != null) {
-                command.execute(chatId, bot, this);
-            } else {
-                bot.sendMessage(chatId, "Неизвестная команда!");
+                if (command != null) {
+                    command.execute(chatId, bot, this);
+                }
             }
         }
     }
 
     private void initializeCommands() {
         commands.put(startGroupCommand.getCommandName(), startGroupCommand);
+        commands.put(blacklistSwitch.getCommandName(), blacklistSwitch);
+
+        buttonCommands.put(blacklistSwitch.getCommandName(), blacklistSwitch);
     }
 
     public String getLastMessage() {
