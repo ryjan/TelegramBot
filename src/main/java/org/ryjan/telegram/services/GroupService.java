@@ -9,8 +9,10 @@ import org.ryjan.telegram.repos.ChatSettingsRepository;
 import org.ryjan.telegram.repos.GroupsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashMap;
+import java.util.List;
 
 @Service
 public class GroupService {
@@ -27,6 +29,18 @@ public class GroupService {
     @Autowired
     BlacklistRepository blacklistRepository;
 
+    @Transactional
+    public void addToBlacklist(Groups group, Blacklist blacklist) {
+        List<Blacklist> list = group.getBlacklists();
+        list.add(blacklist);
+        group.setBlacklists(list);
+        blacklistRepository.save(blacklist);
+        groupsRepository.save(group);
+    }
+
+    public Groups findGroup(Long id) {
+        return groupsRepository.findById(id).orElse(null);
+    }
 
     public boolean groupIsExist(String groupName) {
         return groupsRepository.existsByGroupName(groupName);

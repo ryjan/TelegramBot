@@ -1,13 +1,12 @@
 package org.ryjan.telegram.commands.groups.administration;
 
 import org.ryjan.telegram.commands.groups.BaseGroupCommand;
-import org.ryjan.telegram.commands.groups.Privileges;
+import org.ryjan.telegram.commands.groups.GroupPrivileges;
 import org.ryjan.telegram.handler.GroupCommandHandler;
 import org.ryjan.telegram.main.BotMain;
 import org.ryjan.telegram.model.groups.ChatSettings;
 import org.ryjan.telegram.model.groups.Groups;
 import org.ryjan.telegram.services.GroupService;
-import org.ryjan.telegram.utils.UpdateContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
@@ -45,7 +44,7 @@ public class StartGroup extends BaseGroupCommand {
         }
 
         String groupName = update.getMessage().getChat().getTitle();
-        Groups group = new Groups(Long.valueOf(chatId), groupName, Privileges.BASE);
+        Groups group = new Groups(Long.valueOf(chatId), groupName, GroupPrivileges.BASE);
         ChatSettings chatSettings = new ChatSettings();
         chatSettings.setGroups(group);
         chatSettings.addSetting("aboba", "abo");

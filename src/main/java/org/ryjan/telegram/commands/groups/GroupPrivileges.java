@@ -1,13 +1,13 @@
 package org.ryjan.telegram.commands.groups;
 
-public enum Privileges {
+public enum GroupPrivileges {
     PREMIUM("Premium"),
     VIP("Vip"),
     BASE("Base");
 
     private final String privilege;
 
-    Privileges(String privilege) {
+    GroupPrivileges(String privilege) {
         this.privilege = privilege;
     }
 

@@ -3,6 +3,7 @@ package org.ryjan.telegram.main;
 
 import com.sun.tools.javac.Main;
 
+import org.ryjan.telegram.commands.groups.administration.ChatBlacklist;
 import org.ryjan.telegram.handler.GroupCommandHandler;
 import org.ryjan.telegram.services.GroupService;
 import org.ryjan.telegram.services.UserService;
@@ -39,6 +40,9 @@ public class BotMain extends TelegramLongPollingBot {
     @Autowired
     private GroupCommandHandler groupCommandHandler;
 
+    @Autowired
+    ChatBlacklist chatBlacklist;
+
     @Value("${bot.token}")
     private String token;
     @Value("${bot.username}")
@@ -64,11 +68,14 @@ public class BotMain extends TelegramLongPollingBot {
 
     @Override
     public void onUpdateReceived(Update update) {
+        autoExecute(update);
+
         if (update.hasMessage() && update.getMessage().hasText()) {
             String receivedMessage = update.getMessage().getText();
             Long chatId = update.getMessage().getChatId();
             User user = update.getMessage().getFrom();
         }
+
         System.out.println(update.hasMessage());
         UpdateContext.getInstance().setUpdate(update);
 
@@ -79,8 +86,8 @@ public class BotMain extends TelegramLongPollingBot {
                 groupCommandHandler.handleCommand(update);
             }
 
-        } catch (Exception e) {
-            LOGGER.error("Error occurred while sending message(onUpdateReceived)", e);
+        } catch (Exception _) {
+            LOGGER.error("Error occurred while sending message(onUpdateReceived)");
         }
     }
 
@@ -117,6 +124,13 @@ public class BotMain extends TelegramLongPollingBot {
             execute(banChatMember);
         } catch (Exception e) {
             LOGGER.error("Error occurred while banning user", e);
+        }
+    }
+
+    private void autoExecute(Update update) {
+        if (update.hasMessage() && update.getMessage().getLeftChatMember() != null) {
+            String chatId = update.getMessage().getChatId().toString();
+            chatBlacklist.executeCommand(chatId, update);
         }
     }
 

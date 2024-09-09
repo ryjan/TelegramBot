@@ -1,7 +1,7 @@
 package org.ryjan.telegram.model.groups;
 
 import jakarta.persistence.*;
-import org.ryjan.telegram.commands.groups.Privileges;
+import org.ryjan.telegram.commands.groups.GroupPrivileges;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -31,7 +31,7 @@ public class Groups {
 
     }
 
-    public Groups(Long id, String groupName, Privileges privileges) {
+    public Groups(Long id, String groupName, GroupPrivileges privileges) {
         this.id = id;
         this.groupName = groupName;
         this.privileges = privileges.getDisplayName();
