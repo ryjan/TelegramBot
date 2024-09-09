@@ -36,14 +36,9 @@ public class ChatBlacklist{
         String leftUserUsername = update.getMessage().getLeftChatMember().getUserName();
 
         //botMain.banUser(chatId, leftUserId);
-        Groups group = groupService.findGroup(groupId);
-        System.out.println(group);
-        Blacklist blacklist = new Blacklist(groupId, groupName, leftUserId, leftUserUsername, LocalDateTime.now());
-        List<Blacklist> blacklists = new ArrayList<>();
-        blacklists.add(blacklist);
-        group.setBlacklists(blacklists);
-        blacklist.setGroup(group);
-        groupService.update(blacklist);
+        Blacklist blacklist = new Blacklist(123L, groupName, leftUserId, leftUserUsername, LocalDateTime.now());
+
+        groupService.addToBlacklist(groupId, blacklist);
     }
 
     public void enable() {

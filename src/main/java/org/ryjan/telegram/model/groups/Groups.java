@@ -21,7 +21,7 @@ public class Groups {
     @OneToMany(mappedBy = "group", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     private List<ChatSettings> chatSettings = new ArrayList<>();
 
-    @OneToMany(mappedBy = "group", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+    @OneToMany(mappedBy = "group", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = false)
     private List<Blacklist> blacklists = new ArrayList<>();
 
     @OneToMany(mappedBy = "group", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
@@ -37,6 +37,11 @@ public class Groups {
         this.privileges = privileges.getDisplayName();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
         this.createdAt = LocalDateTime.parse(LocalDateTime.now().format(formatter), formatter);
+        setBlacklists(blacklists);
+    }
+
+    public void addBlacklist(Blacklist blacklist) {
+        blacklists.add(blacklist);
     }
 
     public Long getId() {

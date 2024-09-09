@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -29,12 +30,23 @@ public class GroupService {
     @Autowired
     BlacklistRepository blacklistRepository;
 
-    @Transactional
     public void addToBlacklist(Groups group, Blacklist blacklist) {
         List<Blacklist> list = group.getBlacklists();
         list.add(blacklist);
         group.setBlacklists(list);
-        blacklistRepository.save(blacklist);
+        blacklist.setGroup(group);
+        groupsRepository.save(group);
+    }
+
+    @Transactional
+    public void addToBlacklist(Long groupId, Blacklist blacklist) {
+        Groups group = findGroup(groupId);
+        if (group.getBlacklists().isEmpty() || !isExistBlacklist(groupId)) {
+            List<Blacklist> list = new ArrayList<>();
+            group.setBlacklists(list);
+        }
+        group.addBlacklist(blacklist);
+        blacklist.setGroup(group);
         groupsRepository.save(group);
     }
 
@@ -42,8 +54,16 @@ public class GroupService {
         return groupsRepository.findById(id).orElse(null);
     }
 
-    public boolean groupIsExist(String groupName) {
+    public boolean isExistGroup(String groupName) {
         return groupsRepository.existsByGroupName(groupName);
+    }
+
+    public boolean isExistGroup(Long groupId) {
+        return groupsRepository.existsById(groupId);
+    }
+
+    public boolean isExistBlacklist(Long groupId) {
+        return blacklistRepository.existsById(groupId);
     }
 
     public boolean groupIsExist(Long id) {

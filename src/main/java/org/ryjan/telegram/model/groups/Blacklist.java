@@ -5,19 +5,19 @@ import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(schema = "groups")
+@Table(name = "blacklist", schema = "groups")
 public class Blacklist {
 
     @Id
     private Long id;
+
     private String groupName;
     private Long userId;
     private String username;
     LocalDateTime createdAt;
 
-    @ManyToOne
-    @MapsId
-    @JoinColumn(name = "id")
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "group_id", nullable = false)
     private Groups group;
 
     public Blacklist() {
