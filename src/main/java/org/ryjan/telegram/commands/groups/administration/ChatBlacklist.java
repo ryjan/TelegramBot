@@ -7,6 +7,7 @@ import org.ryjan.telegram.services.GroupService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
+import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
 import java.time.LocalDateTime;
@@ -36,9 +37,21 @@ public class ChatBlacklist{
         String leftUserUsername = update.getMessage().getLeftChatMember().getUserName();
 
         //botMain.banUser(chatId, leftUserId);
-        Blacklist blacklist = new Blacklist(groupName, leftUserId, leftUserUsername, LocalDateTime.now());
+        Blacklist blacklist = new Blacklist(groupName, leftUserId, leftUserUsername);
 
-        groupService.addToBlacklist(groupId, blacklist);
+        try {
+            groupService.addToBlacklist(groupId, blacklist);
+        } catch (Exception e) {
+            SendMessage message = new SendMessage();
+            message.setChatId(chatId);
+            message.setText("😥Бот не запущен! Пропишите /start");
+
+            try {
+                botMain.execute(message);
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        }
     }
 
     public void enable() {

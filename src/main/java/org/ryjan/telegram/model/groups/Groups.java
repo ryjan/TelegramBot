@@ -41,6 +41,7 @@ public class Groups {
     }
 
     public void addBlacklist(Blacklist blacklist) {
+
         blacklists.add(blacklist);
     }
 

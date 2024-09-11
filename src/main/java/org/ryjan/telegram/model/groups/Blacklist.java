@@ -3,15 +3,24 @@ package org.ryjan.telegram.model.groups;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 @Entity
 @Table(name = "blacklist", schema = "groups")
 public class Blacklist {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "blacklist_seq")
+    @SequenceGenerator(
+            name = "blacklist_seq",
+            sequenceName = "blacklist_sequence",
+            allocationSize = 1,
+            initialValue = 1
+    )
     private Long id;
 
+    @Column(name = "group_id", insertable = false, updatable = false)
+    private Long groupId;
     private String groupName;
     private Long userId;
     private String username;
@@ -25,11 +34,13 @@ public class Blacklist {
 
     }
 
-    public Blacklist(String groupName, Long userId, String username, LocalDateTime createdAt) {
+    public Blacklist(String groupName, Long userId, String username) {
         this.groupName = groupName;
         this.userId = userId;
         this.username = username;
-        this.createdAt = createdAt;
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
+
+        this.createdAt = LocalDateTime.parse(dtf.format(LocalDateTime.now()), dtf);
     }
 
     public Long getId() {
@@ -38,6 +49,14 @@ public class Blacklist {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public Long getGroupId() {
+        return groupId;
+    }
+
+    public void setGroupId(Long groupId) {
+        this.groupId = groupId;
     }
 
     public String getGroupName() {
