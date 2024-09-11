@@ -9,6 +9,7 @@ import java.time.LocalDateTime;
 public class Blacklist {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
 
     private String groupName;
@@ -17,15 +18,14 @@ public class Blacklist {
     LocalDateTime createdAt;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "group_id", nullable = false)
+    @JoinColumn(name = "group_id", referencedColumnName = "id")
     private Groups group;
 
     public Blacklist() {
 
     }
 
-    public Blacklist(Long id, String groupName, Long userId, String username, LocalDateTime createdAt) {
-        this.id = id;
+    public Blacklist(String groupName, Long userId, String username, LocalDateTime createdAt) {
         this.groupName = groupName;
         this.userId = userId;
         this.username = username;
