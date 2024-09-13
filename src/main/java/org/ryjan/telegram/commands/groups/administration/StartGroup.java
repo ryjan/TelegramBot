@@ -2,6 +2,7 @@ package org.ryjan.telegram.commands.groups.administration;
 
 import org.ryjan.telegram.commands.groups.BaseGroupCommand;
 import org.ryjan.telegram.commands.groups.GroupPrivileges;
+import org.ryjan.telegram.commands.groups.config.Permission;
 import org.ryjan.telegram.handler.GroupCommandHandler;
 import org.ryjan.telegram.main.BotMain;
 import org.ryjan.telegram.model.groups.ChatSettings;
@@ -20,7 +21,7 @@ public class StartGroup extends BaseGroupCommand {
     private GroupService groupService;
 
     public StartGroup() {
-        super("/start", "Начать работу бота🤙");
+        super("/start", "Начать работу бота🤙", Permission.CREATOR);
     }
 
     @Override

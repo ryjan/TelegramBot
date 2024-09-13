@@ -21,6 +21,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.groupadministration.GetChatMember;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
+import org.telegram.telegrambots.meta.api.objects.ChatMemberUpdated;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.chatmember.ChatMember;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
@@ -86,8 +87,8 @@ public class BotMain extends TelegramLongPollingBot {
                 groupCommandHandler.handleCommand(update);
             }
 
-        } catch (Exception _) {
-            LOGGER.error("Error occurred while sending message(onUpdateReceived)");
+        } catch (Exception e) {
+            LOGGER.error("Error occurred while sending message(onUpdateReceived)", e);
         }
     }
 
@@ -127,10 +128,35 @@ public class BotMain extends TelegramLongPollingBot {
         }
     }
 
+    private void handleChatMemberUpdate(ChatMemberUpdated chatMemberUpdated) {
+        if (chatMemberUpdated.getNewChatMember().getStatus().equals("member")) {
+            long chatId = chatMemberUpdated.getChat().getId();
+            long userId = chatMemberUpdated.getFrom().getId();
+
+            sendPrivateMessageToUser(chatId);
+        }
+    }
+
+    private void sendPrivateMessageToUser(Long userId) {
+        SendMessage message = new SendMessage();
+        message.setChatId(userId);
+        message.setText("✨Привет, воспользуйся /start в группе, чтобы начать работу!");
+
+        try {
+            execute(message);
+        } catch (TelegramApiException e) {
+            LOGGER.error("Error occurred while sending message(sendPrivateMessageToUser)");
+        }
+    }
+
     private void autoExecute(Update update) {
         if (update.hasMessage() && update.getMessage().getLeftChatMember() != null) {
             String chatId = update.getMessage().getChatId().toString();
             chatBlacklist.executeCommand(chatId, update);
+        }
+
+        if (update.hasMyChatMember()) {
+            handleChatMemberUpdate(update.getMyChatMember());
         }
     }
 
