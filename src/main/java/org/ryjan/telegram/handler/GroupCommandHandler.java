@@ -1,5 +1,6 @@
 package org.ryjan.telegram.handler;
 
+import org.ryjan.telegram.commands.groups.BaseGroupCommand;
 import org.ryjan.telegram.commands.groups.administration.BlacklistSwitch;
 import org.ryjan.telegram.commands.groups.administration.BlacklistSwitchOff;
 import org.ryjan.telegram.commands.groups.administration.BlacklistSwitchOn;
@@ -10,6 +11,7 @@ import org.ryjan.telegram.main.BotMain;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
+import org.telegram.telegrambots.meta.api.methods.send.SendAnimation;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
@@ -69,19 +71,32 @@ public class GroupCommandHandler {
     }
 
     private void handleTextMessage(Update update) throws IOException {
-        String chatId = update.getMessage().getChatId().toString();
+        Long chatId = update.getMessage().getChatId();
         String message = update.getMessage().getText();
+        Long userId = update.getMessage().getFrom().getId();
         lastMessage = message;
-        if (message.startsWith("/")) {
+        if (message.startsWith("/")) return;
+
             String commandKey = message.split(" ")[0].replace(bot.getBotTag(), "");
             System.out.println(bot.getBotUsername());
             System.out.println(commandKey);
-            IBotGroupCommand command = commands.get(commandKey);
+            BaseGroupCommand command = (BaseGroupCommand) commands.get(commandKey);
             System.out.println(command);
 
             if (command != null) {
-                command.execute(chatId, bot, this);
+                if (command.hasPermission(chatId, userId)) {
+                    command.execute(chatId.toString(), bot, this);
+                } else {
+                    sendNoPermissionMessage(chatId);
+                }
             }
+    }
+
+    private void sendNoPermissionMessage(Long chatId) {
+        try {
+            bot.execute(new SendMessage(chatId.toString(), "✨У вас нет прав для выполнения этой команды"));
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 

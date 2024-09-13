@@ -1,6 +1,7 @@
 package org.ryjan.telegram.commands.groups.administration;
 
 import org.ryjan.telegram.commands.groups.BaseGroupCommand;
+import org.ryjan.telegram.commands.groups.config.Permission;
 import org.ryjan.telegram.commands.interfaces.IBotGroupCommand;
 import org.ryjan.telegram.commands.users.utils.KeyboardBuilder;
 import org.ryjan.telegram.handler.GroupCommandHandler;
@@ -19,7 +20,7 @@ public class BlacklistSwitch extends BaseGroupCommand {
     ChatBlacklist chatBlacklist;
 
     public BlacklistSwitch() {
-        super("/blacklist", "Включение/Отключение черного списка\nПо началу включен.");
+        super("/blacklist", "Включение/Отключение черного списка\nПо началу включен.", Permission.CREATOR);
     }
 
     @Override

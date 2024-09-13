@@ -1,6 +1,7 @@
 package org.ryjan.telegram.commands.groups.administration;
 
 import org.ryjan.telegram.commands.groups.BaseGroupCommand;
+import org.ryjan.telegram.commands.groups.config.Permission;
 import org.ryjan.telegram.handler.GroupCommandHandler;
 import org.ryjan.telegram.main.BotMain;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +16,7 @@ public class BlacklistSwitchOff extends BaseGroupCommand {
     ChatBlacklist chatBlacklist;
 
     protected BlacklistSwitchOff() {
-        super("blacklistOff", "Выключить черный список");
+        super("blacklistOff", "Выключить черный список", Permission.CREATOR);
     }
 
     @Override

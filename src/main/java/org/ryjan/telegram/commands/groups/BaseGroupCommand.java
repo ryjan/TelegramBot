@@ -17,19 +17,30 @@ import org.telegram.telegrambots.meta.api.objects.chatmember.ChatMember;
 public abstract class BaseGroupCommand implements IBotGroupCommand {
     private final String commandName;
     private final String description;
-    private final Permission permission;
+    private final Permission requiredPermission;
 
     @Autowired
     GroupService groupService;
 
-    protected BaseGroupCommand(String commandName, String description, Permission permission) {
+    protected BaseGroupCommand(String commandName, String description, Permission requiredPermission) {
         this.commandName = commandName;
         this.description = description;
-        this.permission = permission;
+        this.requiredPermission = requiredPermission;
     }
 
-    protected boolean hasPermission(Long chatId, Long userId) {
+    public boolean hasPermission(Long chatId, Long userId) {
+        if (requiredPermission  == Permission.ANY) {
+            return true;
+        }
+
         ChatMember chatMember = groupService.getBotMain().getChatMember(chatId, userId);
+        String status = chatMember.getStatus();
+
+        return switch (requiredPermission) {
+            case CREATOR -> "creator".equals(status);
+            case ADMIN -> "administrator".equals(status) || "creator".equals(status);
+            default -> false;
+        };
     }
 
     protected SendMessage createSendMessage(Long chatId) {
@@ -76,7 +87,7 @@ public abstract class BaseGroupCommand implements IBotGroupCommand {
     }
 
     public Permission getPermission() {
-        return permission;
+        return requiredPermission;
     }
 
     protected Update getUpdate() {
