@@ -1,6 +1,7 @@
 package org.ryjan.telegram.services;
 
 import jakarta.persistence.EntityManager;
+import org.ryjan.telegram.main.BotMain;
 import org.ryjan.telegram.model.groups.Blacklist;
 import org.ryjan.telegram.model.groups.ChatSettings;
 import org.ryjan.telegram.model.groups.Groups;
@@ -8,6 +9,7 @@ import org.ryjan.telegram.repos.BlacklistRepository;
 import org.ryjan.telegram.repos.ChatSettingsRepository;
 import org.ryjan.telegram.repos.GroupsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -29,6 +31,10 @@ public class GroupService {
 
     @Autowired
     BlacklistRepository blacklistRepository;
+
+    @Autowired
+    @Lazy
+    BotMain botMain;
 
     public void addToBlacklist(Groups group, Blacklist blacklist) {
         List<Blacklist> list = group.getBlacklists();
@@ -85,5 +91,9 @@ public class GroupService {
 
     public void delete(Groups group) {
         groupsRepository.delete(group);
+    }
+
+    public BotMain getBotMain() {
+        return botMain;
     }
 }

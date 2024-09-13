@@ -1,32 +1,35 @@
 package org.ryjan.telegram.commands.groups;
 
+import org.ryjan.telegram.commands.groups.config.Permission;
 import org.ryjan.telegram.commands.interfaces.IBotGroupCommand;
 import org.ryjan.telegram.handler.ButtonCommandHandler;
 import org.ryjan.telegram.handler.GroupCommandHandler;
 import org.ryjan.telegram.main.BotMain;
+import org.ryjan.telegram.services.GroupService;
 import org.ryjan.telegram.utils.UpdateContext;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
+import org.telegram.telegrambots.meta.api.objects.chatmember.ChatMember;
 
+@Component
 public abstract class BaseGroupCommand implements IBotGroupCommand {
     private final String commandName;
     private final String description;
+    private final Permission permission;
 
-    protected BaseGroupCommand(String commandName, String description) {
+    @Autowired
+    GroupService groupService;
+
+    protected BaseGroupCommand(String commandName, String description, Permission permission) {
         this.commandName = commandName;
         this.description = description;
+        this.permission = permission;
     }
 
-    public String getCommandName() {
-        return commandName;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    protected Update getUpdate() {
-        return UpdateContext.getInstance().getUpdate();
+    protected boolean hasPermission(Long chatId, Long userId) {
+        ChatMember chatMember = groupService.getBotMain().getChatMember(chatId, userId);
     }
 
     protected SendMessage createSendMessage(Long chatId) {
@@ -62,5 +65,21 @@ public abstract class BaseGroupCommand implements IBotGroupCommand {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public String getCommandName() {
+        return commandName;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public Permission getPermission() {
+        return permission;
+    }
+
+    protected Update getUpdate() {
+        return UpdateContext.getInstance().getUpdate();
     }
 }
