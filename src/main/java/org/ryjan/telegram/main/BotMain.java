@@ -5,6 +5,7 @@ import com.sun.tools.javac.Main;
 
 import org.ryjan.telegram.commands.groups.administration.ChatBlacklist;
 import org.ryjan.telegram.handler.GroupCommandHandler;
+import org.ryjan.telegram.model.groups.Groups;
 import org.ryjan.telegram.services.GroupService;
 import org.ryjan.telegram.services.UserService;
 import org.ryjan.telegram.handler.ButtonCommandHandler;
@@ -81,6 +82,8 @@ public class BotMain extends TelegramLongPollingBot {
         UpdateContext.getInstance().setUpdate(update);
 
         try {
+            Groups groups = groupService.findGroup(-1002174423866L);
+            groupService.delete(groups);
             if (update.hasMessage() && update.getMessage().getChat().isUserChat()) {
                 buttonCommandHandler.handleCommand(update);
             } else {

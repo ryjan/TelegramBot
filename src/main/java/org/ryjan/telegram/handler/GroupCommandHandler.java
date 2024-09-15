@@ -110,6 +110,7 @@ public class GroupCommandHandler {
         buttonCommands.put(blacklistSwitch.getCommandName(), blacklistSwitch);
         buttonCommands.put(blacklistSwitchOn.getCommandName(), blacklistSwitchOn);
         buttonCommands.put(blacklistSwitchOff.getCommandName(), blacklistSwitchOff);
+        buttonCommands.put("blacklistStartGroup", blacklistSwitch);
     }
 
     public String getLastMessage() {

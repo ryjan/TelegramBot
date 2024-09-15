@@ -3,6 +3,7 @@ package org.ryjan.telegram.commands.groups.administration;
 import org.ryjan.telegram.commands.groups.BaseGroupCommand;
 import org.ryjan.telegram.commands.groups.GroupPrivileges;
 import org.ryjan.telegram.commands.groups.config.Permission;
+import org.ryjan.telegram.commands.users.utils.KeyboardBuilder;
 import org.ryjan.telegram.handler.GroupCommandHandler;
 import org.ryjan.telegram.main.BotMain;
 import org.ryjan.telegram.model.groups.ChatSettings;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.chatmember.ChatMember;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 
 @Component
 public class StartGroup extends BaseGroupCommand {
@@ -21,7 +23,7 @@ public class StartGroup extends BaseGroupCommand {
     private GroupService groupService;
 
     public StartGroup() {
-        super("/start", "Начать работу бота🤙", Permission.CREATOR);
+        super("/start", "Начать работу бота🤙", Permission.CREATOR); // добавить при вызове команды inline keyboard с настройками сервера
     }
 
     @Override
@@ -56,4 +58,16 @@ public class StartGroup extends BaseGroupCommand {
 
         sendMessageForCommand(bot, message);
     }
+
+    private InlineKeyboardMarkup getKeyboard() {
+        InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
+
+        KeyboardBuilder.KeyboardLayer keyboard = new KeyboardBuilder.KeyboardLayer()
+                .addRow(new KeyboardBuilder.ButtonRow()
+                        .addButton("🔒Черный список", "blacklistStartGroup"));
+        inlineKeyboardMarkup.setKeyboard(keyboard.build());
+
+        return inlineKeyboardMarkup;
+    }
 }
+

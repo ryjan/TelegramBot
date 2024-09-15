@@ -34,9 +34,9 @@ public class ChatBlacklist{
         String groupName = update.getMessage().getChat().getTitle();
         long groupId = update.getMessage().getChat().getId();
         long leftUserId = update.getMessage().getLeftChatMember().getId();
-        String leftUserUsername = update.getMessage().getLeftChatMember().getUserName();
+        String leftUserUsername = update.getMessage().getLeftChatMember().getUserName(); // добавить кнопку разбанить
 
-        //botMain.banUser(chatId, leftUserId);
+        botMain.banUser(chatId, leftUserId);
         Blacklist blacklist = new Blacklist(groupName, leftUserId, leftUserUsername);
 
         try {
