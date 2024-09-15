@@ -4,6 +4,7 @@ import org.ryjan.telegram.commands.groups.BaseGroupCommand;
 import org.ryjan.telegram.commands.groups.config.Permission;
 import org.ryjan.telegram.handler.GroupCommandHandler;
 import org.ryjan.telegram.main.BotMain;
+import org.ryjan.telegram.model.groups.ChatSettings;
 import org.ryjan.telegram.services.GroupService;
 import org.ryjan.telegram.utils.UpdateContext;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,7 +31,7 @@ public class BlacklistSwitchOff extends BaseGroupCommand {
 
     @Override
     protected void executeCommand(String chatId, BotMain bot, GroupCommandHandler groupCommandHandler) {
-        chatBlacklist.disable();
+        groupService.replaceBlacklistValue(Long.parseLong(chatId), "blacklist", "disabled");
     }
 
     private void replaceMessageWithDone() {

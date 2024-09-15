@@ -56,14 +56,24 @@ public class GroupService {
         groupsRepository.save(group);
     }
 
-    public Groups findGroup(Long id) {
-        return groupsRepository.findById(id).orElse(null);
-    }
-
     public boolean blacklistStatus(long groupId) {
         ChatSettings chatSettings = chatSettingsRepository.findByGroupIdAndSettingKeyAndSettingValue(groupId, "blacklist", "enabled");
         System.out.println("чат сеттинг" + chatSettings);
         return chatSettings != null;
+    }
+
+    public void replaceBlacklistValue(long groupId, String settingsKey, String settingsValue) {
+        ChatSettings chatSettings = findChatSettings(groupId, settingsKey);
+        chatSettings.setSettingValue(settingsValue);
+        update(chatSettings);
+    }
+
+    public Groups findGroup(Long id) {
+        return groupsRepository.findById(id).orElse(null);
+    }
+
+    public ChatSettings findChatSettings(Long groupId, String settingsKey) {
+        return chatSettingsRepository.findByGroupIdAndSettingKey(groupId, settingsKey);
     }
 
     public boolean isExistGroup(String groupName) {
@@ -88,6 +98,10 @@ public class GroupService {
 
     public void update(Blacklist blacklist) {
         blacklistRepository.save(blacklist);
+    }
+
+    public void update(ChatSettings chatSettings) {
+        chatSettingsRepository.save(chatSettings);
     }
 
     public void update(Groups group, ChatSettings chatSettings) {
