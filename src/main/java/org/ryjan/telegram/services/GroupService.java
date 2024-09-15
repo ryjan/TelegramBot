@@ -60,6 +60,15 @@ public class GroupService {
         return groupsRepository.findById(id).orElse(null);
     }
 
+    public boolean blacklistStatus(long groupId) {
+        ChatSettings chatSettings = chatSettingsRepository.findById(groupId).orElse(null);
+        if (chatSettings == null) {
+            throw new NullPointerException();
+        }
+
+        return false;
+    }
+
     public boolean isExistGroup(String groupName) {
         return groupsRepository.existsByGroupName(groupName);
     }

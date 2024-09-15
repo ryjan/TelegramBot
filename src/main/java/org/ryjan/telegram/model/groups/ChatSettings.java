@@ -20,6 +20,12 @@ public class ChatSettings {
 
     }
 
+    public ChatSettings(String settingKey, String settingValue, Groups group) {
+        this.settingKey = settingKey;
+        this.settingValue = settingValue;
+        this.group = group;
+    }
+
     public void addSetting(String settingKey, String settingValue) {
         this.settingKey = settingKey;
         this.settingValue = settingValue;
