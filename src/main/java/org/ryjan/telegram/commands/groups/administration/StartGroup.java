@@ -55,8 +55,10 @@ public class StartGroup extends BaseGroupCommand {
         Groups group = new Groups(Long.valueOf(chatId), groupName, GroupPrivileges.BASE);
         List<ChatSettings> chatSettings = group.getChatSettings();
         ChatSettings chatSetting = new ChatSettings("blacklist", "disabled", group);
+        ChatSettings chatSettingOne = new ChatSettings("aboba", "ggs", group);
 
         chatSettings.add(chatSetting);
+        chatSettings.add(chatSettingOne);
         group.setChatSettings(chatSettings);
 
         groupService.update(group);

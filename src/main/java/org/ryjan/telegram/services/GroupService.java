@@ -61,12 +61,9 @@ public class GroupService {
     }
 
     public boolean blacklistStatus(long groupId) {
-        ChatSettings chatSettings = chatSettingsRepository.findById(groupId).orElse(null);
-        if (chatSettings == null) {
-            throw new NullPointerException();
-        }
+        ChatSettings chatSettings = chatSettingsRepository.findByIdAndSettingKeyAndSettingValue(groupId, "blacklist", "enabled");
 
-        return false;
+        return chatSettings != null;
     }
 
     public boolean isExistGroup(String groupName) {
