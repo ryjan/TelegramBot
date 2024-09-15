@@ -61,8 +61,8 @@ public class GroupService {
     }
 
     public boolean blacklistStatus(long groupId) {
-        ChatSettings chatSettings = chatSettingsRepository.findByIdAndSettingKeyAndSettingValue(groupId, "blacklist", "enabled");
-
+        ChatSettings chatSettings = chatSettingsRepository.findByGroupIdAndSettingKeyAndSettingValue(groupId, "blacklist", "enabled");
+        System.out.println("чат сеттинг" + chatSettings);
         return chatSettings != null;
     }
 

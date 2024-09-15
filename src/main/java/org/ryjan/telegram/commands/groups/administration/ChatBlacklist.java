@@ -27,12 +27,14 @@ public class ChatBlacklist{
     private boolean isEnabled = true;
 
     public void executeCommand(String chatId, Update update) {
-        if (!isEnabled) {
+        long groupId = update.getMessage().getChat().getId();
+
+        if (!groupService.blacklistStatus(groupId)) {
+            System.out.println("is not exists()()");
             return;
         }
 
         String groupName = update.getMessage().getChat().getTitle();
-        long groupId = update.getMessage().getChat().getId();
         long leftUserId = update.getMessage().getLeftChatMember().getId();
         String leftUserUsername = update.getMessage().getLeftChatMember().getUserName(); // добавить кнопку разбанить
 

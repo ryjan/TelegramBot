@@ -5,5 +5,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface ChatSettingsRepository extends JpaRepository<ChatSettings, Long> {
 
-    ChatSettings findByIdAndSettingKeyAndSettingValue(Long id, String key, String value);
+    ChatSettings findByGroupIdAndSettingKeyAndSettingValue(long groupId, String key, String value);
 }
