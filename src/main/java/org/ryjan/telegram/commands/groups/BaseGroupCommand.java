@@ -10,8 +10,11 @@ import org.ryjan.telegram.utils.UpdateContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
+import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.chatmember.ChatMember;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
+import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 @Component
 public abstract class BaseGroupCommand implements IBotGroupCommand {
@@ -59,6 +62,33 @@ public abstract class BaseGroupCommand implements IBotGroupCommand {
         try {
             bot.execute(message);
         } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    protected void editMessage(String text) {
+        EditMessageText editMessageText = new EditMessageText();
+        editMessageText.setChatId(getUpdate().getCallbackQuery().getMessage().getChatId());
+        editMessageText.setMessageId(getUpdate().getCallbackQuery().getMessage().getMessageId());
+        editMessageText.setText(text);
+
+        try {
+            groupService.getBotMain().execute(editMessageText);
+        } catch (TelegramApiException e) {
+            e.printStackTrace();
+        }
+    }
+
+    protected void editMessage(String text, InlineKeyboardMarkup inlineKeyboardMarkup) {
+        EditMessageText editMessageText = new EditMessageText();
+        editMessageText.setChatId(getUpdate().getCallbackQuery().getMessage().getChatId());
+        editMessageText.setMessageId(getUpdate().getCallbackQuery().getMessage().getMessageId());
+        editMessageText.setText(text);
+        editMessageText.enableMarkdown(true);
+        editMessageText.setReplyMarkup(inlineKeyboardMarkup);
+        try {
+            groupService.getBotMain().execute(editMessageText);
+        } catch (TelegramApiException e) {
             e.printStackTrace();
         }
     }

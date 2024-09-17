@@ -25,7 +25,7 @@ public class SettingsGroup extends BaseGroupCommand {
 
         KeyboardBuilder.KeyboardLayer keyboard = new KeyboardBuilder.KeyboardLayer()
                 .addRow(new KeyboardBuilder.ButtonRow()
-                        .addButton("🔒Черный список", "blacklistStartGroup"));
+                        .addButton("🔒Черный список", "blacklistSetting"));
         inlineKeyboardMarkup.setKeyboard(keyboard.build());
 
         return inlineKeyboardMarkup;
