@@ -37,12 +37,14 @@ public class BlacklistSwitchOff extends BaseGroupCommand {
         editMessage("🔓Черный список *выключен*", getKeyboard());
     }
 
-    private InlineKeyboardMarkup getKeyboard() {
+    public InlineKeyboardMarkup getKeyboard() {
         InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
 
         KeyboardBuilder.KeyboardLayer keyboard = new KeyboardBuilder.KeyboardLayer()
                 .addRow(new KeyboardBuilder.ButtonRow()
-                        .addButton("✅Включить", "blacklistOn"));
+                        .addButton("✅Включить", "blacklistOn"))
+                .addRow(new KeyboardBuilder.ButtonRow()
+                        .addButton("↩️Назад", "/settings"));
         inlineKeyboardMarkup.setKeyboard(keyboard.build());
 
         return inlineKeyboardMarkup;

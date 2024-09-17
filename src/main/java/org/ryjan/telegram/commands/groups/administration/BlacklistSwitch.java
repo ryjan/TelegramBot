@@ -6,6 +6,7 @@ import org.ryjan.telegram.commands.interfaces.IBotGroupCommand;
 import org.ryjan.telegram.commands.users.utils.KeyboardBuilder;
 import org.ryjan.telegram.handler.GroupCommandHandler;
 import org.ryjan.telegram.main.BotMain;
+import org.ryjan.telegram.services.GroupService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
@@ -19,6 +20,14 @@ public class BlacklistSwitch extends BaseGroupCommand {
     @Autowired
     ChatBlacklist chatBlacklist;
 
+    @Autowired
+    GroupService groupService;
+
+    @Autowired
+    BlacklistSwitchOn blacklistSwitchOn;
+    @Autowired
+    BlacklistSwitchOff blacklistSwitchOff;
+
     public BlacklistSwitch() {
         super("/blacklist", "Включение/Отключение черного списка\nПо началу включен.", Permission.CREATOR);
     }
@@ -26,21 +35,13 @@ public class BlacklistSwitch extends BaseGroupCommand {
     @Override
     protected void executeCommand(String chatId, BotMain bot, GroupCommandHandler groupCommandHandler) {
         Update update = getUpdate();
-        SendMessage message = createSendMessage(chatId);
-        message.setText("🔒Черный список");
-        message.setReplyMarkup(getKeyboard());
-        sendMessageForCommand(bot, message);
-    }
 
-    private InlineKeyboardMarkup getKeyboard() {
-        InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
-
-        KeyboardBuilder.KeyboardLayer keyboard = new KeyboardBuilder.KeyboardLayer()
-                .addRow(new KeyboardBuilder.ButtonRow()
-                        .addButton("✅Включить", "blacklistOn")
-                        .addButton("❌Выключить", "blacklistOff"));
-        inlineKeyboardMarkup.setKeyboard(keyboard.build());
-
-        return inlineKeyboardMarkup;
+        if (groupService.blacklistStatus(update.getCallbackQuery().getMessage().getChatId())) {
+            groupService.replaceBlacklistValue(Long.parseLong(chatId), "blacklist", "enabled");
+            editMessage("🔒Черный список *включен*", blacklistSwitchOn.getKeyboard());
+        } else {
+            groupService.replaceBlacklistValue(Long.parseLong(chatId), "blacklist", "disabled");
+            editMessage("🔓Черный список *выключен*", blacklistSwitchOff.getKeyboard());
+        }
     }
 }

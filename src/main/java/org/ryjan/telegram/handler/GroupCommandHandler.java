@@ -1,14 +1,12 @@
 package org.ryjan.telegram.handler;
 
 import org.ryjan.telegram.commands.groups.BaseGroupCommand;
-import org.ryjan.telegram.commands.groups.administration.BlacklistSwitch;
-import org.ryjan.telegram.commands.groups.administration.BlacklistSwitchOff;
-import org.ryjan.telegram.commands.groups.administration.BlacklistSwitchOn;
-import org.ryjan.telegram.commands.groups.administration.StartGroup;
+import org.ryjan.telegram.commands.groups.administration.*;
 import org.ryjan.telegram.commands.interfaces.IBotGroupCommand;
 import org.ryjan.telegram.commands.users.BaseCommand;
 import org.ryjan.telegram.commands.users.utils.KeyboardBuilder;
 import org.ryjan.telegram.main.BotMain;
+import org.ryjan.telegram.model.groups.ChatSettings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
@@ -26,6 +24,7 @@ import java.util.Map;
 public class GroupCommandHandler {
 
     private final StartGroup startGroupCommand;
+    private final SettingsGroup settingsGroup;
     private final BlacklistSwitch blacklistSwitch;
     private final BlacklistSwitchOn blacklistSwitchOn;
     private final BlacklistSwitchOff blacklistSwitchOff;
@@ -38,8 +37,9 @@ public class GroupCommandHandler {
     @Lazy
     private BotMain bot;
 
-    public GroupCommandHandler(StartGroup startGroupCommand, BlacklistSwitch blacklistSwitch, BlacklistSwitchOn blacklistSwitchOn, BlacklistSwitchOff blacklistSwitchOff) {
+    public GroupCommandHandler(StartGroup startGroupCommand, BlacklistSwitch blacklistSwitch, BlacklistSwitchOn blacklistSwitchOn, BlacklistSwitchOff blacklistSwitchOff, SettingsGroup settingsGroup) {
         this.startGroupCommand = startGroupCommand;
+        this.settingsGroup = settingsGroup;
         this.blacklistSwitch = blacklistSwitch;
         this.blacklistSwitchOn = blacklistSwitchOn;
         this.blacklistSwitchOff = blacklistSwitchOff;
@@ -106,11 +106,13 @@ public class GroupCommandHandler {
     private void initializeCommands() {
         commands.put(startGroupCommand.getCommandName(), startGroupCommand);
         commands.put(blacklistSwitch.getCommandName(), blacklistSwitch);
+        commands.put(settingsGroup.getCommandName(), settingsGroup);
 
         buttonCommands.put(blacklistSwitch.getCommandName(), blacklistSwitch);
         buttonCommands.put(blacklistSwitchOn.getCommandName(), blacklistSwitchOn);
         buttonCommands.put(blacklistSwitchOff.getCommandName(), blacklistSwitchOff);
         buttonCommands.put("blacklistStartGroup", blacklistSwitch);
+        buttonCommands.put(settingsGroup.getCommandName(), settingsGroup);
     }
 
     public String getLastMessage() {

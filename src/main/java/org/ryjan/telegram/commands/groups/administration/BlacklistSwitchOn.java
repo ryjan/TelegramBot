@@ -27,16 +27,18 @@ public class BlacklistSwitchOn extends BaseGroupCommand {
 
     @Override
     protected void executeCommand(String chatId, BotMain bot, GroupCommandHandler groupCommandHandler) {
-        groupService.replaceBlacklistValue(Long.parseLong(chatId), "blacklist", "disabled");
+        groupService.replaceBlacklistValue(Long.parseLong(chatId), "blacklist", "enabled");
         editMessage("🔒Черный список *включен*", getKeyboard());
     }
 
-    private InlineKeyboardMarkup getKeyboard() {
+    public InlineKeyboardMarkup getKeyboard() {
         InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
 
         KeyboardBuilder.KeyboardLayer keyboard = new KeyboardBuilder.KeyboardLayer()
                 .addRow(new KeyboardBuilder.ButtonRow()
-                        .addButton("❌Выключить", "blacklistOff"));
+                        .addButton("❌Выключить", "blacklistOff"))
+                .addRow(new KeyboardBuilder.ButtonRow()
+                        .addButton("↩️Назад", "/settings"));
         inlineKeyboardMarkup.setKeyboard(keyboard.build());
 
         return inlineKeyboardMarkup;
