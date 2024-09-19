@@ -2,19 +2,17 @@ package org.ryjan.telegram.handler;
 
 import org.ryjan.telegram.commands.groups.BaseGroupCommand;
 import org.ryjan.telegram.commands.groups.administration.*;
+import org.ryjan.telegram.commands.groups.administration.blacklist.BlacklistSwitch;
+import org.ryjan.telegram.commands.groups.administration.blacklist.BlacklistSwitchOff;
+import org.ryjan.telegram.commands.groups.administration.blacklist.BlacklistSwitchOn;
+import org.ryjan.telegram.commands.groups.administration.blacklist.BlacklistUnban;
 import org.ryjan.telegram.commands.interfaces.IBotGroupCommand;
-import org.ryjan.telegram.commands.users.BaseCommand;
-import org.ryjan.telegram.commands.users.utils.KeyboardBuilder;
 import org.ryjan.telegram.main.BotMain;
-import org.ryjan.telegram.model.groups.ChatSettings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
-import org.telegram.telegrambots.meta.api.methods.send.SendAnimation;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
-import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -28,6 +26,7 @@ public class GroupCommandHandler {
     private final BlacklistSwitch blacklistSwitch;
     private final BlacklistSwitchOn blacklistSwitchOn;
     private final BlacklistSwitchOff blacklistSwitchOff;
+    private final BlacklistUnban blacklistUnban;
 
     private final Map<String, BaseGroupCommand> commands;
     private final Map<String, BaseGroupCommand> buttonCommands;
@@ -37,12 +36,13 @@ public class GroupCommandHandler {
     @Lazy
     private BotMain bot;
 
-    public GroupCommandHandler(StartGroup startGroupCommand, BlacklistSwitch blacklistSwitch, BlacklistSwitchOn blacklistSwitchOn, BlacklistSwitchOff blacklistSwitchOff, SettingsGroup settingsGroup) {
+    public GroupCommandHandler(StartGroup startGroupCommand, BlacklistSwitch blacklistSwitch, BlacklistSwitchOn blacklistSwitchOn, BlacklistSwitchOff blacklistSwitchOff, SettingsGroup settingsGroup, BlacklistUnban blacklistUnban) {
         this.startGroupCommand = startGroupCommand;
         this.settingsGroup = settingsGroup;
         this.blacklistSwitch = blacklistSwitch;
         this.blacklistSwitchOn = blacklistSwitchOn;
         this.blacklistSwitchOff = blacklistSwitchOff;
+        this.blacklistUnban = blacklistUnban;
 
         this.commands = new HashMap<>();
         this.buttonCommands = new HashMap<>();
@@ -77,7 +77,7 @@ public class GroupCommandHandler {
         Long userId = update.getMessage().getFrom().getId();
         lastMessage = message;
 
-        if (!message.startsWith("/")) return;
+        if (message == null || !message.startsWith("/")) return;
 
         String commandKey = message.split(" ")[0].replace(bot.getBotTag(), "");
         System.out.println(bot.getBotUsername());
@@ -113,6 +113,7 @@ public class GroupCommandHandler {
         buttonCommands.put(blacklistSwitchOff.getCommandName(), blacklistSwitchOff);
         buttonCommands.put("blacklistStartGroup", blacklistSwitch);
         buttonCommands.put(settingsGroup.getCommandName(), settingsGroup);
+        buttonCommands.put(blacklistUnban.getCommandName(), blacklistUnban);
     }
 
     public String getLastMessage() {

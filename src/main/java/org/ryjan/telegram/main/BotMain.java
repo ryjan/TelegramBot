@@ -3,14 +3,12 @@ package org.ryjan.telegram.main;
 
 import com.sun.tools.javac.Main;
 
-import org.ryjan.telegram.commands.groups.administration.ChatBlacklist;
+import org.ryjan.telegram.commands.groups.administration.blacklist.ChatBlacklist;
 import org.ryjan.telegram.handler.GroupCommandHandler;
-import org.ryjan.telegram.model.groups.Groups;
 import org.ryjan.telegram.services.GroupService;
 import org.ryjan.telegram.services.UserService;
 import org.ryjan.telegram.handler.ButtonCommandHandler;
 import org.telegram.telegrambots.meta.api.methods.groupadministration.BanChatMember;
-import org.telegram.telegrambots.meta.api.methods.groupadministration.LeaveChat;
 
 import org.ryjan.telegram.utils.UpdateContext;
 import org.slf4j.Logger;
@@ -21,6 +19,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.groupadministration.GetChatMember;
+import org.telegram.telegrambots.meta.api.methods.groupadministration.UnbanChatMember;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.ChatMemberUpdated;
 import org.telegram.telegrambots.meta.api.objects.Update;
@@ -70,6 +69,7 @@ public class BotMain extends TelegramLongPollingBot {
 
     @Override
     public void onUpdateReceived(Update update) {
+        UpdateContext.getInstance().setUpdate(update);
         autoExecute(update);
 
         if (update.hasMessage() && update.getMessage().hasText()) {
@@ -79,7 +79,6 @@ public class BotMain extends TelegramLongPollingBot {
         }
 
         System.out.println(update.hasMessage());
-        UpdateContext.getInstance().setUpdate(update);
 
         try {
             if (update.hasMessage() && update.getMessage().getChat().isUserChat()) {
@@ -129,6 +128,18 @@ public class BotMain extends TelegramLongPollingBot {
         }
     }
 
+    public void unbanUser(String chatId, Long userId) {
+        UnbanChatMember unbanChatMember = new UnbanChatMember();
+        unbanChatMember.setChatId(chatId);
+        unbanChatMember.setUserId(userId);
+
+        try {
+            execute(unbanChatMember);
+        } catch (Exception e) {
+            LOGGER.error("Error occurred while unbanning user", e);
+        }
+    }
+
     private void handleChatMemberUpdate(ChatMemberUpdated chatMemberUpdated) {
         if (chatMemberUpdated.getNewChatMember().getStatus().equals("member")) {
             long chatId = chatMemberUpdated.getChat().getId();
@@ -153,7 +164,7 @@ public class BotMain extends TelegramLongPollingBot {
     private void autoExecute(Update update) {
         if (update.hasMessage() && update.getMessage().getLeftChatMember() != null) {
             String chatId = update.getMessage().getChatId().toString();
-            chatBlacklist.executeCommand(chatId, update);
+            chatBlacklist.executeCommand(chatId, this, groupCommandHandler);
         }
 
         if (update.hasMyChatMember()) {

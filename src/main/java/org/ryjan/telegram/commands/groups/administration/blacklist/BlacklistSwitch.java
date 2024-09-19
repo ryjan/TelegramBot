@@ -1,17 +1,13 @@
-package org.ryjan.telegram.commands.groups.administration;
+package org.ryjan.telegram.commands.groups.administration.blacklist;
 
 import org.ryjan.telegram.commands.groups.BaseGroupCommand;
 import org.ryjan.telegram.commands.groups.config.Permission;
-import org.ryjan.telegram.commands.interfaces.IBotGroupCommand;
-import org.ryjan.telegram.commands.users.utils.KeyboardBuilder;
 import org.ryjan.telegram.handler.GroupCommandHandler;
 import org.ryjan.telegram.main.BotMain;
 import org.ryjan.telegram.services.GroupService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 
 @Component
 public class BlacklistSwitch extends BaseGroupCommand {

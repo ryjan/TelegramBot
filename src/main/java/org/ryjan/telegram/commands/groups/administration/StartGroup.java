@@ -37,13 +37,6 @@ public class StartGroup extends BaseGroupCommand {
         SendMessage message = createSendMessage(chatId);
         //String groupName = update.getMessage().getLeftChatMember();
         // Добавить проверку на админа
-        ChatMember chatMember = bot.getChatMember(Long.valueOf(chatId), update.getMessage().getFrom().getId());
-
-        if (!chatMember.getStatus().equals("creator")) {
-            message.setText("Только создатель чата может запустить бота😎");
-            sendMessageForCommand(bot, message);
-            return;
-        }
 
         if (groupService.groupIsExist(update.getMessage().getChatId())) {
             message.setText("Группа уже зарегистрирована😊");
@@ -75,23 +68,10 @@ public class StartGroup extends BaseGroupCommand {
 
         KeyboardBuilder.KeyboardLayer keyboard = new KeyboardBuilder.KeyboardLayer()
                 .addRow(new KeyboardBuilder.ButtonRow()
-                        .addButton("🔒Черный список", "blacklistStartGroup"));
+                        .addButton("🔒Черный список", "/settings"));
         inlineKeyboardMarkup.setKeyboard(keyboard.build());
 
         return inlineKeyboardMarkup;
-    }
-
-    private void getReplyMarkup(CallbackQuery callbackQuery) {
-        EditMessageReplyMarkup editMessageReplyMarkup = new EditMessageReplyMarkup();
-        editMessageReplyMarkup.setChatId(callbackQuery.getMessage().getChatId().toString());
-        editMessageReplyMarkup.setMessageId(callbackQuery.getMessage().getMessageId());
-        editMessageReplyMarkup.setReplyMarkup(getKeyboard());
-
-        try {
-            groupService.getBotMain().execute(editMessageReplyMarkup);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
     }
 }
 

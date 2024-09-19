@@ -72,6 +72,10 @@ public class GroupService {
         return groupsRepository.findById(id).orElse(null);
     }
 
+    public Blacklist findBlacklist(long id) {
+        return blacklistRepository.findByUserId(id);
+    }
+
     public ChatSettings findChatSettings(Long groupId, String settingsKey) {
         return chatSettingsRepository.findByGroupIdAndSettingKey(groupId, settingsKey);
     }
@@ -111,6 +115,10 @@ public class GroupService {
 
     public void delete(Groups group) {
         groupsRepository.delete(group);
+    }
+
+    public void delete(Blacklist blacklist) {
+        blacklistRepository.delete(blacklist);
     }
 
     public BotMain getBotMain() {
