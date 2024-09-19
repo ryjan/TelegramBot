@@ -29,6 +29,8 @@ public class ChatBlacklist extends BaseGroupCommand {
     private BotMain botMain;
 
     private boolean isEnabled = true;
+    private String leftUserFirstName;
+    private String leftUserUsername;
     private long leftUserId;
 
     protected ChatBlacklist() {
@@ -48,8 +50,8 @@ public class ChatBlacklist extends BaseGroupCommand {
 
         String groupName = update.getMessage().getChat().getTitle();
         setLeftUserId(update.getMessage().getLeftChatMember().getId());
-        String leftUserUsername = update.getMessage().getLeftChatMember().getUserName(); // добавить кнопку разбанить
-        String leftUserFirstName = update.getMessage().getLeftChatMember().getFirstName();
+        setLeftUserUsername(update.getMessage().getLeftChatMember().getUserName()); // добавить кнопку разбанить
+        setLeftUserFirstName(update.getMessage().getLeftChatMember().getFirstName());
 
         //botMain.banUser(chatId, leftUserId);
         Blacklist blacklist = new Blacklist(groupName, leftUserId, leftUserUsername);
@@ -80,6 +82,22 @@ public class ChatBlacklist extends BaseGroupCommand {
 
     public void disable() {
         isEnabled = false;
+    }
+
+    public String getLeftUserUsername() {
+        return leftUserUsername;
+    }
+
+    public void setLeftUserUsername(String leftUserUsername) {
+        this.leftUserUsername = leftUserUsername;
+    }
+
+    public String getLeftUserFirstName() {
+        return leftUserFirstName;
+    }
+
+    public void setLeftUserFirstName(String leftUserFirstName) {
+        this.leftUserFirstName = leftUserFirstName;
     }
 
     public long getLeftUserId() {

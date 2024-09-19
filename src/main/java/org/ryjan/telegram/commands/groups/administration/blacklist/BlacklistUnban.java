@@ -11,6 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
+import java.text.MessageFormat;
+
 @Component
 public class BlacklistUnban extends BaseGroupCommand {
 
@@ -34,6 +36,9 @@ public class BlacklistUnban extends BaseGroupCommand {
         bot.unbanUser(chatId, userId);
         Blacklist blacklist = groupService.findBlacklist(userId);
         groupService.delete(blacklist);
-        editMessage("🤙Пользователь разблокирован");
+        String adminUsername = getUpdate().getCallbackQuery().getFrom().getUserName();
+        String adminFirstname = getUpdate().getCallbackQuery().getFrom().getFirstName();
+        editMessage(MessageFormat.format("🤙Пользователь [{0}](https://t.me/{1}) разблокирован администратором [{2}](https://t.me/{3})",
+                chatBlacklist.getLeftUserFirstName(), chatBlacklist.getLeftUserUsername(), adminFirstname, adminUsername));
     }
 }

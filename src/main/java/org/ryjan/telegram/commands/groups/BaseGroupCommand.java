@@ -9,6 +9,7 @@ import org.ryjan.telegram.services.GroupService;
 import org.ryjan.telegram.utils.UpdateContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.telegram.telegrambots.meta.api.methods.ParseMode;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
 import org.telegram.telegrambots.meta.api.objects.Update;
@@ -71,6 +72,7 @@ public abstract class BaseGroupCommand implements IBotGroupCommand {
         editMessageText.setChatId(getUpdate().getCallbackQuery().getMessage().getChatId());
         editMessageText.setMessageId(getUpdate().getCallbackQuery().getMessage().getMessageId());
         editMessageText.setText(text);
+        editMessageText.setParseMode(ParseMode.MARKDOWN);
 
         try {
             groupService.getBotMain().execute(editMessageText);
