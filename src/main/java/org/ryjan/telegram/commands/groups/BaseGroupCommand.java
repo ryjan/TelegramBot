@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.ParseMode;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
+import org.telegram.telegrambots.meta.api.methods.updatingmessages.DeleteMessage;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.chatmember.ChatMember;
@@ -90,6 +91,18 @@ public abstract class BaseGroupCommand implements IBotGroupCommand {
         editMessageText.setReplyMarkup(inlineKeyboardMarkup);
         try {
             groupService.getBotMain().execute(editMessageText);
+        } catch (TelegramApiException e) {
+            e.printStackTrace();
+        }
+    }
+
+    protected void deleteMessage() {
+        DeleteMessage deleteMessage = new DeleteMessage();
+        deleteMessage.setChatId(getUpdate().getCallbackQuery().getMessage().getChatId());
+        deleteMessage.setMessageId(getUpdate().getCallbackQuery().getMessage().getMessageId());
+
+        try {
+            groupService.getBotMain().execute(deleteMessage);
         } catch (TelegramApiException e) {
             e.printStackTrace();
         }

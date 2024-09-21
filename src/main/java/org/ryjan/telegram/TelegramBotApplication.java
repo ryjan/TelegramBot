@@ -21,7 +21,7 @@ public class TelegramBotApplication {
 
     @PostConstruct
     public void getServerPort() {
-        System.out.println("Server is running on port: " +
+        System.out.println("Server is running on port: " + 
                 applicationContext.getEnvironment().getProperty("local.server.port"));
     }
 }

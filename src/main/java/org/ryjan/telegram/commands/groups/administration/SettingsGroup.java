@@ -33,7 +33,9 @@ public class SettingsGroup extends BaseGroupCommand {
 
         KeyboardBuilder.KeyboardLayer keyboard = new KeyboardBuilder.KeyboardLayer()
                 .addRow(new KeyboardBuilder.ButtonRow()
-                        .addButton("🔒Черный список", "blacklistStartGroup"));
+                        .addButton("🔒Черный список", "blacklistStartGroup"))
+                .addRow(new KeyboardBuilder.ButtonRow()
+                        .addButton("❌Закрыть", "closeMessage"));
         inlineKeyboardMarkup.setKeyboard(keyboard.build());
 
         return inlineKeyboardMarkup;
