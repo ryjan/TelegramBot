@@ -54,8 +54,11 @@ public class ChatBlacklist extends BaseGroupCommand {
         setLeftUserFirstName(update.getMessage().getLeftChatMember().getFirstName());
 
         //botMain.banUser(chatId, leftUserId);
-        Blacklist blacklist = new Blacklist(groupName, leftUserId, leftUserUsername);
-        groupService.addToBlacklist(groupId, blacklist);
+        Blacklist blacklist = new Blacklist(groupName, leftUserId, leftUserUsername, leftUserFirstName);
+
+        if (!groupService.isExistBlacklist(leftUserId)) {
+            groupService.addToBlacklist(groupId, blacklist);
+        }
 
         SendMessage message = createSendMessage(chatId);
         message.setText(MessageFormat.format("🥱Пользователь [{0}](https://t.me/{1}) покинул чат", leftUserFirstName, leftUserUsername));

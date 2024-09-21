@@ -24,6 +24,7 @@ public class GroupCommandHandler {
     private final BlacklistSwitchOn blacklistSwitchOn;
     private final BlacklistSwitchOff blacklistSwitchOff;
     private final BlacklistUnban blacklistUnban;
+    private final BlacklistBannedUsersList blacklistBannedUsers;
     private final CloseMessage closeMessage;
 
     private final Map<String, BaseGroupCommand> commands;
@@ -35,13 +36,14 @@ public class GroupCommandHandler {
     private BotMain bot;
 
     public GroupCommandHandler(StartGroup startGroupCommand, BlacklistSwitch blacklistSwitch, BlacklistSwitchOn blacklistSwitchOn, BlacklistSwitchOff blacklistSwitchOff,
-                               SettingsGroup settingsGroup, BlacklistUnban blacklistUnban, CloseMessage closeMessage) {
+                               SettingsGroup settingsGroup, BlacklistUnban blacklistUnban, BlacklistBannedUsersList blacklistBannedUsers, CloseMessage closeMessage) {
         this.startGroupCommand = startGroupCommand;
         this.settingsGroup = settingsGroup;
         this.blacklistSwitch = blacklistSwitch;
         this.blacklistSwitchOn = blacklistSwitchOn;
         this.blacklistSwitchOff = blacklistSwitchOff;
         this.blacklistUnban = blacklistUnban;
+        this.blacklistBannedUsers = blacklistBannedUsers;
         this.closeMessage = closeMessage;
 
         this.commands = new HashMap<>();
@@ -117,8 +119,8 @@ public class GroupCommandHandler {
         buttonCommands.put(blacklistUnban.getCommandName(), blacklistUnban);
 
         buttonCommands.put(settingsGroup.getCommandName(), settingsGroup);
-
-        buttonCommands.put("settingsStartGroup", settingsGroup);
+        buttonCommands.put(blacklistBannedUsers.getCommandName(), blacklistBannedUsers);
+        //buttonCommands.put("settingsStartGroup", settingsGroup);
 
         buttonCommands.put(closeMessage.getCommandName(), closeMessage);
     }

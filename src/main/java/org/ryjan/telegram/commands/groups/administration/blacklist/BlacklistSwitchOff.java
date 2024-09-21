@@ -36,6 +36,8 @@ public class BlacklistSwitchOff extends BaseGroupCommand {
                 .addRow(new KeyboardBuilder.ButtonRow()
                         .addButton("✅Включить", "blacklistOn"))
                 .addRow(new KeyboardBuilder.ButtonRow()
+                        .addButton("📃Список заблокированных", "blacklistBannedUsersList"))
+                .addRow(new KeyboardBuilder.ButtonRow()
                         .addButton("↩️Назад", "/settings"));
         inlineKeyboardMarkup.setKeyboard(keyboard.build());
 

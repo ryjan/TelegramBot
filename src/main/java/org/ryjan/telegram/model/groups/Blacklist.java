@@ -23,6 +23,7 @@ public class Blacklist {
     private Long groupId;
     private String groupName;
     private Long userId;
+    private String userFirstname;
     private String username;
     LocalDateTime createdAt;
 
@@ -34,9 +35,10 @@ public class Blacklist {
 
     }
 
-    public Blacklist(String groupName, Long userId, String username) {
+    public Blacklist(String groupName, Long userId, String username, String userFirstname) {
         this.groupName = groupName;
         this.userId = userId;
+        this.userFirstname = userFirstname;
         this.username = username;
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
 
@@ -75,12 +77,28 @@ public class Blacklist {
         this.userId = userId;
     }
 
+    public String getUserFirstname() {
+        return userFirstname;
+    }
+
+    public void setUserFirstname(String userFirstname) {
+        this.userFirstname = userFirstname;
+    }
+
     public String getUsername() {
         return username;
     }
 
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
     }
 
     public Groups getGroup() {

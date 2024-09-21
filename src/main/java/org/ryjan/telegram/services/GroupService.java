@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
@@ -76,6 +77,10 @@ public class GroupService {
         return blacklistRepository.findByUserId(id);
     }
 
+    public List<Blacklist> findAllBlacklists(long groupId) {
+        return blacklistRepository.findByGroupId(groupId);
+    }
+
     public ChatSettings findChatSettings(Long groupId, String settingsKey) {
         return chatSettingsRepository.findByGroupIdAndSettingKey(groupId, settingsKey);
     }
@@ -88,8 +93,8 @@ public class GroupService {
         return groupsRepository.existsById(groupId);
     }
 
-    public boolean isExistBlacklist(Long groupId) {
-        return blacklistRepository.existsById(groupId);
+    public boolean isExistBlacklist(Long userId) {
+        return blacklistRepository.existsByUserId(userId);
     }
 
     public boolean groupIsExist(Long id) {
