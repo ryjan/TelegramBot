@@ -46,15 +46,8 @@ public class StartGroup extends BaseGroupCommand {
 
         String groupName = update.getMessage().getChat().getTitle();
         Groups group = new Groups(Long.valueOf(chatId), groupName, GroupPrivileges.BASE);
-        List<ChatSettings> chatSettings = group.getChatSettings();
-        ChatSettings chatSetting = new ChatSettings("blacklist", "disabled", group);
-        ChatSettings chatSettingOne = new ChatSettings("aboba", "ggs", group);
-
-        chatSettings.add(chatSetting);
-        chatSettings.add(chatSettingOne);
-        group.setChatSettings(chatSettings);
-
-        groupService.update(group);
+        groupService.addChatSettings(group, "blacklist", "disabled");
+        groupService.addChatSettings(group, "aboba", "ggs");
 
         message.setText("Бот успешно зарегистрирован🤙\n⚙️Настройки:");
         message.setReplyMarkup(getKeyboard());

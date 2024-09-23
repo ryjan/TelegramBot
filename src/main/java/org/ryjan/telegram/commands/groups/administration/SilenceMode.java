@@ -9,8 +9,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+
 @Component
 public class SilenceMode extends BaseGroupCommand {
+    private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
 
     @Autowired
     private GroupService groupService;
@@ -32,7 +36,9 @@ public class SilenceMode extends BaseGroupCommand {
 
         try {
             int minutes = Integer.parseInt(parts[0]);
-
+            long silenceTime = System.currentTimeMillis() + ((long) minutes * 60 * 1000);
+            groupService.addChatSettings(Long.valueOf(chatId), "silenceModeEndTime", String.valueOf(silenceTime));
+            groupService.addChatSettings(Long.valueOf(chatId), "silenceModeActive", "enabled");
 
         } catch (IllegalArgumentException e) {
             message.setText("🥲Корректно введите количество минут");

@@ -58,6 +58,31 @@ public class GroupService {
         groupsRepository.save(group);
     }
 
+    public void addChatSettings(Long groupId, String settingsKey, String settingsValue) {
+        Groups group = findGroup(groupId);
+        ChatSettings chatSettings = findChatSettings(groupId, settingsKey);
+        if (chatSettings == null) {
+            chatSettings = new ChatSettings(settingsKey, settingsValue, group);
+            group.addChatSetting(chatSettings);
+            update(group);
+        } else {
+            chatSettings.setSettingValue(settingsValue);
+            update(chatSettings);
+        }
+    }
+
+    public void addChatSettings(Groups group, String settingsKey, String settingsValue) {
+        ChatSettings chatSettings = findChatSettings(group.getId(), settingsKey);
+        if (chatSettings == null) {
+            chatSettings = new ChatSettings(settingsKey, settingsValue, group);
+            group.addChatSetting(chatSettings);
+            update(group);
+        } else {
+            chatSettings.setSettingValue(settingsValue);
+            update(chatSettings);
+        }
+    }
+
     public boolean blacklistStatus(long groupId) {
         ChatSettings chatSettings = chatSettingsRepository.findByGroupIdAndSettingKeyAndSettingValue(groupId, "blacklist", "enabled");
         System.out.println("чат сеттинг" + chatSettings);
@@ -84,19 +109,6 @@ public class GroupService {
 
     public ChatSettings findChatSettings(Long groupId, String settingsKey) {
         return chatSettingsRepository.findByGroupIdAndSettingKey(groupId, settingsKey);
-    }
-
-    public void addChatSettings(Long groupId, String settingsKey, String settingsValue) {
-        Groups group = findGroup(groupId);
-        ChatSettings chatSettings = findChatSettings(groupId, settingsKey);
-        if (chatSettings == null) {
-            chatSettings = new ChatSettings(settingsKey, settingsValue, group);
-            group.addChatSetting(chatSettings);
-            update(group);
-        } else {
-            chatSettings.setSettingValue(settingsValue);
-            update(chatSettings);
-        }
     }
 
     public boolean isExistGroup(String groupName) {
