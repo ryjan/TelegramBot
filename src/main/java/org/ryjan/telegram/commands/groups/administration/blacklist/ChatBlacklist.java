@@ -53,7 +53,7 @@ public class ChatBlacklist extends BaseGroupCommand {
         setLeftUserUsername(update.getMessage().getLeftChatMember().getUserName()); // добавить кнопку разбанить
         setLeftUserFirstName(update.getMessage().getLeftChatMember().getFirstName());
 
-        //botMain.banUser(chatId, leftUserId);
+        botMain.banUser(chatId, leftUserId);
         Blacklist blacklist = new Blacklist(groupName, leftUserId, leftUserUsername, leftUserFirstName);
 
         if (!groupService.isExistBlacklist(leftUserId)) {

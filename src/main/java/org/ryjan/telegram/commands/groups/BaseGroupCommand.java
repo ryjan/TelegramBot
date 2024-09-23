@@ -87,7 +87,7 @@ public abstract class BaseGroupCommand implements IBotGroupCommand {
         editMessageText.setChatId(getUpdate().getCallbackQuery().getMessage().getChatId());
         editMessageText.setMessageId(getUpdate().getCallbackQuery().getMessage().getMessageId());
         editMessageText.setText(text);
-        editMessageText.enableMarkdown(true);
+        editMessageText.setParseMode(ParseMode.MARKDOWNV2);
         editMessageText.setReplyMarkup(inlineKeyboardMarkup);
         try {
             groupService.getBotMain().execute(editMessageText);

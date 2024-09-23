@@ -63,13 +63,14 @@ public class GroupCommandHandler {
     private void handleCallBackQuery(Update update) throws IOException {
         String callbackData = update.getCallbackQuery().getData();
         String chatId = update.getCallbackQuery().getMessage().getChatId().toString();
+        long userId = update.getCallbackQuery().getFrom().getId();
 
-        IBotGroupCommand command = buttonCommands.get(callbackData);
+        BaseGroupCommand command = buttonCommands.get(callbackData);
 
-        if (command != null) {
+        if (command == null) return;
+
+        if (command.hasPermission(Long.valueOf(chatId), userId)) {
             command.execute(chatId, bot, this);
-        } else {
-            bot.sendMessage(chatId, "Неизвестная команда!");
         }
     }
 
@@ -92,7 +93,7 @@ public class GroupCommandHandler {
         if (command.hasPermission(chatId, userId)) {
             command.execute(chatId.toString(), bot, this);
         } else {
-            sendNoPermissionMessage(chatId, command);
+            sendNoPermissionMessageToUser(userId, command);
         }
 
     }
@@ -100,6 +101,17 @@ public class GroupCommandHandler {
     private void sendNoPermissionMessage(Long chatId, BaseGroupCommand baseGroupCommand) {
         try {
             bot.execute(new SendMessage(chatId.toString(), "✨У вас нет прав для выполнения этой команды\n" + "Нужны права: " + baseGroupCommand.getPermission()));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void sendNoPermissionMessageToUser(Long userId, BaseGroupCommand baseGroupCommand) {
+        SendMessage dm = new SendMessage();
+        dm.setChatId(7009707687L);
+        dm.setText("✨У вас нет прав для выполнения команды " + baseGroupCommand.getCommandName() + "\nНужны права: " + baseGroupCommand.getPermission());
+        try {
+            bot.execute(dm);
         } catch (Exception e) {
             e.printStackTrace();
         }

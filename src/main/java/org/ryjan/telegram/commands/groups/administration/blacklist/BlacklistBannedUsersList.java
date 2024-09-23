@@ -38,7 +38,7 @@ public class BlacklistBannedUsersList extends BaseGroupCommand {
 
         for (int i = 0; i < blacklistList.size(); i++) {
             Blacklist blacklist = blacklistList.get(i);
-            String formattedDate = blacklist.getCreatedAt().format(DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss"));
+            String formattedDate = blacklist.getCreatedAt().format(DateTimeFormatter.ofPattern("dd\\-MM\\-yyyy HH:mm:ss"));
             sb.append(MessageFormat.format("🎃Пользователь [{0}](https://t.me/{1}) был добавлен *{2}*", blacklist.getUserFirstname(), blacklist.getUsername(),
                     formattedDate))
                     .append("\n");
