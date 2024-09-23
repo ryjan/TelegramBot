@@ -14,6 +14,6 @@ public class CloseMessage extends BaseGroupCommand {
 
     @Override
     protected void executeCommand(String chatId, BotMain bot, GroupCommandHandler groupCommandHandler) {
-        deleteMessage();
+        deleteMessageByCallbackQuery();
     }
 }

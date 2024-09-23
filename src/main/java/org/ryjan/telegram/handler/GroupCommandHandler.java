@@ -83,10 +83,7 @@ public class GroupCommandHandler {
         if (message == null || !message.startsWith("/")) return;
 
         String commandKey = message.split(" ")[0].replace(bot.getBotTag(), "");
-        System.out.println(bot.getBotUsername());
-        System.out.println(commandKey);
         BaseGroupCommand command = commands.get(commandKey);
-        System.out.println(command);
 
         if (command == null) return;
         System.out.println(command.hasPermission(chatId, userId));

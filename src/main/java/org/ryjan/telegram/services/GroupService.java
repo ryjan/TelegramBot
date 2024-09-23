@@ -19,6 +19,7 @@ import java.util.HashMap;
 import java.util.List;
 
 @Service
+@Transactional
 public class GroupService {
 
     @Autowired
@@ -83,6 +84,19 @@ public class GroupService {
 
     public ChatSettings findChatSettings(Long groupId, String settingsKey) {
         return chatSettingsRepository.findByGroupIdAndSettingKey(groupId, settingsKey);
+    }
+
+    public void addChatSettings(Long groupId, String settingsKey, String settingsValue) {
+        Groups group = findGroup(groupId);
+        ChatSettings chatSettings = findChatSettings(groupId, settingsKey);
+        if (chatSettings == null) {
+            chatSettings = new ChatSettings(settingsKey, settingsValue, group);
+            group.addChatSetting(chatSettings);
+            update(group);
+        } else {
+            chatSettings.setSettingValue(settingsValue);
+            update(chatSettings);
+        }
     }
 
     public boolean isExistGroup(String groupName) {

@@ -81,6 +81,7 @@ public class BotMain extends TelegramLongPollingBot {
         System.out.println(update.hasMessage());
 
         try {
+            //groupService.addChatSettings(-1002174423866L, "aboba1", "aboba1");
             if (update.hasMessage() && update.getMessage().getChat().isUserChat()) {
                 buttonCommandHandler.handleCommand(update);
             } else {

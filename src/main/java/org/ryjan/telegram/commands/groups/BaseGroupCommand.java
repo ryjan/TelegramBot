@@ -98,6 +98,18 @@ public abstract class BaseGroupCommand implements IBotGroupCommand {
 
     protected void deleteMessage() {
         DeleteMessage deleteMessage = new DeleteMessage();
+        deleteMessage.setChatId(getUpdate().getMessage().getChatId());
+        deleteMessage.setMessageId(getUpdate().getMessage().getMessageId());
+
+        try {
+            groupService.getBotMain().execute(deleteMessage);
+        } catch (TelegramApiException e) {
+            e.printStackTrace();
+        }
+    }
+
+    protected void deleteMessageByCallbackQuery() {
+        DeleteMessage deleteMessage = new DeleteMessage();
         deleteMessage.setChatId(getUpdate().getCallbackQuery().getMessage().getChatId());
         deleteMessage.setMessageId(getUpdate().getCallbackQuery().getMessage().getMessageId());
 

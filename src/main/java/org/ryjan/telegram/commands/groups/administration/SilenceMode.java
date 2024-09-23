@@ -4,14 +4,39 @@ import org.ryjan.telegram.commands.groups.BaseGroupCommand;
 import org.ryjan.telegram.commands.groups.config.Permission;
 import org.ryjan.telegram.handler.GroupCommandHandler;
 import org.ryjan.telegram.main.BotMain;
+import org.ryjan.telegram.services.GroupService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 
+@Component
 public class SilenceMode extends BaseGroupCommand {
+
+    @Autowired
+    private GroupService groupService;
+
     protected SilenceMode() {
-        super("silenceMode", "🤫Режим тишины", Permission.ADMIN);
+        super("/silence", "🤫Режим тишины", Permission.ADMIN);
     }
 
     @Override
     protected void executeCommand(String chatId, BotMain bot, GroupCommandHandler groupCommandHandler) {
+        SendMessage message = createSendMessage(chatId);
+        String[] parts = getParts(getCommandName(), 1);
 
+        if (parts.length != 1) {
+            message.setText("🥲Введите /silence <количество_минут>");
+            sendMessageForCommand(bot, message);
+            return;
+        }
+
+        try {
+            int minutes = Integer.parseInt(parts[0]);
+
+
+        } catch (IllegalArgumentException e) {
+            message.setText("🥲Корректно введите количество минут");
+            sendMessageForCommand(bot, message);
+        }
     }
 }

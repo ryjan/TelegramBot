@@ -45,6 +45,12 @@ public class Groups {
         blacklists.add(blacklist);
     }
 
+    public void addChatSetting(ChatSettings chatSetting) {
+
+        chatSettings.add(chatSetting);
+        chatSetting.setGroups(this);
+    }
+
     public Long getId() {
         return id;
     }
