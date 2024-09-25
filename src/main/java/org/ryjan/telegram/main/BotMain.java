@@ -7,7 +7,7 @@ import org.ryjan.telegram.commands.groups.administration.blacklist.ChatBlacklist
 import org.ryjan.telegram.handler.GroupCommandHandler;
 import org.ryjan.telegram.services.GroupService;
 import org.ryjan.telegram.services.UserService;
-import org.ryjan.telegram.handler.ButtonCommandHandler;
+import org.ryjan.telegram.handler.UserCommandHandler;
 import org.telegram.telegrambots.meta.api.methods.groupadministration.BanChatMember;
 
 import org.ryjan.telegram.utils.UpdateContext;
@@ -36,7 +36,7 @@ public class BotMain extends TelegramLongPollingBot {
     private GroupService groupService;
 
     @Autowired
-    private ButtonCommandHandler buttonCommandHandler;
+    private UserCommandHandler userCommandHandler;
 
     @Autowired
     private GroupCommandHandler groupCommandHandler;
@@ -83,7 +83,7 @@ public class BotMain extends TelegramLongPollingBot {
         try {
             //groupService.addChatSettings(-1002174423866L, "aboba1", "aboba1");
             if (update.hasMessage() && update.getMessage().getChat().isUserChat()) {
-                buttonCommandHandler.handleCommand(update);
+                userCommandHandler.handleCommand(update);
             } else {
                 groupCommandHandler.handleCommand(update);
             }
@@ -168,9 +168,9 @@ public class BotMain extends TelegramLongPollingBot {
             chatBlacklist.executeCommand(chatId, this, groupCommandHandler);
         }
 
-        if (update.hasMyChatMember()) {
+        /*if (update.hasMyChatMember()) {
             handleChatMemberUpdate(update.getMyChatMember());
-        }
+        }*/
     }
 
     public String getBotTag() {

@@ -2,6 +2,7 @@ package org.ryjan.telegram.commands.groups.config;
 
 import org.ryjan.telegram.commands.groups.BaseGroupCommand;
 import org.ryjan.telegram.commands.groups.administration.SettingsGroup;
+import org.ryjan.telegram.commands.groups.administration.silence.SilenceMode;
 import org.ryjan.telegram.commands.groups.administration.StartGroup;
 import org.ryjan.telegram.commands.groups.administration.blacklist.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,16 +21,25 @@ public class Builder {
     private BlacklistSwitchOff blacklistSwitchOff;
     private BlacklistUnban blacklistUnban;
     private BlacklistBannedUsersList blacklistBannedUsers;
+    private SilenceMode silenceMode;
     private CloseMessage closeMessage;
 
     private Map<String, BaseGroupCommand> commands = new HashMap<>();
     private Map<String, BaseGroupCommand> buttonCommands = new HashMap<>();
 
     public void initializeCommands() {
+        initializeButtonCommands();
+        initializeSlashCommands();
+    }
+
+    private void initializeSlashCommands() {
         commands.put(startGroupCommand.getCommandName(), startGroupCommand);
         commands.put(blacklistSwitch.getCommandName(), blacklistSwitch);
         commands.put(settingsGroup.getCommandName(), settingsGroup);
+        //commands.put(silenceMode.getCommandName(), silenceMode);
+    }
 
+    private void initializeButtonCommands() {
         buttonCommands.put(blacklistSwitch.getCommandName(), blacklistSwitch);
         buttonCommands.put("blacklistStartGroup", blacklistSwitch);
 
@@ -43,6 +53,7 @@ public class Builder {
         //buttonCommands.put("settingsStartGroup", settingsGroup);
 
         buttonCommands.put(closeMessage.getCommandName(), closeMessage);
+        //buttonCommands.put(silenceMode.getCommandName(), silenceMode);
     }
 
     public StartGroup getStartGroupCommand() {
@@ -106,6 +117,15 @@ public class Builder {
     @Autowired
     public void setBlacklistBannedUsers(BlacklistBannedUsersList blacklistBannedUsers) {
         this.blacklistBannedUsers = blacklistBannedUsers;
+    }
+
+    public SilenceMode getSilenceMode() {
+        return silenceMode;
+    }
+
+    @Autowired
+    public void setSilenceMode(SilenceMode silenceMode) {
+        this.silenceMode = silenceMode;
     }
 
     public CloseMessage getCloseMessage() {

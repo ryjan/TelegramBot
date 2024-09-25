@@ -1,7 +1,7 @@
 package org.ryjan.telegram.commands.users;
 
 import org.ryjan.telegram.commands.users.user.UserGroup;
-import org.ryjan.telegram.handler.ButtonCommandHandler;
+import org.ryjan.telegram.handler.UserCommandHandler;
 import org.ryjan.telegram.main.BotMain;
 import org.ryjan.telegram.model.users.BankDatabase;
 import org.ryjan.telegram.model.users.UserDatabase;
@@ -22,7 +22,7 @@ public class SetCoins extends BaseCommand {
     }
 
     @Override
-    protected void executeCommand(String chatId, BotMain bot, ButtonCommandHandler buttonCommandHandler) {
+    protected void executeCommand(String chatId, BotMain bot, UserCommandHandler userCommandHandler) {
         SendMessage message = createSendMessage(chatId);
         UserDatabase fromUser = userService.findUser(getUpdate().getMessage().getFrom().getId());
 

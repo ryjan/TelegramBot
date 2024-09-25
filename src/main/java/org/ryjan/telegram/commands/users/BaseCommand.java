@@ -3,7 +3,7 @@ package org.ryjan.telegram.commands.users;
 import org.ryjan.telegram.commands.interfaces.IBotCommand;
 import org.ryjan.telegram.services.UserService;
 import org.ryjan.telegram.model.users.UserDatabase;
-import org.ryjan.telegram.handler.ButtonCommandHandler;
+import org.ryjan.telegram.handler.UserCommandHandler;
 import org.ryjan.telegram.main.BotMain;
 import org.ryjan.telegram.utils.UpdateContext;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -85,12 +85,12 @@ public abstract class BaseCommand extends Translation implements IBotCommand {
         }
     }
 
-    protected abstract void executeCommand(String chatId, BotMain bot, ButtonCommandHandler buttonCommandHandler);
+    protected abstract void executeCommand(String chatId, BotMain bot, UserCommandHandler userCommandHandler);
 
     @Override
-    public void execute(String chatId, BotMain bot, ButtonCommandHandler buttonCommandHandler) {
+    public void execute(String chatId, BotMain bot, UserCommandHandler userCommandHandler) {
         try {
-            executeCommand(chatId, bot, buttonCommandHandler);
+            executeCommand(chatId, bot, userCommandHandler);
         } catch (Exception e) {
             e.printStackTrace();
         }

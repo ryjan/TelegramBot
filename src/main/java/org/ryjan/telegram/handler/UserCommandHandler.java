@@ -22,7 +22,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Component
-public class ButtonCommandHandler {
+public class UserCommandHandler {
 
     private final SendCoins sendCoins;
     private final SetCoins setCoins;
@@ -36,7 +36,7 @@ public class ButtonCommandHandler {
     private String lastMessage;
 
     @Autowired
-    public ButtonCommandHandler(SendCoins sendCoins, SetCoins setCoins) {
+    public UserCommandHandler(SendCoins sendCoins, SetCoins setCoins) {
         this.nonButtonCommands = new HashMap<>();
         this.commands = new HashMap<>();
         this.sendCoins = sendCoins;

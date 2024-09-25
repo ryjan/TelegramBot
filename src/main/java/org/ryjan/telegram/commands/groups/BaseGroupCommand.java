@@ -2,13 +2,11 @@ package org.ryjan.telegram.commands.groups;
 
 import org.ryjan.telegram.commands.groups.config.Permission;
 import org.ryjan.telegram.commands.interfaces.IBotGroupCommand;
-import org.ryjan.telegram.handler.ButtonCommandHandler;
 import org.ryjan.telegram.handler.GroupCommandHandler;
 import org.ryjan.telegram.main.BotMain;
 import org.ryjan.telegram.services.GroupService;
 import org.ryjan.telegram.utils.UpdateContext;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.methods.ParseMode;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
@@ -101,6 +99,30 @@ public abstract class BaseGroupCommand implements IBotGroupCommand {
         DeleteMessage deleteMessage = new DeleteMessage();
         deleteMessage.setChatId(getUpdate().getMessage().getChatId());
         deleteMessage.setMessageId(getUpdate().getMessage().getMessageId());
+
+        try {
+            groupService.getBotMain().execute(deleteMessage);
+        } catch (TelegramApiException e) {
+            e.printStackTrace();
+        }
+    }
+
+    protected void deleteMessage(String chatId) {
+        DeleteMessage deleteMessage = new DeleteMessage();
+        deleteMessage.setChatId(chatId);
+        deleteMessage.setMessageId(getUpdate().getMessage().getMessageId());
+
+        try {
+            groupService.getBotMain().execute(deleteMessage);
+        } catch (TelegramApiException e) {
+            e.printStackTrace();
+        }
+    }
+
+    protected void deleteMessage(String chatId, int messageId) {
+        DeleteMessage deleteMessage = new DeleteMessage();
+        deleteMessage.setChatId(chatId);
+        deleteMessage.setMessageId(messageId);
 
         try {
             groupService.getBotMain().execute(deleteMessage);

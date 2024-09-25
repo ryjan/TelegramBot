@@ -85,8 +85,11 @@ public class GroupService {
 
     public boolean blacklistStatus(long groupId) {
         ChatSettings chatSettings = chatSettingsRepository.findByGroupIdAndSettingKeyAndSettingValue(groupId, "blacklist", "enabled");
-        System.out.println("чат сеттинг" + chatSettings);
         return chatSettings != null;
+    }
+
+    public ChatSettings chatSettingsCheckKeyValue(long groupId, String key, String value) {
+        return chatSettingsRepository.findByGroupIdAndSettingKeyAndSettingValue(groupId, key, value);
     }
 
     public void replaceBlacklistValue(long groupId, String settingsKey, String settingsValue) {
