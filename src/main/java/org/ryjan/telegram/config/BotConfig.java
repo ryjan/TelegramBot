@@ -9,7 +9,8 @@ public class BotConfig {
     public static String BOT_TOKEN;
     @Value("${bot.username}")
     public static String BOT_NAME;
-    public static final String BOT_VERSION = "0.0.1";
+    @Value("${bot.version}")
+    public static String BOT_VERSION;
 
     public static final String OWNER_ID = "";
     // API
