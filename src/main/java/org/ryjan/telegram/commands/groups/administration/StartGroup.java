@@ -26,6 +26,9 @@ public class StartGroup extends BaseGroupCommand {
     @Autowired
     private GroupService groupService;
 
+    @Autowired
+    private SettingsGroup settingsGroup;
+
     public StartGroup() {
         super("/start", "Начать работу бота🤙", Permission.CREATOR); // добавить при вызове команды inline keyboard с настройками сервера
         // а лучше отдельный класс с этой командой, которая будет использоваться тут. SettingsGroup
@@ -50,7 +53,7 @@ public class StartGroup extends BaseGroupCommand {
         groupService.addChatSettings(group, "aboba", "ggs");
 
         message.setText("Бот успешно зарегистрирован🤙\n⚙️Настройки:");
-        message.setReplyMarkup(getKeyboard());
+        message.setReplyMarkup(settingsGroup.getKeyboard());
         message.setReplyToMessageId(update.getMessage().getMessageId());
 
         sendMessageForCommand(bot, message);

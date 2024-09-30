@@ -41,7 +41,7 @@ public class SettingsGroup extends BaseGroupCommand {
         }
     }
 
-    private InlineKeyboardMarkup getKeyboard() {
+    protected InlineKeyboardMarkup getKeyboard() {
         InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
 
         KeyboardBuilder.KeyboardLayer keyboard = new KeyboardBuilder.KeyboardLayer()

@@ -49,13 +49,9 @@ public class GroupService {
     @Transactional
     public void addToBlacklist(Long groupId, Blacklist blacklist) {
         Groups group = findGroup(groupId);
-        if (group.getBlacklists().isEmpty() || !isExistBlacklist(groupId)) {
-            List<Blacklist> list = new ArrayList<>();
-            group.setBlacklists(list);
-        }
-        group.addBlacklist(blacklist);
         blacklist.setGroup(group);
-        groupsRepository.save(group);
+        group.getBlacklists().add(blacklist);
+        groupsRepository.save(group); // попробовать привязать BlacklistList группы и добавить туда blacklist
     }
 
     public void addChatSettings(Long groupId, String settingsKey, String settingsValue) {
