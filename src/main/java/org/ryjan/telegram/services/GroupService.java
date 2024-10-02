@@ -5,17 +5,14 @@ import org.ryjan.telegram.main.BotMain;
 import org.ryjan.telegram.model.groups.Blacklist;
 import org.ryjan.telegram.model.groups.ChatSettings;
 import org.ryjan.telegram.model.groups.Groups;
-import org.ryjan.telegram.repos.BlacklistRepository;
-import org.ryjan.telegram.repos.ChatSettingsRepository;
-import org.ryjan.telegram.repos.GroupsRepository;
+import org.ryjan.telegram.repos.jpa.BlacklistRepository;
+import org.ryjan.telegram.repos.jpa.ChatSettingsRepository;
+import org.ryjan.telegram.repos.jpa.GroupsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 
 @Service
@@ -79,9 +76,12 @@ public class GroupService {
         }
     }
 
+    public boolean silenceModeStatus(long groupId) {
+        return chatSettingsCheckKeyValue(groupId, "silenceMode", "enabled") != null;
+    }
+
     public boolean blacklistStatus(long groupId) {
-        ChatSettings chatSettings = chatSettingsRepository.findByGroupIdAndSettingKeyAndSettingValue(groupId, "blacklist", "enabled");
-        return chatSettings != null;
+        return chatSettingsCheckKeyValue(groupId, "blacklist", "enabled") != null;
     }
 
     public ChatSettings chatSettingsCheckKeyValue(long groupId, String key, String value) {

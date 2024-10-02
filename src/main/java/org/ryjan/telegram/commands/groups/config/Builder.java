@@ -36,7 +36,7 @@ public class Builder {
         commands.put(startGroupCommand.getCommandName(), startGroupCommand);
         commands.put(blacklistSwitch.getCommandName(), blacklistSwitch);
         commands.put(settingsGroup.getCommandName(), settingsGroup);
-        //commands.put(silenceMode.getCommandName(), silenceMode);
+        commands.put(silenceMode.getCommandName(), silenceMode);
     }
 
     private void initializeButtonCommands() {

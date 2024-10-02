@@ -32,6 +32,17 @@ public abstract class BaseGroupCommand implements IBotGroupCommand {
         this.requiredPermission = requiredPermission;
     }
 
+    public Permission getPermissionFromChat(Long chatId, Long userId) {
+        ChatMember chatMember = groupService.getBotMain().getChatMember(chatId, userId);
+        String status = chatMember.getStatus();
+
+        return switch (status) {
+            case "creator" -> Permission.CREATOR;
+            case "administrator" -> Permission.ADMIN;
+            default -> Permission.ANY;
+        };
+    }
+
     public boolean hasPermission(Long chatId, Long userId) {
         if (requiredPermission  == Permission.ANY) {
             return true;

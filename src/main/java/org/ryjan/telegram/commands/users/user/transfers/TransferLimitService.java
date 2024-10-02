@@ -2,6 +2,7 @@ package org.ryjan.telegram.commands.users.user.transfers;
 
 import org.ryjan.telegram.config.BotConfig;
 import org.ryjan.telegram.model.users.UserDatabase;
+import org.ryjan.telegram.repos.jpa.TransferLimitRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

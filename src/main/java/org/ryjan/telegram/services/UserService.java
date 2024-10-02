@@ -2,8 +2,8 @@ package org.ryjan.telegram.services;
 
 import org.ryjan.telegram.model.users.BankDatabase;
 import org.ryjan.telegram.model.users.UserDatabase;
-import org.ryjan.telegram.repos.BankDatabaseRepository;
-import org.ryjan.telegram.repos.UserDatabaseRepository;
+import org.ryjan.telegram.repos.jpa.BankDatabaseRepository;
+import org.ryjan.telegram.repos.jpa.JpaUserDatabaseRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -11,7 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class UserService { // сделать Jpa repository к сервису и все будет работать
     @Autowired
-    private UserDatabaseRepository userDatabaseRepository;
+    private JpaUserDatabaseRepository userDatabaseRepository;
     @Autowired
     private BankDatabaseRepository bankDatabaseRepository;
 

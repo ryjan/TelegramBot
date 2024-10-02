@@ -20,7 +20,7 @@ public class SilenceMode extends BaseGroupCommand {
     private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
 
     @Autowired
-    private GroupService groupService;
+    private SilenceModeService silenceModeService;
 
     protected SilenceMode() {
         super("/silence", "🤫Режим тишины", Permission.ADMIN);
@@ -41,8 +41,7 @@ public class SilenceMode extends BaseGroupCommand {
             int minutes = Integer.parseInt(parts[0]);
             LocalDateTime dateTime = LocalDateTime.now().plusMinutes(minutes);
             String formattedDateTime = dateTime.format(DateTimeFormatter.ofPattern("HH:mm:ss dd/MM/yyyy"));
-            groupService.addChatSettings(Long.valueOf(chatId), "silenceModeEndTime", String.valueOf(dateTime));
-            groupService.addChatSettings(Long.valueOf(chatId), "silenceModeActive", "enabled");
+            silenceModeService.enableSilenceMode(Long.valueOf(chatId), dateTime);
             message.setText("🎃Режим тишины включен\nВремя окончания: " + formattedDateTime);
             sendMessageForCommand(bot, message);
 
@@ -52,8 +51,12 @@ public class SilenceMode extends BaseGroupCommand {
         }
     }
 
-    private void doDeleteFunction() {
+    public void doDeleteFunction() {
         Update update = getUpdate();
+        Permission permission = getPermissionFromChat(update.getMessage().getChatId(), update.getMessage().getFrom().getId());
+        if (permission.getPermission() < 2) {
+            return;
+        }
 
         deleteMessage();
     }
