@@ -3,22 +3,16 @@ package org.ryjan.telegram.commands.groups.administration;
 import org.ryjan.telegram.commands.groups.BaseGroupCommand;
 import org.ryjan.telegram.commands.groups.GroupPrivileges;
 import org.ryjan.telegram.commands.groups.config.Permission;
-import org.ryjan.telegram.commands.users.utils.KeyboardBuilder;
+import org.ryjan.telegram.commands.users.utils.InlineKeyboardBuilder;
 import org.ryjan.telegram.handler.GroupCommandHandler;
 import org.ryjan.telegram.main.BotMain;
-import org.ryjan.telegram.model.groups.ChatSettings;
 import org.ryjan.telegram.model.groups.Groups;
 import org.ryjan.telegram.services.GroupService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
-import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageReplyMarkup;
-import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import org.telegram.telegrambots.meta.api.objects.Update;
-import org.telegram.telegrambots.meta.api.objects.chatmember.ChatMember;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
-
-import java.util.List;
 
 @Component
 public class StartGroup extends BaseGroupCommand {
@@ -62,8 +56,8 @@ public class StartGroup extends BaseGroupCommand {
     private InlineKeyboardMarkup getKeyboard() {
         InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
 
-        KeyboardBuilder.KeyboardLayer keyboard = new KeyboardBuilder.KeyboardLayer()
-                .addRow(new KeyboardBuilder.ButtonRow()
+        InlineKeyboardBuilder.KeyboardLayer keyboard = new InlineKeyboardBuilder.KeyboardLayer()
+                .addRow(new InlineKeyboardBuilder.ButtonRow()
                         .addButton("🔒Черный список", "/settings"));
         inlineKeyboardMarkup.setKeyboard(keyboard.build());
 

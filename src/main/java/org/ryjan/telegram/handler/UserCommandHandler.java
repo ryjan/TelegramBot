@@ -6,7 +6,7 @@ import org.ryjan.telegram.commands.users.user.button.OwnerCommand;
 //import org.ryjan.telegram.commands.user.button.StartCommand;
 import org.ryjan.telegram.commands.interfaces.IBotCommand;
 //import org.ryjan.telegram.commands.users.SetCoins;
-import org.ryjan.telegram.commands.users.utils.KeyboardBuilder;
+import org.ryjan.telegram.commands.users.utils.InlineKeyboardBuilder;
 import org.ryjan.telegram.main.BotMain;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,8 +51,8 @@ public class UserCommandHandler {
 
         InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
 
-        KeyboardBuilder.KeyboardLayer keyboard = new KeyboardBuilder.KeyboardLayer()
-                        .addRow(new KeyboardBuilder.ButtonRow()
+        InlineKeyboardBuilder.KeyboardLayer keyboard = new InlineKeyboardBuilder.KeyboardLayer()
+                        .addRow(new InlineKeyboardBuilder.ButtonRow()
                                 .addButton("Владелец", "owner")
                                 .addButton("ChatGPT-4", "askchatgpt"));
         inlineKeyboardMarkup.setKeyboard(keyboard.build());

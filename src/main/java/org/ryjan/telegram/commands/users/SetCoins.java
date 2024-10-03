@@ -13,7 +13,7 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import java.math.BigDecimal;
 
 @Component
-public class SetCoins extends BaseCommand {
+public class SetCoins extends BaseUserCommand {
     @Autowired
     UserService userService;
 

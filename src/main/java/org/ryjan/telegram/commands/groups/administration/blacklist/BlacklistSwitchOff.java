@@ -2,7 +2,7 @@ package org.ryjan.telegram.commands.groups.administration.blacklist;
 
 import org.ryjan.telegram.commands.groups.BaseGroupCommand;
 import org.ryjan.telegram.commands.groups.config.Permission;
-import org.ryjan.telegram.commands.users.utils.KeyboardBuilder;
+import org.ryjan.telegram.commands.users.utils.InlineKeyboardBuilder;
 import org.ryjan.telegram.handler.GroupCommandHandler;
 import org.ryjan.telegram.main.BotMain;
 import org.ryjan.telegram.services.GroupService;
@@ -32,12 +32,12 @@ public class BlacklistSwitchOff extends BaseGroupCommand {
     public InlineKeyboardMarkup getKeyboard() {
         InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
 
-        KeyboardBuilder.KeyboardLayer keyboard = new KeyboardBuilder.KeyboardLayer()
-                .addRow(new KeyboardBuilder.ButtonRow()
+        InlineKeyboardBuilder.KeyboardLayer keyboard = new InlineKeyboardBuilder.KeyboardLayer()
+                .addRow(new InlineKeyboardBuilder.ButtonRow()
                         .addButton("✅Включить", "blacklistOn"))
-                .addRow(new KeyboardBuilder.ButtonRow()
+                .addRow(new InlineKeyboardBuilder.ButtonRow()
                         .addButton("📃Список заблокированных", "blacklistBannedUsersList"))
-                .addRow(new KeyboardBuilder.ButtonRow()
+                .addRow(new InlineKeyboardBuilder.ButtonRow()
                         .addButton("↩️Назад", "/settings"));
         inlineKeyboardMarkup.setKeyboard(keyboard.build());
 

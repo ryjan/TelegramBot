@@ -7,8 +7,11 @@ import org.ryjan.telegram.main.BotMain;
 import org.ryjan.telegram.services.GroupService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.telegram.telegrambots.meta.api.methods.ParseMode;
+import org.telegram.telegrambots.meta.api.methods.pinnedmessages.PinChatMessage;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
+import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -42,7 +45,8 @@ public class SilenceMode extends BaseGroupCommand {
             LocalDateTime dateTime = LocalDateTime.now().plusMinutes(minutes);
             String formattedDateTime = dateTime.format(DateTimeFormatter.ofPattern("HH:mm:ss dd/MM/yyyy"));
             silenceModeService.enableSilenceMode(Long.valueOf(chatId), dateTime);
-            message.setText("🎃Режим тишины включен\nВремя окончания: " + formattedDateTime);
+            message.setText("🎃Режим тишины включен\n**Время окончания: " + formattedDateTime + "**");
+            message.setParseMode(ParseMode.MARKDOWN);
             sendMessageForCommand(bot, message);
 
         } catch (IllegalArgumentException e) {

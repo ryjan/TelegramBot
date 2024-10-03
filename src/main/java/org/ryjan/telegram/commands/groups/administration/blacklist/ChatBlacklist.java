@@ -2,12 +2,11 @@ package org.ryjan.telegram.commands.groups.administration.blacklist;
 
 import org.ryjan.telegram.commands.groups.BaseGroupCommand;
 import org.ryjan.telegram.commands.groups.config.Permission;
-import org.ryjan.telegram.commands.users.utils.KeyboardBuilder;
+import org.ryjan.telegram.commands.users.utils.InlineKeyboardBuilder;
 import org.ryjan.telegram.handler.GroupCommandHandler;
 import org.ryjan.telegram.main.BotMain;
 import org.ryjan.telegram.model.groups.Blacklist;
 import org.ryjan.telegram.services.GroupService;
-import org.ryjan.telegram.utils.UpdateContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
@@ -71,8 +70,8 @@ public class ChatBlacklist extends BaseGroupCommand {
     private InlineKeyboardMarkup getKeyboard() {
         InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
 
-        KeyboardBuilder.KeyboardLayer keyboard = new KeyboardBuilder.KeyboardLayer()
-                .addRow(new KeyboardBuilder.ButtonRow()
+        InlineKeyboardBuilder.KeyboardLayer keyboard = new InlineKeyboardBuilder.KeyboardLayer()
+                .addRow(new InlineKeyboardBuilder.ButtonRow()
                         .addButton("😶‍🌫️Разблокировать", "blacklistUnban"));
         inlineKeyboardMarkup.setKeyboard(keyboard.build());
 

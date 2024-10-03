@@ -14,7 +14,7 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 
 @Component
-public class SendCoins extends BaseCommand {
+public class SendCoins extends BaseUserCommand {
     @Autowired
     TransferService transferService;
 

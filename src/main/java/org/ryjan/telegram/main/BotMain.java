@@ -4,6 +4,7 @@ package org.ryjan.telegram.main;
 import com.sun.tools.javac.Main;
 
 import org.ryjan.telegram.commands.groups.administration.blacklist.ChatBlacklist;
+import org.ryjan.telegram.commands.groups.administration.silence.SilenceModeService;
 import org.ryjan.telegram.handler.GroupCommandHandler;
 import org.ryjan.telegram.services.GroupService;
 import org.ryjan.telegram.services.UserService;
@@ -34,6 +35,9 @@ public class BotMain extends TelegramLongPollingBot {
 
     @Autowired
     private GroupService groupService;
+
+    @Autowired
+    private SilenceModeService silenceModeService;
 
     @Autowired
     private UserCommandHandler userCommandHandler;
@@ -166,6 +170,10 @@ public class BotMain extends TelegramLongPollingBot {
         if (update.hasMessage() && update.getMessage().getLeftChatMember() != null) {
             String chatId = update.getMessage().getChatId().toString();
             chatBlacklist.executeCommand(chatId, this, groupCommandHandler);
+        }
+
+        if (update.hasMessage() && silenceModeService.isSilenceModeEnabled(update.getMessage().getChatId())) {
+            silenceModeService.doDeleteFunction();
         }
 
         /*if (update.hasMyChatMember()) {

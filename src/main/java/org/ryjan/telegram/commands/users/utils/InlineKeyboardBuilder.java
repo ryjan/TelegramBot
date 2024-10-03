@@ -5,7 +5,7 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKe
 import java.util.ArrayList;
 import java.util.List;
 
-public class KeyboardBuilder {
+public class InlineKeyboardBuilder {
 
     public static class ButtonRow {
         private final List<InlineKeyboardButton> buttons = new ArrayList<>();
@@ -24,7 +24,7 @@ public class KeyboardBuilder {
     }
 
     public static class KeyboardLayer {
-        List<List<InlineKeyboardButton>> rows = new ArrayList<>();
+        private final List<List<InlineKeyboardButton>> rows = new ArrayList<>();
 
         public KeyboardLayer addRow(ButtonRow button) {
             rows.add(button.build());

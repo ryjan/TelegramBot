@@ -2,7 +2,7 @@ package org.ryjan.telegram.commands.groups.administration;
 
 import org.ryjan.telegram.commands.groups.BaseGroupCommand;
 import org.ryjan.telegram.commands.groups.config.Permission;
-import org.ryjan.telegram.commands.users.utils.KeyboardBuilder;
+import org.ryjan.telegram.commands.users.utils.InlineKeyboardBuilder;
 import org.ryjan.telegram.handler.GroupCommandHandler;
 import org.ryjan.telegram.main.BotMain;
 import org.ryjan.telegram.model.groups.Groups;
@@ -44,10 +44,10 @@ public class SettingsGroup extends BaseGroupCommand {
     protected InlineKeyboardMarkup getKeyboard() {
         InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
 
-        KeyboardBuilder.KeyboardLayer keyboard = new KeyboardBuilder.KeyboardLayer()
-                .addRow(new KeyboardBuilder.ButtonRow()
+        InlineKeyboardBuilder.KeyboardLayer keyboard = new InlineKeyboardBuilder.KeyboardLayer()
+                .addRow(new InlineKeyboardBuilder.ButtonRow()
                         .addButton("🔒Черный список", "blacklistStartGroup"))
-                .addRow(new KeyboardBuilder.ButtonRow()
+                .addRow(new InlineKeyboardBuilder.ButtonRow()
                         .addButton("❌Закрыть", "closeMessage"));
         inlineKeyboardMarkup.setKeyboard(keyboard.build());
 

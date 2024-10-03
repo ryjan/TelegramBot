@@ -12,7 +12,7 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
 @Component
-public abstract class BaseCommand extends Translation implements IBotCommand {
+public abstract class BaseUserCommand extends Translation implements IBotCommand {
     private final String commandName;
     private final String description;
 
@@ -20,7 +20,7 @@ public abstract class BaseCommand extends Translation implements IBotCommand {
     protected UserService userService;
 
 
-    protected BaseCommand(String commandName, String description) {
+    protected BaseUserCommand(String commandName, String description) {
         this.commandName = commandName;
         this.description = description;
     }
