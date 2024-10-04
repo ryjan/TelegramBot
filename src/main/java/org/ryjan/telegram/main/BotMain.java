@@ -5,6 +5,7 @@ import com.sun.tools.javac.Main;
 
 import org.ryjan.telegram.commands.groups.administration.blacklist.ChatBlacklist;
 import org.ryjan.telegram.commands.groups.administration.silence.SilenceModeService;
+import org.ryjan.telegram.commands.users.user.button.bugreport.UserReportBug;
 import org.ryjan.telegram.handler.GroupCommandHandler;
 import org.ryjan.telegram.services.GroupService;
 import org.ryjan.telegram.services.UserService;
@@ -46,7 +47,10 @@ public class BotMain extends TelegramLongPollingBot {
     private GroupCommandHandler groupCommandHandler;
 
     @Autowired
-    ChatBlacklist chatBlacklist;
+    private ChatBlacklist chatBlacklist;
+
+    @Autowired
+    private UserReportBug userReportBug;
 
     @Value("${bot.token}")
     private String token;
@@ -170,6 +174,11 @@ public class BotMain extends TelegramLongPollingBot {
         if (update.hasMessage() && update.getMessage().getLeftChatMember() != null) {
             String chatId = update.getMessage().getChatId().toString();
             chatBlacklist.executeCommand(chatId, this, groupCommandHandler);
+            return;
+        }
+
+        if (update.getMessage().getChat().isUserChat() && update.getMessage().hasText()) {
+            userReportBug.operationSuccessful();
         }
 
         if (update.hasMessage() && silenceModeService.isSilenceModeEnabled(update.getMessage().getChatId())) {

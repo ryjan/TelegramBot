@@ -1,10 +1,7 @@
 package org.ryjan.telegram.handler;
 
 import org.ryjan.telegram.commands.groups.BaseGroupCommand;
-import org.ryjan.telegram.commands.groups.administration.*;
-import org.ryjan.telegram.commands.groups.administration.blacklist.*;
-import org.ryjan.telegram.commands.groups.config.Builder;
-import org.ryjan.telegram.commands.interfaces.IBotGroupCommand;
+import org.ryjan.telegram.commands.groups.config.GroupCommandsBuilder;
 import org.ryjan.telegram.main.BotMain;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
@@ -13,7 +10,6 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.Map;
 
 @Component
@@ -27,7 +23,7 @@ public class GroupCommandHandler {
     @Lazy
     private BotMain bot;
 
-    public GroupCommandHandler(Builder builder) {
+    public GroupCommandHandler(GroupCommandsBuilder builder) {
         commands = builder.getCommands();
         buttonCommands = builder.getButtonCommands();
         builder.initializeCommands();

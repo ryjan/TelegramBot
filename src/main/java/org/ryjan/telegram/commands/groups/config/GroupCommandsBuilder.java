@@ -12,7 +12,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Component
-public class Builder {
+public class GroupCommandsBuilder {
 
     private StartGroup startGroupCommand;
     private SettingsGroup settingsGroup;
