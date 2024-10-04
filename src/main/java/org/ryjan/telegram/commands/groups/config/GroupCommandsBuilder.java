@@ -1,5 +1,6 @@
 package org.ryjan.telegram.commands.groups.config;
 
+import jakarta.annotation.PostConstruct;
 import org.ryjan.telegram.commands.groups.BaseGroupCommand;
 import org.ryjan.telegram.commands.groups.administration.SettingsGroup;
 import org.ryjan.telegram.commands.groups.administration.silence.SilenceMode;
@@ -14,19 +15,29 @@ import java.util.Map;
 @Component
 public class GroupCommandsBuilder {
 
+    @Autowired
     private StartGroup startGroupCommand;
+    @Autowired
     private SettingsGroup settingsGroup;
+    @Autowired
     private BlacklistSwitch blacklistSwitch;
+    @Autowired
     private BlacklistSwitchOn blacklistSwitchOn;
+    @Autowired
     private BlacklistSwitchOff blacklistSwitchOff;
+    @Autowired
     private BlacklistUnban blacklistUnban;
+    @Autowired
     private BlacklistBannedUsersList blacklistBannedUsers;
+    @Autowired
     private SilenceMode silenceMode;
+    @Autowired
     private CloseMessage closeMessage;
 
     private Map<String, BaseGroupCommand> commands = new HashMap<>();
     private Map<String, BaseGroupCommand> buttonCommands = new HashMap<>();
 
+    @PostConstruct
     public void initializeCommands() {
         initializeButtonCommands();
         initializeSlashCommands();
@@ -54,87 +65,6 @@ public class GroupCommandsBuilder {
 
         buttonCommands.put(closeMessage.getCommandName(), closeMessage);
         //buttonCommands.put(silenceMode.getCommandName(), silenceMode);
-    }
-
-    public StartGroup getStartGroupCommand() {
-        return startGroupCommand;
-    }
-
-    @Autowired
-    public void setStartGroupCommand(StartGroup startGroupCommand) {
-        this.startGroupCommand = startGroupCommand;
-    }
-
-    public SettingsGroup getSettingsGroup() {
-        return settingsGroup;
-    }
-
-    @Autowired
-    public void setSettingsGroup(SettingsGroup settingsGroup) {
-        this.settingsGroup = settingsGroup;
-    }
-
-    public BlacklistSwitch getBlacklistSwitch() {
-        return blacklistSwitch;
-    }
-
-    @Autowired
-    public void setBlacklistSwitch(BlacklistSwitch blacklistSwitch) {
-        this.blacklistSwitch = blacklistSwitch;
-    }
-
-    public BlacklistSwitchOn getBlacklistSwitchOn() {
-        return blacklistSwitchOn;
-    }
-
-    @Autowired
-    public void setBlacklistSwitchOn(BlacklistSwitchOn blacklistSwitchOn) {
-        this.blacklistSwitchOn = blacklistSwitchOn;
-    }
-
-    public BlacklistSwitchOff getBlacklistSwitchOff() {
-        return blacklistSwitchOff;
-    }
-
-    @Autowired
-    public void setBlacklistSwitchOff(BlacklistSwitchOff blacklistSwitchOff) {
-        this.blacklistSwitchOff = blacklistSwitchOff;
-    }
-
-    public BlacklistUnban getBlacklistUnban() {
-        return blacklistUnban;
-    }
-
-    @Autowired
-    public void setBlacklistUnban(BlacklistUnban blacklistUnban) {
-        this.blacklistUnban = blacklistUnban;
-    }
-
-    public BlacklistBannedUsersList getBlacklistBannedUsers() {
-        return blacklistBannedUsers;
-    }
-
-    @Autowired
-    public void setBlacklistBannedUsers(BlacklistBannedUsersList blacklistBannedUsers) {
-        this.blacklistBannedUsers = blacklistBannedUsers;
-    }
-
-    public SilenceMode getSilenceMode() {
-        return silenceMode;
-    }
-
-    @Autowired
-    public void setSilenceMode(SilenceMode silenceMode) {
-        this.silenceMode = silenceMode;
-    }
-
-    public CloseMessage getCloseMessage() {
-        return closeMessage;
-    }
-
-    @Autowired
-    public void setCloseMessage(CloseMessage closeMessage) {
-        this.closeMessage = closeMessage;
     }
 
     public Map<String, BaseGroupCommand> getCommands() {

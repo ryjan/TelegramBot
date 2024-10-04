@@ -177,7 +177,7 @@ public class BotMain extends TelegramLongPollingBot {
             return;
         }
 
-        if (update.getMessage().getChat().isUserChat() && update.getMessage().hasText()) {
+        if (update.hasMessage() && update.getMessage().getChat().isUserChat() && update.getMessage().hasText()) {
             userReportBug.operationSuccessful();
         }
 
