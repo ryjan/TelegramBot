@@ -3,6 +3,7 @@ package org.ryjan.telegram.commands.users.user.button.bugreport;
 import org.ryjan.telegram.commands.users.BaseUserCommand;
 import org.ryjan.telegram.handler.UserCommandHandler;
 import org.ryjan.telegram.main.BotMain;
+import org.ryjan.telegram.model.users.Articles;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
@@ -10,15 +11,18 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
 @Component
-public class UserReportBug extends BaseUserCommand {
-    private final Update update = getUpdate();
+public class UserSendReportReply extends BaseUserCommand {
+
+    @Autowired
+    private BugReportService bugReportService;
 
     @Autowired
     private RedisTemplate<String, String> redisTemplate;
+
     private String chatId;
     private BotMain bot;
 
-    protected UserReportBug() {
+    protected UserSendReportReply() {
         super("👾Сообщить о баге", "👾Сообщить о баге");
     }
 
@@ -33,13 +37,18 @@ public class UserReportBug extends BaseUserCommand {
         sendMessageForCommand(bot, message);
     }
 
-    public void operationSuccessful() {
+    public void operationSuccessful(Update update) {
         String userState = redisTemplate.opsForValue().get("user_state:" + chatId);
         assert userState != null;
         if ("waiting_message".equals(userState)) {
+            String text = update.getMessage().getText();
+            String username = update.getMessage().getFrom().getUserName();
+            Articles articles = new Articles(getCommandName(), text, username, Long.parseLong(chatId));
+            bugReportService.update(articles);
             SendMessage message = createSendMessage(chatId);
             redisTemplate.delete("user_state:" + chatId);
-            message.setText("⚙️Обращение успешно зарегистрированно, ожидайте ответа...");
+
+            message.setText("⚙️Спасибо за обращение! Ожидайте ответа.");
             sendMessageForCommand(bot, message);
         }
     }

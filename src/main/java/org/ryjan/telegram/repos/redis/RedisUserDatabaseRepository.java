@@ -9,5 +9,5 @@ import org.telegram.telegrambots.meta.api.objects.User;
 public interface RedisUserDatabaseRepository extends CrudRepository<UserDatabase, String> {
     UserDatabase findByUserTag(String tag);
 
-    boolean existsByUserTag(String username);
+    Boolean existsByUserTag(String username);
 }

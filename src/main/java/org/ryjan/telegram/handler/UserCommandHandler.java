@@ -7,7 +7,7 @@ import org.ryjan.telegram.commands.users.user.button.OwnerCommand;
 import org.ryjan.telegram.commands.interfaces.IBotCommand;
 //import org.ryjan.telegram.commands.users.SetCoins;
 import org.ryjan.telegram.commands.users.user.button.bugreport.UserBugReport;
-import org.ryjan.telegram.commands.users.user.button.bugreport.UserReportBug;
+import org.ryjan.telegram.commands.users.user.button.bugreport.UserSendReportReply;
 import org.ryjan.telegram.commands.users.utils.InlineKeyboardBuilder;
 import org.ryjan.telegram.main.BotMain;
 
@@ -29,7 +29,7 @@ public class UserCommandHandler {
     private final SendCoins sendCoins;
     private final SetCoins setCoins;
     private final UserBugReport userBugReport;
-    private final UserReportBug userReportBug;
+    private final UserSendReportReply userSendReportReply;
 
     @Autowired
     @Lazy
@@ -40,13 +40,13 @@ public class UserCommandHandler {
     private String lastMessage;
 
     @Autowired
-    public UserCommandHandler(SendCoins sendCoins, SetCoins setCoins, UserBugReport userBugReport, UserReportBug userReportBug) {
+    public UserCommandHandler(SendCoins sendCoins, SetCoins setCoins, UserBugReport userBugReport, UserSendReportReply userSendReportReply) {
         this.nonButtonCommands = new HashMap<>();
         this.commands = new HashMap<>();
         this.sendCoins = sendCoins;
         this.setCoins = setCoins;
         this.userBugReport = userBugReport;
-        this.userReportBug = userReportBug;
+        this.userSendReportReply = userSendReportReply;
         initializeCommands();
     }
 
@@ -113,7 +113,7 @@ public class UserCommandHandler {
         nonButtonCommands.put(setCoins.getCommandName(), setCoins);
         nonButtonCommands.put(sendCoins.getCommandName(), sendCoins);
         nonButtonCommands.put(userBugReport.getCommandName(), userBugReport);
-        nonButtonCommands.put(userReportBug.getCommandName().split(" ")[0], userReportBug);
+        nonButtonCommands.put(userSendReportReply.getCommandName().split(" ")[0], userSendReportReply);
 
         commands.put("owner", new OwnerCommand());
     }
