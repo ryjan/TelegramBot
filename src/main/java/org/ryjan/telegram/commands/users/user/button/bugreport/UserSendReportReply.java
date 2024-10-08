@@ -1,6 +1,6 @@
 package org.ryjan.telegram.commands.users.user.button.bugreport;
 
-import org.ryjan.telegram.commands.users.BaseUserCommand;
+import org.ryjan.telegram.commands.users.utils.BaseUserCommand;
 import org.ryjan.telegram.handler.UserCommandHandler;
 import org.ryjan.telegram.main.BotMain;
 import org.ryjan.telegram.model.users.Articles;
@@ -37,13 +37,13 @@ public class UserSendReportReply extends BaseUserCommand {
         sendMessageForCommand(bot, message);
     }
 
-    public void operationSuccessful(Update update) {
+    public void operationSuccessful(Update update, String commandName) {
         String userState = redisTemplate.opsForValue().get("user_state:" + chatId);
         assert userState != null;
         if ("waiting_message".equals(userState)) {
             String text = update.getMessage().getText();
             String username = update.getMessage().getFrom().getUserName();
-            Articles articles = new Articles(getCommandName(), text, username, Long.parseLong(chatId));
+            Articles articles = new Articles(commandName, text, username, Long.parseLong(chatId));
             bugReportService.update(articles);
             SendMessage message = createSendMessage(chatId);
             redisTemplate.delete("user_state:" + chatId);

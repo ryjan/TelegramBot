@@ -17,20 +17,28 @@ public class GroupCommandsBuilder {
 
     @Autowired
     private StartGroup startGroupCommand;
+
     @Autowired
     private SettingsGroup settingsGroup;
+
     @Autowired
     private BlacklistSwitch blacklistSwitch;
+
     @Autowired
     private BlacklistSwitchOn blacklistSwitchOn;
+
     @Autowired
     private BlacklistSwitchOff blacklistSwitchOff;
+
     @Autowired
     private BlacklistUnban blacklistUnban;
+
     @Autowired
     private BlacklistBannedUsersList blacklistBannedUsers;
+
     @Autowired
     private SilenceMode silenceMode;
+
     @Autowired
     private CloseMessage closeMessage;
 

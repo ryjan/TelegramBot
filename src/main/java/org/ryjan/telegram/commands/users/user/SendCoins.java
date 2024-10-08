@@ -1,5 +1,6 @@
-package org.ryjan.telegram.commands.users;
+package org.ryjan.telegram.commands.users.user;
 
+import org.ryjan.telegram.commands.users.utils.BaseUserCommand;
 import org.ryjan.telegram.commands.users.user.transfers.TransferService;
 import org.ryjan.telegram.model.users.UserDatabase;
 import org.ryjan.telegram.handler.UserCommandHandler;

@@ -1,6 +1,7 @@
 package org.ryjan.telegram.commands.users;
 
 import org.ryjan.telegram.commands.users.user.UserGroup;
+import org.ryjan.telegram.commands.users.utils.BaseUserCommand;
 import org.ryjan.telegram.handler.UserCommandHandler;
 import org.ryjan.telegram.main.BotMain;
 import org.ryjan.telegram.model.users.BankDatabase;
@@ -14,6 +15,7 @@ import java.math.BigDecimal;
 
 @Component
 public class SetCoins extends BaseUserCommand {
+
     @Autowired
     UserService userService;
 
