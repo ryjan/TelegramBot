@@ -5,6 +5,7 @@ import com.sun.tools.javac.Main;
 
 import org.ryjan.telegram.commands.groups.administration.blacklist.ChatBlacklist;
 import org.ryjan.telegram.commands.groups.administration.silence.SilenceModeService;
+import org.ryjan.telegram.commands.users.user.button.bugreport.BugReportService;
 import org.ryjan.telegram.commands.users.user.button.bugreport.UserSendReportReply;
 import org.ryjan.telegram.commands.users.user.button.bugreport.UserSendWishReply;
 import org.ryjan.telegram.handler.GroupCommandHandler;
@@ -66,6 +67,8 @@ public class BotMain extends TelegramLongPollingBot {
     public static final Logger LOGGER = LoggerFactory.getLogger(Main.class);
 
     private static final String OWNER_ID = "2323";
+    @Autowired
+    private BugReportService bugReportService;
 
     public void sendMessage(String chatId, String text) {
         SendMessage message = new SendMessage();
@@ -84,16 +87,7 @@ public class BotMain extends TelegramLongPollingBot {
         UpdateContext.getInstance().setUpdate(update);
         autoExecute(update);
 
-        if (update.hasMessage() && update.getMessage().hasText()) {
-            String receivedMessage = update.getMessage().getText();
-            Long chatId = update.getMessage().getChatId();
-            User user = update.getMessage().getFrom();
-        }
-
-        System.out.println(update.hasMessage());
-
         try {
-            //groupService.addChatSettings(-1002174423866L, "aboba1", "aboba1");
             if (update.hasMessage() && update.getMessage().getChat().isUserChat()) {
                 userCommandHandler.handleCommand(update);
             } else {
@@ -183,9 +177,11 @@ public class BotMain extends TelegramLongPollingBot {
 
         if (update.hasMessage() && update.getMessage().getChat().isUserChat() && update.getMessage().hasText()) {
             String text = update.getMessage().getText();
-            String commandName = text.equals(userSendReportReply.getCommandName()) ? userSendReportReply.getCommandName() :
-                    userSendWishReply.getCommandName();
-            userSendReportReply.operationSuccessful(update, commandName);
+            String commandName = text.equals(userSendReportReply.getCommandName())
+                    ? userSendReportReply.getCommandName()
+                    : userSendWishReply.getCommandName();
+            bugReportService.operationSuccessful(update, commandName);
+            return;
         }
 
         if (update.hasMessage() && silenceModeService.isSilenceModeEnabled(update.getMessage().getChatId())) {

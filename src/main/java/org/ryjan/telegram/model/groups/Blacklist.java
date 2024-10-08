@@ -1,6 +1,9 @@
 package org.ryjan.telegram.model.groups;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
@@ -26,11 +29,10 @@ public class Blacklist {
     private Long userId;
     private String userFirstname;
     private String username;
-    LocalDateTime createdAt;
+    private String createdAt;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "group_id", referencedColumnName = "id")
-    @JsonBackReference
     private Groups group;
 
     public Blacklist() {
@@ -43,8 +45,8 @@ public class Blacklist {
         this.userFirstname = userFirstname;
         this.username = username;
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
-
-        this.createdAt = LocalDateTime.parse(dtf.format(LocalDateTime.now()), dtf);
+        LocalDateTime now = LocalDateTime.parse(dtf.format(LocalDateTime.now()), dtf);
+        this.createdAt = now.toString();
     }
 
     public Long getId() {
@@ -95,11 +97,11 @@ public class Blacklist {
         this.username = username;
     }
 
-    public LocalDateTime getCreatedAt() {
+    public String getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(LocalDateTime createdAt) {
+    public void setCreatedAt(String createdAt) {
         this.createdAt = createdAt;
     }
 

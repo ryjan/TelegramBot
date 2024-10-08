@@ -45,6 +45,7 @@ public class UserCommandsBuilder {
         commands.put(sendCoins.getCommandName(), sendCoins);
         commands.put(userBugReport.getCommandName(), userBugReport);
         commands.put(userSendReportReply.getCommandName().split(" ")[0], userSendReportReply);
+        commands.put(userSendWishReply.getCommandName().split(" ")[0], userSendWishReply);
     }
 
     private void initializeButtonCommands() {

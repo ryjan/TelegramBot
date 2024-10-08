@@ -42,7 +42,9 @@ public class StartGroup extends BaseGroupCommand {
         }
 
         String groupName = update.getMessage().getChat().getTitle();
-        Groups group = new Groups(Long.valueOf(chatId), groupName, GroupPrivileges.BASE);
+        String creatorName = update.getMessage().getFrom().getUserName();
+        Long creatorId = update.getMessage().getFrom().getId();
+        Groups group = new Groups(Long.valueOf(chatId), groupName, GroupPrivileges.BASE, "registered",  creatorId.toString(), creatorName);
         groupService.addChatSettings(group, "blacklist", "disabled");
         groupService.addChatSettings(group, "aboba", "ggs");
 

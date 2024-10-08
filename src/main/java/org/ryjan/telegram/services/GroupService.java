@@ -1,6 +1,7 @@
 package org.ryjan.telegram.services;
 
 import jakarta.persistence.EntityManager;
+import org.hibernate.Hibernate;
 import org.ryjan.telegram.main.BotMain;
 import org.ryjan.telegram.model.groups.Blacklist;
 import org.ryjan.telegram.model.groups.ChatSettings;
@@ -104,6 +105,14 @@ public class GroupService {
 
     public List<Blacklist> findAllBlacklists(long groupId) {
         return blacklistRepository.findByGroupId(groupId);
+    }
+
+    @Transactional
+    public List<Blacklist> findAllBlacklistsWithInitializedGroups(long groupId) {
+        List<Blacklist> blacklists = blacklistRepository.findByGroupId(groupId);
+        blacklists.forEach(blacklist -> Hibernate.initialize(blacklist.getGroup().getChatSettings()));
+        return blacklists;
+        //DO NOT USE
     }
 
     public ChatSettings findChatSettings(Long groupId, String settingsKey) {

@@ -14,13 +14,7 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 public class UserSendReportReply extends BaseUserCommand {
 
     @Autowired
-    private BugReportService bugReportService;
-
-    @Autowired
     private RedisTemplate<String, String> redisTemplate;
-
-    private String chatId;
-    private BotMain bot;
 
     protected UserSendReportReply() {
         super("👾Сообщить о баге", "👾Сообщить о баге");
@@ -28,28 +22,10 @@ public class UserSendReportReply extends BaseUserCommand {
 
     @Override
     protected void executeCommand(String chatId, BotMain bot, UserCommandHandler userCommandHandler) {
-        this.chatId = chatId;
-        this.bot = bot;
         SendMessage message = createSendMessage(chatId);
         redisTemplate.opsForValue().set("user_state:" + chatId, "waiting_message");
         message.setText("✨Введите свое обращение:");
 
         sendMessageForCommand(bot, message);
-    }
-
-    public void operationSuccessful(Update update, String commandName) {
-        String userState = redisTemplate.opsForValue().get("user_state:" + chatId);
-        assert userState != null;
-        if ("waiting_message".equals(userState)) {
-            String text = update.getMessage().getText();
-            String username = update.getMessage().getFrom().getUserName();
-            Articles articles = new Articles(commandName, text, username, Long.parseLong(chatId));
-            bugReportService.update(articles);
-            SendMessage message = createSendMessage(chatId);
-            redisTemplate.delete("user_state:" + chatId);
-
-            message.setText("⚙️Спасибо за обращение! Ожидайте ответа.");
-            sendMessageForCommand(bot, message);
-        }
     }
 }

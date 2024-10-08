@@ -1,5 +1,6 @@
 package org.ryjan.telegram.model.groups;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import org.ryjan.telegram.commands.groups.GroupPrivileges;
@@ -17,28 +18,37 @@ public class Groups {
     private Long id;
     private String groupName;
     private String privileges;
-    private LocalDateTime createdAt;
+    private String creatorId;
+    private String creatorUsername;
+    private String status;
+    private String createdAt;
 
     @OneToMany(mappedBy = "group", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+    @JsonIgnore
     private List<ChatSettings> chatSettings = new ArrayList<>();
 
-    @OneToMany(mappedBy = "group", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = false)
-    @JsonManagedReference
+    @OneToMany(mappedBy = "group", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+    @JsonIgnore
     private List<Blacklist> blacklists = new ArrayList<>();
 
     @OneToMany(mappedBy = "group", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+    @JsonIgnore
     private List<GroupMemberList> groupMemberLists = new ArrayList<>();
 
     public Groups() {
 
     }
 
-    public Groups(Long id, String groupName, GroupPrivileges privileges) {
+    public Groups(Long id, String groupName, GroupPrivileges privileges, String status,
+                  String creatorId, String creatorUsername) {
         this.id = id;
         this.groupName = groupName;
         this.privileges = privileges.getDisplayName();
+        this.status = status;
+        this.creatorId = creatorId;
+        this.creatorUsername = creatorUsername;
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
-        this.createdAt = LocalDateTime.parse(LocalDateTime.now().format(formatter), formatter);
+        this.createdAt = LocalDateTime.parse(LocalDateTime.now().format(formatter), formatter).toString();
         setBlacklists(blacklists);
     }
 
@@ -77,11 +87,11 @@ public class Groups {
         this.privileges = privileges;
     }
 
-    public LocalDateTime getCreatedAt() {
+    public String getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(LocalDateTime createdAt) {
+    public void setCreatedAt(String createdAt) {
         this.createdAt = createdAt;
     }
 
@@ -99,6 +109,30 @@ public class Groups {
 
     public void setBlacklists(List<Blacklist> blacklists) {
         this.blacklists = blacklists;
+    }
+
+    public String getCreatorId() {
+        return creatorId;
+    }
+
+    public void setCreatorId(String creatorId) {
+        this.creatorId = creatorId;
+    }
+
+    public String getCreatorUsername() {
+        return creatorUsername;
+    }
+
+    public void setCreatorUsername(String creatorUsername) {
+        this.creatorUsername = creatorUsername;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     public List<GroupMemberList> getGroupMemberLists() {

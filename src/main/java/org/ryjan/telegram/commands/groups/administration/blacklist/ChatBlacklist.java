@@ -43,7 +43,6 @@ public class ChatBlacklist extends BaseGroupCommand {
         long groupId = update.getMessage().getChat().getId();
 
         if (!groupService.blacklistStatus(groupId)) {
-            //System.out.println("is not exists()()");
             return;
         }
 

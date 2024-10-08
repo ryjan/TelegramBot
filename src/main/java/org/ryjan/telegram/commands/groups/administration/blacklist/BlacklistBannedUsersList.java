@@ -45,7 +45,7 @@ public class BlacklistBannedUsersList extends BaseGroupCommand {
 
         for (int i = 0; i < blacklistList.size(); i++) {
             Blacklist blacklist = blacklistList.get(i);
-            String formattedDate = blacklist.getCreatedAt().format(DateTimeFormatter.ofPattern("dd\\-MM\\-yyyy HH:mm:ss"));
+            String formattedDate = blacklist.getCreatedAt().replace("-", "\\-");
             sb.append(MessageFormat.format("🎃Пользователь [{0}](https://t.me/{1}) был добавлен *{2}*", blacklist.getUserFirstname(), blacklist.getUsername(),
                     formattedDate))
                     .append("\n");
@@ -67,12 +67,16 @@ public class BlacklistBannedUsersList extends BaseGroupCommand {
 
     private List<Blacklist> getBlacklist(String chatId) {
         String blacklistCacheKey = "groupBlacklist:" + chatId;
-        List<Blacklist> blacklistList = (List<Blacklist>) redisTemplate.opsForValue().get(blacklistCacheKey);
-        System.out.println(redisTemplate.opsForValue().get(blacklistCacheKey));
+        List<Blacklist> blacklistList = redisTemplate.opsForValue().get(blacklistCacheKey);
+        System.out.println(redisTemplate.opsForValue().get(blacklistCacheKey) == null);
 
         if (blacklistList == null) {
             blacklistList = groupService.findAllBlacklists(Long.parseLong(chatId));
             redisTemplate.opsForValue().set(blacklistCacheKey, blacklistList, 30, TimeUnit.MINUTES);
+        }
+
+        for (Blacklist blacklist : blacklistList) {
+            System.out.println(blacklist.getUsername());
         }
 
         return blacklistList;
