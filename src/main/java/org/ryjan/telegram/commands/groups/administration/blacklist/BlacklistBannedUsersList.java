@@ -2,23 +2,31 @@ package org.ryjan.telegram.commands.groups.administration.blacklist;
 
 import org.ryjan.telegram.commands.groups.BaseGroupCommand;
 import org.ryjan.telegram.commands.groups.config.Permission;
-import org.ryjan.telegram.commands.users.utils.InlineKeyboardBuilder;
+import org.ryjan.telegram.builders.InlineKeyboardBuilder;
 import org.ryjan.telegram.handler.GroupCommandHandler;
 import org.ryjan.telegram.main.BotMain;
 import org.ryjan.telegram.model.groups.Blacklist;
 import org.ryjan.telegram.services.GroupService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 
 import java.text.MessageFormat;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 @Component
 public class BlacklistBannedUsersList extends BaseGroupCommand {
     @Autowired
     GroupService groupService;
+
+    @Autowired
+    private RedisTemplate<String, List<Blacklist>> redisTemplate;
 
     protected BlacklistBannedUsersList() {
         super("blacklistBannedUsersList", "✨Проверить список заблокированных пользователей", Permission.ADMIN);
@@ -26,7 +34,7 @@ public class BlacklistBannedUsersList extends BaseGroupCommand {
 
     @Override
     protected void executeCommand(String chatId, BotMain bot, GroupCommandHandler groupCommandHandler) {
-        List<Blacklist> blacklistList = groupService.findAllBlacklists(Long.parseLong(chatId));
+        List<Blacklist> blacklistList = getBlacklist(chatId);
 
         if (blacklistList.isEmpty()) {
             editMessage("🎃Список пуст", getKeyboard());
@@ -55,5 +63,18 @@ public class BlacklistBannedUsersList extends BaseGroupCommand {
         inlineKeyboardMarkup.setKeyboard(keyboard.build());
 
         return inlineKeyboardMarkup;
+    }
+
+    private List<Blacklist> getBlacklist(String chatId) {
+        String blacklistCacheKey = "groupBlacklist:" + chatId;
+        List<Blacklist> blacklistList = (List<Blacklist>) redisTemplate.opsForValue().get(blacklistCacheKey);
+        System.out.println(redisTemplate.opsForValue().get(blacklistCacheKey));
+
+        if (blacklistList == null) {
+            blacklistList = groupService.findAllBlacklists(Long.parseLong(chatId));
+            redisTemplate.opsForValue().set(blacklistCacheKey, blacklistList, 30, TimeUnit.MINUTES);
+        }
+
+        return blacklistList;
     }
 }

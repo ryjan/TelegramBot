@@ -1,4 +1,4 @@
-package org.ryjan.telegram.commands.groups.config;
+package org.ryjan.telegram.builders;
 
 import jakarta.annotation.PostConstruct;
 import org.ryjan.telegram.commands.groups.BaseGroupCommand;

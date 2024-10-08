@@ -1,11 +1,12 @@
-package org.ryjan.telegram.commands.users.utils;
+package org.ryjan.telegram.builders;
 
 import jakarta.annotation.PostConstruct;
 import org.ryjan.telegram.commands.users.user.SendCoins;
-import org.ryjan.telegram.commands.users.SetCoins;
+import org.ryjan.telegram.commands.users.owner.SetCoins;
 import org.ryjan.telegram.commands.users.user.button.bugreport.UserBugReport;
 import org.ryjan.telegram.commands.users.user.button.bugreport.UserSendReportReply;
 import org.ryjan.telegram.commands.users.user.button.bugreport.UserSendWishReply;
+import org.ryjan.telegram.commands.users.utils.BaseUserCommand;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

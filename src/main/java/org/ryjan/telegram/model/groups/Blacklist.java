@@ -1,5 +1,6 @@
 package org.ryjan.telegram.model.groups;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
@@ -29,6 +30,7 @@ public class Blacklist {
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "group_id", referencedColumnName = "id")
+    @JsonBackReference
     private Groups group;
 
     public Blacklist() {

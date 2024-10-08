@@ -1,7 +1,7 @@
 package org.ryjan.telegram.handler;
 
 import org.ryjan.telegram.commands.groups.BaseGroupCommand;
-import org.ryjan.telegram.commands.groups.config.GroupCommandsBuilder;
+import org.ryjan.telegram.builders.GroupCommandsBuilder;
 import org.ryjan.telegram.main.BotMain;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;

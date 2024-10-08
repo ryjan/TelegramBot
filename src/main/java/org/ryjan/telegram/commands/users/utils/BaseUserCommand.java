@@ -1,7 +1,7 @@
 package org.ryjan.telegram.commands.users.utils;
 
 import org.ryjan.telegram.commands.interfaces.IBotCommand;
-import org.ryjan.telegram.commands.users.Translation;
+import org.ryjan.telegram.utils.Translation;
 import org.ryjan.telegram.services.UserService;
 import org.ryjan.telegram.model.users.UserDatabase;
 import org.ryjan.telegram.handler.UserCommandHandler;

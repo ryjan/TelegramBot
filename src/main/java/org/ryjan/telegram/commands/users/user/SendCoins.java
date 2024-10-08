@@ -14,11 +14,11 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
-@Component
+@Component("userSendCoins")
 public class SendCoins extends BaseUserCommand {
+
     @Autowired
     TransferService transferService;
-
 
     public SendCoins() {
         super("/sendcoins", "Отправить пользователю свои монеты🪙");

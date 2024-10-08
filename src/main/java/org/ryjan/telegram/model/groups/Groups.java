@@ -1,5 +1,6 @@
 package org.ryjan.telegram.model.groups;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import org.ryjan.telegram.commands.groups.GroupPrivileges;
 
@@ -22,6 +23,7 @@ public class Groups {
     private List<ChatSettings> chatSettings = new ArrayList<>();
 
     @OneToMany(mappedBy = "group", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = false)
+    @JsonManagedReference
     private List<Blacklist> blacklists = new ArrayList<>();
 
     @OneToMany(mappedBy = "group", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)

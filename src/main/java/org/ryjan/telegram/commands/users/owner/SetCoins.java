@@ -1,4 +1,4 @@
-package org.ryjan.telegram.commands.users;
+package org.ryjan.telegram.commands.users.owner;
 
 import org.ryjan.telegram.commands.users.user.UserGroup;
 import org.ryjan.telegram.commands.users.utils.BaseUserCommand;
