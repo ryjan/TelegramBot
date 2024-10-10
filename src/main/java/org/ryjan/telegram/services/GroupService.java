@@ -32,10 +32,6 @@ public class GroupService {
     @Autowired
     BlacklistRepository blacklistRepository;
 
-    @Autowired
-    @Lazy
-    BotMain botMain;
-
     public void addToBlacklist(Groups group, Blacklist blacklist) {
         List<Blacklist> list = group.getBlacklists();
         list.add(blacklist);
@@ -75,10 +71,6 @@ public class GroupService {
             chatSettings.setSettingValue(settingsValue);
             update(chatSettings);
         }
-    }
-
-    public boolean silenceModeStatus(long groupId) {
-        return chatSettingsCheckKeyValue(groupId, "silenceMode", "enabled") != null;
     }
 
     public boolean blacklistStatus(long groupId) {
@@ -158,9 +150,5 @@ public class GroupService {
 
     public void delete(Blacklist blacklist) {
         blacklistRepository.delete(blacklist);
-    }
-
-    public BotMain getBotMain() {
-        return botMain;
     }
 }

@@ -6,6 +6,7 @@ import org.ryjan.telegram.handler.GroupCommandHandler;
 import org.ryjan.telegram.main.BotMain;
 import org.ryjan.telegram.model.groups.Blacklist;
 import org.ryjan.telegram.model.groups.Groups;
+import org.ryjan.telegram.services.BotService;
 import org.ryjan.telegram.services.GroupService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -18,6 +19,9 @@ public class BlacklistUnban extends BaseGroupCommand {
 
     @Autowired
     private GroupService groupService;
+
+    @Autowired
+    private BotService botService;
 
     @Autowired
     private ChatBlacklist chatBlacklist;
@@ -33,7 +37,7 @@ public class BlacklistUnban extends BaseGroupCommand {
     }
 
     private void blacklistUnban(String chatId, Long userId, BotMain bot) {
-        bot.unbanUser(chatId, userId);
+        botService.unbanUser(chatId, userId);
         Blacklist blacklist = groupService.findBlacklist(userId);
         groupService.delete(blacklist);
         String adminUsername = getUpdate().getCallbackQuery().getFrom().getUserName();

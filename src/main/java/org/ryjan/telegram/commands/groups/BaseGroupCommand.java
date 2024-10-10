@@ -4,6 +4,7 @@ import org.ryjan.telegram.commands.groups.config.Permission;
 import org.ryjan.telegram.commands.interfaces.IBotGroupCommand;
 import org.ryjan.telegram.handler.GroupCommandHandler;
 import org.ryjan.telegram.main.BotMain;
+import org.ryjan.telegram.services.BotService;
 import org.ryjan.telegram.services.GroupService;
 import org.ryjan.telegram.utils.UpdateContext;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +27,9 @@ public abstract class BaseGroupCommand implements IBotGroupCommand {
     @Autowired
     GroupService groupService;
 
+    @Autowired
+    BotService botService;
+
     protected BaseGroupCommand(String commandName, String description, Permission requiredPermission) {
         this.commandName = commandName;
         this.description = description;
@@ -33,7 +37,7 @@ public abstract class BaseGroupCommand implements IBotGroupCommand {
     }
 
     public Permission getPermissionFromChat(Long chatId, Long userId) {
-        ChatMember chatMember = groupService.getBotMain().getChatMember(chatId, userId);
+        ChatMember chatMember = botService.getChatMember(chatId, userId);
         String status = chatMember.getStatus();
 
         return switch (status) {
@@ -48,7 +52,7 @@ public abstract class BaseGroupCommand implements IBotGroupCommand {
             return true;
         }
 
-        ChatMember chatMember = groupService.getBotMain().getChatMember(chatId, userId);
+        ChatMember chatMember = botService.getChatMember(chatId, userId);
         String status = chatMember.getStatus();
 
         return switch (requiredPermission) {
@@ -86,7 +90,7 @@ public abstract class BaseGroupCommand implements IBotGroupCommand {
         editMessageText.setParseMode(ParseMode.MARKDOWN);
 
         try {
-            groupService.getBotMain().execute(editMessageText);
+            botService.getBot().execute(editMessageText);
         } catch (TelegramApiException e) {
             e.printStackTrace();
         }
@@ -100,7 +104,7 @@ public abstract class BaseGroupCommand implements IBotGroupCommand {
         editMessageText.setParseMode(ParseMode.MARKDOWNV2);
         editMessageText.setReplyMarkup(inlineKeyboardMarkup);
         try {
-            groupService.getBotMain().execute(editMessageText);
+            botService.getBot().execute(editMessageText);
         } catch (TelegramApiException e) {
             e.printStackTrace();
         }
@@ -112,7 +116,7 @@ public abstract class BaseGroupCommand implements IBotGroupCommand {
         deleteMessage.setMessageId(getUpdate().getMessage().getMessageId());
 
         try {
-            groupService.getBotMain().execute(deleteMessage);
+            botService.getBot().execute(deleteMessage);
         } catch (TelegramApiException e) {
             e.printStackTrace();
         }
@@ -124,7 +128,7 @@ public abstract class BaseGroupCommand implements IBotGroupCommand {
         deleteMessage.setMessageId(getUpdate().getMessage().getMessageId());
 
         try {
-            groupService.getBotMain().execute(deleteMessage);
+            botService.getBot().execute(deleteMessage);
         } catch (TelegramApiException e) {
             e.printStackTrace();
         }
@@ -136,7 +140,7 @@ public abstract class BaseGroupCommand implements IBotGroupCommand {
         deleteMessage.setMessageId(messageId);
 
         try {
-            groupService.getBotMain().execute(deleteMessage);
+            botService.getBot().execute(deleteMessage);
         } catch (TelegramApiException e) {
             e.printStackTrace();
         }
@@ -148,7 +152,7 @@ public abstract class BaseGroupCommand implements IBotGroupCommand {
         deleteMessage.setMessageId(getUpdate().getCallbackQuery().getMessage().getMessageId());
 
         try {
-            groupService.getBotMain().execute(deleteMessage);
+            botService.getBot().execute(deleteMessage);
         } catch (TelegramApiException e) {
             e.printStackTrace();
         }
