@@ -29,6 +29,7 @@ public class BotService {
     public UserCommandHandler userCommandHandler;
 
     @Autowired
+    @Lazy
     public GroupCommandHandler groupCommandHandler;
 
     @Autowired
@@ -36,9 +37,11 @@ public class BotService {
     private BotMain bot;
 
     @Autowired
+    @Lazy
     private SilenceModeService silenceModeService;
 
     @Autowired
+    @Lazy
     private ChatBlacklist chatBlacklist;
 
     @Autowired

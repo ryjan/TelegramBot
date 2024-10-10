@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
-public class UserService { // сделать Jpa repository к сервису и все будет работать
+public class UserService {
     @Autowired
     private JpaUserDatabaseRepository userDatabaseRepository;
     @Autowired

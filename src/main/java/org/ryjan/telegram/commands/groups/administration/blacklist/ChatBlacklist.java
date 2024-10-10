@@ -6,7 +6,9 @@ import org.ryjan.telegram.builders.InlineKeyboardBuilder;
 import org.ryjan.telegram.handler.GroupCommandHandler;
 import org.ryjan.telegram.main.BotMain;
 import org.ryjan.telegram.model.groups.Blacklist;
+import org.ryjan.telegram.services.BlacklistService;
 import org.ryjan.telegram.services.GroupService;
+import org.ryjan.telegram.services.MainServices;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
@@ -20,14 +22,6 @@ import java.text.MessageFormat;
 @Component
 public class ChatBlacklist extends BaseGroupCommand {
 
-    @Autowired
-    private GroupService groupService;
-
-    @Autowired
-    @Lazy
-    private BotMain botMain;
-
-    private boolean isEnabled = true;
     private String leftUserFirstName;
     private String leftUserUsername;
     private long leftUserId;
@@ -42,7 +36,7 @@ public class ChatBlacklist extends BaseGroupCommand {
 
         long groupId = update.getMessage().getChat().getId();
 
-        if (!groupService.blacklistStatus(groupId)) {
+        if (!blacklistService.blacklistStatus(groupId)) {
             return;
         }
 
@@ -54,8 +48,8 @@ public class ChatBlacklist extends BaseGroupCommand {
         //botMain.banUser(chatId, leftUserId);
         Blacklist blacklist = new Blacklist(groupName, leftUserId, leftUserUsername, leftUserFirstName);
 
-        if (!groupService.isExistBlacklist(leftUserId)) {
-            groupService.addToBlacklist(groupId, blacklist);
+        if (!blacklistService.isExistBlacklist(leftUserId)) {
+            blacklistService.addToBlacklist(groupId, blacklist);
         }
 
         SendMessage message = createSendMessage(chatId);
@@ -75,14 +69,6 @@ public class ChatBlacklist extends BaseGroupCommand {
         inlineKeyboardMarkup.setKeyboard(keyboard.build());
 
         return inlineKeyboardMarkup;
-    }
-
-    public void enable() {
-        isEnabled = true;
-    }
-
-    public void disable() {
-        isEnabled = false;
     }
 
     public String getLeftUserUsername() {

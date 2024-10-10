@@ -2,6 +2,7 @@ package org.ryjan.telegram.controllers.commands;
 
 import org.ryjan.telegram.model.groups.Groups;
 import org.ryjan.telegram.services.GroupService;
+import org.ryjan.telegram.services.MainServices;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.ResponseEntity;
@@ -17,10 +18,10 @@ import java.math.BigDecimal;
 public class GroupsController {
 
     @Autowired
-    private GroupService groupService;
+    private RedisTemplate<String, Groups> redisTemplate;
 
     @Autowired
-    private RedisTemplate<String, Groups> redisTemplate;
+    private GroupService groupService;
 
     @PostMapping("/delete")
     public ResponseEntity<String> deleteGroup(@RequestParam Long groupId) {

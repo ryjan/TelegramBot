@@ -1,12 +1,15 @@
 package org.ryjan.telegram.commands.groups.administration.blacklist;
 
+import com.sun.tools.javac.Main;
 import org.ryjan.telegram.commands.groups.BaseGroupCommand;
 import org.ryjan.telegram.commands.groups.config.Permission;
 import org.ryjan.telegram.builders.InlineKeyboardBuilder;
 import org.ryjan.telegram.handler.GroupCommandHandler;
 import org.ryjan.telegram.main.BotMain;
 import org.ryjan.telegram.model.groups.Blacklist;
+import org.ryjan.telegram.services.BlacklistService;
 import org.ryjan.telegram.services.GroupService;
+import org.ryjan.telegram.services.MainServices;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.jpa.repository.Query;
@@ -22,8 +25,6 @@ import java.util.concurrent.TimeUnit;
 
 @Component
 public class BlacklistBannedUsersList extends BaseGroupCommand {
-    @Autowired
-    GroupService groupService;
 
     @Autowired
     private RedisTemplate<String, List<Blacklist>> redisTemplate;
@@ -71,7 +72,7 @@ public class BlacklistBannedUsersList extends BaseGroupCommand {
         System.out.println(redisTemplate.opsForValue().get(blacklistCacheKey) == null);
 
         if (blacklistList == null) {
-            blacklistList = groupService.findAllBlacklists(Long.parseLong(chatId));
+            blacklistList = blacklistService.findAllBlacklists(Long.parseLong(chatId));
             redisTemplate.opsForValue().set(blacklistCacheKey, blacklistList, 30, TimeUnit.MINUTES);
         }
 

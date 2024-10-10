@@ -1,13 +1,16 @@
 package org.ryjan.telegram.commands.groups;
 
+import com.sun.tools.javac.Main;
+import jakarta.annotation.PostConstruct;
 import org.ryjan.telegram.commands.groups.config.Permission;
 import org.ryjan.telegram.commands.interfaces.IBotGroupCommand;
 import org.ryjan.telegram.handler.GroupCommandHandler;
 import org.ryjan.telegram.main.BotMain;
-import org.ryjan.telegram.services.BotService;
-import org.ryjan.telegram.services.GroupService;
+import org.ryjan.telegram.services.*;
 import org.ryjan.telegram.utils.UpdateContext;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.methods.ParseMode;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
@@ -20,15 +23,23 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 @Service
 public abstract class BaseGroupCommand implements IBotGroupCommand {
+
     private final String commandName;
     private final String description;
     private final Permission requiredPermission;
 
-    @Autowired
-    GroupService groupService;
+    protected GroupService groupService;
+    protected BotService botService;
+    protected ChatSettingsService chatSettingsService;
+    protected BlacklistService blacklistService;
 
     @Autowired
-    BotService botService;
+    public void setMainServices(MainServices mainServices) {
+        this.groupService = mainServices.getGroupService();
+        this.botService = mainServices.getBotService();
+        this.chatSettingsService = mainServices.getChatSettingsService();
+        this.blacklistService = mainServices.getBlacklistService();
+    }
 
     protected BaseGroupCommand(String commandName, String description, Permission requiredPermission) {
         this.commandName = commandName;
@@ -188,4 +199,6 @@ public abstract class BaseGroupCommand implements IBotGroupCommand {
     protected Update getUpdate() {
         return UpdateContext.getInstance().getUpdate();
     }
+
+
 }

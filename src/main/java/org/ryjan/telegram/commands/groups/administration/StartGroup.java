@@ -7,7 +7,9 @@ import org.ryjan.telegram.builders.InlineKeyboardBuilder;
 import org.ryjan.telegram.handler.GroupCommandHandler;
 import org.ryjan.telegram.main.BotMain;
 import org.ryjan.telegram.model.groups.Groups;
+import org.ryjan.telegram.services.ChatSettingsService;
 import org.ryjan.telegram.services.GroupService;
+import org.ryjan.telegram.services.MainServices;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
@@ -16,9 +18,6 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMa
 
 @Component
 public class StartGroup extends BaseGroupCommand {
-
-    @Autowired
-    private GroupService groupService;
 
     @Autowired
     private SettingsGroup settingsGroup;
@@ -45,8 +44,8 @@ public class StartGroup extends BaseGroupCommand {
         String creatorName = update.getMessage().getFrom().getUserName();
         Long creatorId = update.getMessage().getFrom().getId();
         Groups group = new Groups(Long.valueOf(chatId), groupName, GroupPrivileges.BASE, "registered",  creatorId.toString(), creatorName);
-        groupService.addChatSettings(group, "blacklist", "disabled");
-        groupService.addChatSettings(group, "aboba", "ggs");
+        chatSettingsService.addChatSettings(group, "blacklist", "disabled");
+        chatSettingsService.addChatSettings(group, "aboba", "ggs");
 
         message.setText("Бот успешно зарегистрирован🤙\n⚙️Настройки:");
         message.setReplyMarkup(settingsGroup.getKeyboard());
