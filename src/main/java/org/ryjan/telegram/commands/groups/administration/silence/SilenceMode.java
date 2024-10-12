@@ -16,7 +16,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 
 @Component
-public class SilenceMode extends BaseCommand<GroupCommandHandler> {
+public class SilenceMode extends BaseCommand {
     private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
 
     @Autowired
@@ -27,7 +27,7 @@ public class SilenceMode extends BaseCommand<GroupCommandHandler> {
     }
 
     @Override
-    protected void executeCommand(String chatId, BotMain bot, GroupCommandHandler groupCommandHandler) {
+    protected void executeCommand(String chatId, BotMain bot, GroupCommandHandler commandHandler) {
         SendMessage message = createSendMessage(chatId);
         String[] parts = getParts(getCommandName(), 1);
 

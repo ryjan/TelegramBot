@@ -7,13 +7,13 @@ import org.ryjan.telegram.main.BotMain;
 import org.springframework.stereotype.Component;
 
 @Component
-public class CloseMessage extends BaseCommand<GroupCommandHandler> {
+public class CloseMessage extends BaseCommand {
     protected CloseMessage() {
         super("closeMessage", "❌Закрыть", Permission.ADMIN);
     }
 
     @Override
-    protected void executeCommand(String chatId, BotMain bot, GroupCommandHandler groupCommandHandler) {
+    protected void executeCommand(String chatId, BotMain bot, GroupCommandHandler commandHandler) {
         deleteMessageByCallbackQuery();
     }
 }

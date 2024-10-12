@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
 @Component
-public class BlacklistSwitch extends BaseCommand<GroupCommandHandler> {
+public class BlacklistSwitch extends BaseCommand {
 
     @Autowired
     ChatBlacklist chatBlacklist;
@@ -25,7 +25,7 @@ public class BlacklistSwitch extends BaseCommand<GroupCommandHandler> {
     }
 
     @Override
-    protected void executeCommand(String chatId, BotMain bot, GroupCommandHandler groupCommandHandler) {
+    protected void executeCommand(String chatId, BotMain bot, GroupCommandHandler commandHandler) {
         Update update = getUpdate();
 
         if (blacklistService.blacklistStatus(update.getCallbackQuery().getMessage().getChatId())) {

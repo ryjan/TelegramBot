@@ -13,9 +13,11 @@ import java.io.IOException;
 import java.util.Map;
 
 @Component
-public class GroupCommandHandler implements CommandHandler { // переписать под единый commandHandler, наверное
-    private final Map<String, BaseCommand<GroupCommandHandler>> commands;
-    private final Map<String, BaseCommand<GroupCommandHandler>> buttonCommands;
+public class GroupCommandHandler { // переписать под единый commandHandler, наверное
+    private final Map<String, BaseCommand> groupCommands;
+    private final Map<String, BaseCommand> userCommands;
+    private final Map<String, BaseCommand> groupButtonCommands;
+    private final Map<String, BaseCommand> userButtonCommands;
 
     private String lastMessage;
 
@@ -24,25 +26,32 @@ public class GroupCommandHandler implements CommandHandler { // переписа
     private BotMain bot;
 
     public GroupCommandHandler(GroupCommandsBuilder builder) {
-        commands = builder.getCommands();
-        buttonCommands = builder.getButtonCommands();
+        groupCommands = builder.getCommands();
+        userCommands = builder.getUserCommands();
+        groupButtonCommands = builder.getButtonCommands();
+        userButtonCommands = builder.getUserButtonCommands();
         builder.initializeCommands();
     }
 
-    public void handleCommand(Update update) throws IOException {
+    public void handleCommand(Update update, Boolean isGroup) throws IOException {
         if (update.getCallbackQuery() != null) {
-            handleCallBackQuery(update, buttonCommands);
+            handleCallBackQuery(update, isGroup);
         } else {
-            handleTextMessage(update);
+            handleTextMessage(update, isGroup);
         }
     }
 
-    private void handleCallBackQuery(Update update, Map<?, ?> buttonCommands) throws IOException {
+    private void handleCallBackQuery(Update update, Boolean isGroup) throws IOException {
         String callbackData = update.getCallbackQuery().getData();
         String chatId = update.getCallbackQuery().getMessage().getChatId().toString();
         long userId = update.getCallbackQuery().getFrom().getId();
 
-        BaseCommand command = (BaseCommand) buttonCommands.get(callbackData);
+        BaseCommand command;
+        if (isGroup) {
+            command = groupButtonCommands.get(callbackData);
+        } else {
+            command = userButtonCommands.get(callbackData);
+        }
 
         if (command == null) return;
 
@@ -51,16 +60,21 @@ public class GroupCommandHandler implements CommandHandler { // переписа
         }
     }
 
-    private void handleTextMessage(Update update) throws IOException {
+    private void handleTextMessage(Update update, Boolean isGroup) throws IOException {
         Long chatId = update.getMessage().getChatId();
         String message = update.getMessage().getText();
         Long userId = update.getMessage().getFrom().getId();
         lastMessage = message;
 
-        if (message == null || !message.startsWith("/")) return;
+        if (message == null) return;
 
         String commandKey = message.split(" ")[0].replace(bot.getBotTag(), "");
-        BaseCommand command = commands.get(commandKey);
+        BaseCommand command;
+        if (isGroup) {
+            command = groupCommands.get(commandKey);
+        } else {
+            command = userCommands.get(commandKey);
+        }
 
         if (command == null) return;
         System.out.println(command.hasPermission(chatId, userId));

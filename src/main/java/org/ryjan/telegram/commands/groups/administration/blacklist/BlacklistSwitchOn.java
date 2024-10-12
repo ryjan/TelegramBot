@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 
 @Component
-public class BlacklistSwitchOn extends BaseCommand<GroupCommandHandler> {
+public class BlacklistSwitchOn extends BaseCommand {
 
     @Autowired
     ChatBlacklist chatBlacklist;
@@ -20,7 +20,7 @@ public class BlacklistSwitchOn extends BaseCommand<GroupCommandHandler> {
     }
 
     @Override
-    protected void executeCommand(String chatId, BotMain bot, GroupCommandHandler groupCommandHandler) {
+    protected void executeCommand(String chatId, BotMain bot, GroupCommandHandler commandHandler) {
         blacklistService.replaceBlacklistValue(Long.parseLong(chatId), "blacklist", "enabled");
         editMessage("🔒Черный список *включен*", getKeyboard());
     }

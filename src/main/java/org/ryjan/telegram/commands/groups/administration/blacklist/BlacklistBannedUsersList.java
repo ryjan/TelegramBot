@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 @Component
-public class BlacklistBannedUsersList extends BaseCommand<GroupCommandHandler> {
+public class BlacklistBannedUsersList extends BaseCommand {
 
     @Autowired
     private RedisTemplate<String, List<Blacklist>> redisTemplate;
@@ -26,7 +26,7 @@ public class BlacklistBannedUsersList extends BaseCommand<GroupCommandHandler> {
     }
 
     @Override
-    protected void executeCommand(String chatId, BotMain bot, GroupCommandHandler groupCommandHandler) {
+    protected void executeCommand(String chatId, BotMain bot, GroupCommandHandler commandHandler) {
         List<Blacklist> blacklistList = getBlacklist(chatId);
 
         if (blacklistList.isEmpty()) {

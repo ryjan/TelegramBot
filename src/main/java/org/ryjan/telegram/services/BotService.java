@@ -6,7 +6,7 @@ import org.ryjan.telegram.commands.users.user.button.bugreport.BugReportService;
 import org.ryjan.telegram.commands.users.user.button.bugreport.UserSendReportReply;
 import org.ryjan.telegram.commands.users.user.button.bugreport.UserSendWishReply;
 import org.ryjan.telegram.handler.GroupCommandHandler;
-import org.ryjan.telegram.handler.UserCommandHandler;
+
 import org.ryjan.telegram.main.BotMain;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
@@ -24,9 +24,6 @@ import static org.ryjan.telegram.main.BotMain.LOGGER;
 
 @Service
 public class BotService {
-
-    @Autowired
-    public UserCommandHandler userCommandHandler;
 
     @Autowired
     @Lazy

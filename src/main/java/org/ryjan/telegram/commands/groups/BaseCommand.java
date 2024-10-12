@@ -2,8 +2,7 @@ package org.ryjan.telegram.commands.groups;
 
 import org.ryjan.telegram.commands.groups.config.Permission;
 import org.ryjan.telegram.commands.interfaces.IBotCommand;
-import org.ryjan.telegram.commands.interfaces.IBotUserCommand;
-import org.ryjan.telegram.handler.CommandHandler;
+import org.ryjan.telegram.handler.GroupCommandHandler;
 import org.ryjan.telegram.main.BotMain;
 import org.ryjan.telegram.services.*;
 import org.ryjan.telegram.utils.UpdateContext;
@@ -19,7 +18,7 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMa
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 @Service
-public abstract class BaseCommand<T extends CommandHandler> implements IBotCommand<T> {
+public abstract class BaseCommand implements IBotCommand {
 
     private final String commandName;
     private final String description;
@@ -172,12 +171,12 @@ public abstract class BaseCommand<T extends CommandHandler> implements IBotComma
         return getUpdate().getMessage().getText().replace(command, "").trim().split(" ", expectedParts);
     }
 
-    protected abstract void executeCommand(String chatId, BotMain bot, T handler);
+    protected abstract void executeCommand(String chatId, BotMain bot, GroupCommandHandler handler);
 
     @Override
-    public void execute(String chatId, BotMain bot, T handler) {
+    public void execute(String chatId, BotMain bot, GroupCommandHandler commandHandler) {
         try {
-            executeCommand(chatId, bot, handler);
+            executeCommand(chatId, bot, commandHandler);
         } catch (Exception e) {
             e.printStackTrace();
         }

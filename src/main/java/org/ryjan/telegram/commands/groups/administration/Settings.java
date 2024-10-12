@@ -16,7 +16,7 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMa
 import java.util.concurrent.TimeUnit;
 
 @Component
-public class Settings extends BaseCommand<GroupCommandHandler> {
+public class Settings extends BaseCommand {
 
     @Autowired
     private GroupService groupService;
@@ -29,7 +29,7 @@ public class Settings extends BaseCommand<GroupCommandHandler> {
     }
 
     @Override
-    protected void executeCommand(String chatId, BotMain bot, GroupCommandHandler groupCommandHandler) {
+    protected void executeCommand(String chatId, BotMain bot, GroupCommandHandler commandHandler) {
         String cacheKey = "groups:" + chatId;
         Groups group = redisTemplate.opsForValue().get(cacheKey);
         SendMessage message = createSendMessage(chatId);

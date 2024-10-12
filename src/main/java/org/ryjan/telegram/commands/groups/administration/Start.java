@@ -14,7 +14,7 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 
 @Component
-public class Start extends BaseCommand<GroupCommandHandler> {
+public class Start extends BaseCommand {
 
     @Autowired
     private Settings settingsGroup;
@@ -25,7 +25,7 @@ public class Start extends BaseCommand<GroupCommandHandler> {
     }
 
     @Override
-    protected void executeCommand(String chatId, BotMain bot, GroupCommandHandler groupCommandHandler) {
+    protected void executeCommand(String chatId, BotMain bot, GroupCommandHandler commandHandler) {
         Update update = getUpdate();
         SendMessage message = createSendMessage(chatId);
         //String groupName = update.getMessage().getLeftChatMember();

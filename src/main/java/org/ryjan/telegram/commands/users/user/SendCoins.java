@@ -4,7 +4,7 @@ import org.ryjan.telegram.commands.groups.BaseCommand;
 import org.ryjan.telegram.commands.groups.config.Permission;
 import org.ryjan.telegram.commands.users.user.transfers.TransferService;
 import org.ryjan.telegram.model.users.UserDatabase;
-import org.ryjan.telegram.handler.UserCommandHandler;
+
 import org.ryjan.telegram.main.BotMain;
 import org.ryjan.telegram.utils.UpdateContext;
 import org.springframework.beans.factory.annotation.Autowired;

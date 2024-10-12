@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 import java.text.MessageFormat;
 
 @Component
-public class BlacklistUnban extends BaseCommand<GroupCommandHandler> {
+public class BlacklistUnban extends BaseCommand {
 
     @Autowired
     private ChatBlacklist chatBlacklist;
@@ -21,7 +21,7 @@ public class BlacklistUnban extends BaseCommand<GroupCommandHandler> {
     }
 
     @Override
-    protected void executeCommand(String chatId, BotMain bot, GroupCommandHandler groupCommandHandler) {
+    protected void executeCommand(String chatId, BotMain bot, GroupCommandHandler commandHandler) {
         System.out.println(chatBlacklist.getLeftUserId());
         blacklistUnban(chatId, chatBlacklist.getLeftUserId(), bot);
     }

@@ -10,8 +10,6 @@ import org.ryjan.telegram.commands.users.owner.SetCoins;
 import org.ryjan.telegram.commands.users.user.button.bugreport.UserBugReport;
 import org.ryjan.telegram.commands.users.user.button.bugreport.UserSendReportReply;
 import org.ryjan.telegram.commands.users.user.button.bugreport.UserSendWishReply;
-import org.ryjan.telegram.handler.GroupCommandHandler;
-import org.ryjan.telegram.handler.UserCommandHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -61,10 +59,10 @@ public class GroupCommandsBuilder {
     @Autowired
     private UserSendWishReply userSendWishReply;
 
-    private Map<String, BaseCommand<GroupCommandHandler>> commands = new HashMap<>();
-    private Map<String, BaseCommand<GroupCommandHandler>> buttonCommands = new HashMap<>();
-    private Map<String, BaseCommand<UserCommandHandler>> userCommands = new HashMap<>();
-    private Map<String, BaseCommand<UserCommandHandler>> userButtonCommands = new HashMap<>();
+    private Map<String, BaseCommand> commands = new HashMap<>();
+    private Map<String, BaseCommand> buttonCommands = new HashMap<>();
+    private Map<String, BaseCommand> userCommands = new HashMap<>();
+    private Map<String, BaseCommand> userButtonCommands = new HashMap<>();
 
     @PostConstruct
     public void initializeCommands() {
@@ -110,35 +108,35 @@ public class GroupCommandsBuilder {
 
     }
 
-    public Map<String, BaseCommand<GroupCommandHandler>> getCommands() {
+    public Map<String, BaseCommand> getCommands() {
         return commands;
     }
 
-    public void setCommands(Map<String, BaseCommand<GroupCommandHandler>> commands) {
+    public void setCommands(Map<String, BaseCommand> commands) {
         this.commands = commands;
     }
 
-    public Map<String, BaseCommand<GroupCommandHandler>> getButtonCommands() {
+    public Map<String, BaseCommand> getButtonCommands() {
         return buttonCommands;
     }
 
-    public void setButtonCommands(Map<String, BaseCommand<GroupCommandHandler>> buttonCommands) {
+    public void setButtonCommands(Map<String, BaseCommand> buttonCommands) {
         this.buttonCommands = buttonCommands;
     }
 
-    public Map<String, BaseCommand<UserCommandHandler>> getUserCommands() {
+    public Map<String, BaseCommand> getUserCommands() {
         return userCommands;
     }
 
-    public void setUserCommands(Map<String, BaseCommand<UserCommandHandler>> userCommands) {
+    public void setUserCommands(Map<String, BaseCommand> userCommands) {
         this.userCommands = userCommands;
     }
 
-    public Map<String, BaseCommand<UserCommandHandler>> getUserButtonCommands() {
+    public Map<String, BaseCommand> getUserButtonCommands() {
         return userButtonCommands;
     }
 
-    public void setUserButtonCommands(Map<String, BaseCommand<UserCommandHandler>> userButtonCommands) {
+    public void setUserButtonCommands(Map<String, BaseCommand> userButtonCommands) {
         this.userButtonCommands = userButtonCommands;
     }
 }

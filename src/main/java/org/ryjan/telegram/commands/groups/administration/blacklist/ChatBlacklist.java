@@ -15,7 +15,7 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMa
 import java.text.MessageFormat;
 
 @Component
-public class ChatBlacklist extends BaseCommand<GroupCommandHandler> {
+public class ChatBlacklist extends BaseCommand {
 
     private String leftUserFirstName;
     private String leftUserUsername;
@@ -26,7 +26,7 @@ public class ChatBlacklist extends BaseCommand<GroupCommandHandler> {
     }
 
     @Override
-    public void executeCommand(String chatId, BotMain bot, GroupCommandHandler groupCommandHandler) {
+    public void executeCommand(String chatId, BotMain bot, GroupCommandHandler commandHandler) {
         Update update = getUpdate();
 
         long groupId = update.getMessage().getChat().getId();

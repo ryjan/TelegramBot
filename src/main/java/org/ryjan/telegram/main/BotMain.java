@@ -12,7 +12,7 @@ import org.ryjan.telegram.handler.GroupCommandHandler;
 import org.ryjan.telegram.services.BotService;
 import org.ryjan.telegram.services.GroupService;
 import org.ryjan.telegram.services.UserService;
-import org.ryjan.telegram.handler.UserCommandHandler;
+
 import org.telegram.telegrambots.meta.api.methods.groupadministration.BanChatMember;
 
 import org.ryjan.telegram.utils.UpdateContext;
@@ -68,9 +68,9 @@ public class BotMain extends TelegramLongPollingBot {
 
         try {
             if (update.hasMessage() && update.getMessage().getChat().isUserChat()) {
-                botService.userCommandHandler.handleCommand(update);
+                botService.groupCommandHandler.handleCommand(update, false);
             } else {
-                botService.groupCommandHandler.handleCommand(update);
+                botService.groupCommandHandler.handleCommand(update, true);
             }
 
         } catch (Exception e) {

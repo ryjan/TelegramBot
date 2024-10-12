@@ -3,8 +3,7 @@ package org.ryjan.telegram.commands.users.owner;
 import org.ryjan.telegram.commands.groups.BaseCommand;
 import org.ryjan.telegram.commands.groups.config.Permission;
 import org.ryjan.telegram.commands.users.user.UserGroup;
-import org.ryjan.telegram.commands.users.user.BaseUserCommand;
-import org.ryjan.telegram.handler.UserCommandHandler;
+import org.ryjan.telegram.handler.GroupCommandHandler;
 import org.ryjan.telegram.main.BotMain;
 import org.ryjan.telegram.model.users.BankDatabase;
 import org.ryjan.telegram.model.users.UserDatabase;
@@ -16,14 +15,14 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import java.math.BigDecimal;
 
 @Component
-public class SetCoins extends BaseCommand<UserCommandHandler> {
+public class SetCoins extends BaseCommand {
 
     public SetCoins() {
         super("/setcoins", "Установить монеты пользователю", Permission.CREATOR);
     }
 
     @Override
-    protected void executeCommand(String chatId, BotMain bot, UserCommandHandler userCommandHandler) {
+    protected void executeCommand(String chatId, BotMain bot, GroupCommandHandler commandHandler) {
         SendMessage message = createSendMessage(chatId);
 
         String[] parts = getParts(getCommandName(), 2);
