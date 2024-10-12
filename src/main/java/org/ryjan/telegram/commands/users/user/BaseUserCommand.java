@@ -1,6 +1,6 @@
 package org.ryjan.telegram.commands.users.user;
 
-import org.ryjan.telegram.commands.interfaces.IBotCommand;
+import org.ryjan.telegram.commands.interfaces.IBotUserCommand;
 import org.ryjan.telegram.utils.Translation;
 import org.ryjan.telegram.services.UserService;
 import org.ryjan.telegram.model.users.UserDatabase;
@@ -13,7 +13,7 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
 @Component
-public abstract class BaseUserCommand extends Translation implements IBotCommand {
+public abstract class BaseUserCommand extends Translation implements IBotUserCommand {
     private final String commandName;
     private final String description;
 
@@ -88,7 +88,6 @@ public abstract class BaseUserCommand extends Translation implements IBotCommand
 
     protected abstract void executeCommand(String chatId, BotMain bot, UserCommandHandler userCommandHandler);
 
-    @Override
     public void execute(String chatId, BotMain bot, UserCommandHandler userCommandHandler) {
         try {
             executeCommand(chatId, bot, userCommandHandler);

@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 @Component
-public class BlacklistBannedUsersList extends BaseCommand {
+public class BlacklistBannedUsersList extends BaseCommand<GroupCommandHandler> {
 
     @Autowired
     private RedisTemplate<String, List<Blacklist>> redisTemplate;

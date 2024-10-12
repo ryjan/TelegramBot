@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
 @Component
-public class BlacklistSwitch extends BaseCommand {
+public class BlacklistSwitch extends BaseCommand<GroupCommandHandler> {
 
     @Autowired
     ChatBlacklist chatBlacklist;

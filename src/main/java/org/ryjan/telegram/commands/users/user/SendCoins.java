@@ -1,5 +1,7 @@
-package org.ryjan.telegram.commands.users.user;
+/*package org.ryjan.telegram.commands.users.user;
 
+import org.ryjan.telegram.commands.groups.BaseCommand;
+import org.ryjan.telegram.commands.groups.config.Permission;
 import org.ryjan.telegram.commands.users.user.transfers.TransferService;
 import org.ryjan.telegram.model.users.UserDatabase;
 import org.ryjan.telegram.handler.UserCommandHandler;
@@ -14,13 +16,13 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 
 @Component("userSendCoins")
-public class SendCoins extends BaseUserCommand {
+public class SendCoins extends BaseCommand<UserCommandHandler> {
 
     @Autowired
     TransferService transferService;
 
     public SendCoins() {
-        super("/sendcoins", "Отправить пользователю свои монеты🪙");
+        super("/sendcoins", "Отправить пользователю свои монеты🪙", Permission.ANY);
     }
 
     @Override
@@ -56,3 +58,4 @@ public class SendCoins extends BaseUserCommand {
         sendMessageForCommand(bot, message);
     }
 }
+ */

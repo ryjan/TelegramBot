@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 
 @Component
-public class BlacklistSwitchOn extends BaseCommand {
+public class BlacklistSwitchOn extends BaseCommand<GroupCommandHandler> {
 
     @Autowired
     ChatBlacklist chatBlacklist;

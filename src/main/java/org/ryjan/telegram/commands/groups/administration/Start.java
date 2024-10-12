@@ -14,7 +14,7 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 
 @Component
-public class Start extends BaseCommand {
+public class Start extends BaseCommand<GroupCommandHandler> {
 
     @Autowired
     private Settings settingsGroup;

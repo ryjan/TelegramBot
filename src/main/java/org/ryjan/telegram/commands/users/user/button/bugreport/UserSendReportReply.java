@@ -1,5 +1,7 @@
 package org.ryjan.telegram.commands.users.user.button.bugreport;
 
+import org.ryjan.telegram.commands.groups.BaseCommand;
+import org.ryjan.telegram.commands.groups.config.Permission;
 import org.ryjan.telegram.commands.users.user.BaseUserCommand;
 import org.ryjan.telegram.handler.UserCommandHandler;
 import org.ryjan.telegram.main.BotMain;
@@ -9,13 +11,13 @@ import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 
 @Component
-public class UserSendReportReply extends BaseUserCommand {
+public class UserSendReportReply extends BaseCommand<UserCommandHandler> {
 
     @Autowired
     private RedisTemplate<String, String> redisTemplate;
 
     protected UserSendReportReply() {
-        super("👾Сообщить о баге", "👾Сообщить о баге");
+        super("👾Сообщить о баге", "👾Сообщить о баге", Permission.ANY);
     }
 
     @Override

@@ -16,7 +16,7 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMa
 import java.util.concurrent.TimeUnit;
 
 @Component
-public class Settings extends BaseCommand {
+public class Settings extends BaseCommand<GroupCommandHandler> {
 
     @Autowired
     private GroupService groupService;

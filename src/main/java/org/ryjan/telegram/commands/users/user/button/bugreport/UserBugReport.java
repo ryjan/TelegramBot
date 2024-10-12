@@ -1,5 +1,7 @@
 package org.ryjan.telegram.commands.users.user.button.bugreport;
 
+import org.ryjan.telegram.commands.groups.BaseCommand;
+import org.ryjan.telegram.commands.groups.config.Permission;
 import org.ryjan.telegram.commands.users.user.BaseUserCommand;
 import org.ryjan.telegram.builders.ReplyKeyboardBuilder;
 import org.ryjan.telegram.handler.UserCommandHandler;
@@ -9,9 +11,9 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
 
 @Component
-public class UserBugReport  extends BaseUserCommand {
+public class UserBugReport  extends BaseCommand<UserCommandHandler> {
     protected UserBugReport() {
-        super("/bugreport", "👾Рассказать о баге или поделиться идеей");
+        super("/bugreport", "👾Рассказать о баге или поделиться идеей", Permission.ANY);
     }
 
     @Override

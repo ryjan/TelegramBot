@@ -6,7 +6,7 @@ import org.ryjan.telegram.handler.GroupCommandHandler;
 import org.ryjan.telegram.main.BotMain;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 
-public class SetGreetings extends BaseCommand {
+public class SetGreetings extends BaseCommand<GroupCommandHandler> {
     protected SetGreetings(String commandName, String description, Permission requiredPermission) {
         super("setGreetings", "🎃Установить приветствие", Permission.ADMIN);
     }

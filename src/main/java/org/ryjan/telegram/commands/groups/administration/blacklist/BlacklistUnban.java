@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 import java.text.MessageFormat;
 
 @Component
-public class BlacklistUnban extends BaseCommand {
+public class BlacklistUnban extends BaseCommand<GroupCommandHandler> {
 
     @Autowired
     private ChatBlacklist chatBlacklist;

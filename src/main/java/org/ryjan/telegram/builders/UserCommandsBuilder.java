@@ -1,12 +1,13 @@
 package org.ryjan.telegram.builders;
 
 import jakarta.annotation.PostConstruct;
-import org.ryjan.telegram.commands.users.user.SendCoins;
+import org.ryjan.telegram.commands.groups.BaseCommand;
 import org.ryjan.telegram.commands.users.owner.SetCoins;
 import org.ryjan.telegram.commands.users.user.button.bugreport.UserBugReport;
 import org.ryjan.telegram.commands.users.user.button.bugreport.UserSendReportReply;
 import org.ryjan.telegram.commands.users.user.button.bugreport.UserSendWishReply;
 import org.ryjan.telegram.commands.users.user.BaseUserCommand;
+import org.ryjan.telegram.handler.UserCommandHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -15,9 +16,6 @@ import java.util.Map;
 
 @Component
 public class UserCommandsBuilder {
-
-    @Autowired
-    private SendCoins sendCoins;
 
     @Autowired
     private SetCoins setCoins;
@@ -31,8 +29,8 @@ public class UserCommandsBuilder {
     @Autowired
     private UserSendWishReply userSendWishReply;
 
-    private Map<String, BaseUserCommand> commands = new HashMap<>();
-    private Map<String, BaseUserCommand> buttonCommands = new HashMap<>();
+    private Map<String, BaseCommand<UserCommandHandler>> commands = new HashMap<>();
+    private Map<String, BaseCommand<UserCommandHandler>> buttonCommands = new HashMap<>();
 
     @PostConstruct
     public void initializeCommands() {
@@ -42,7 +40,7 @@ public class UserCommandsBuilder {
 
     private void initializeSlashCommands() {
         commands.put(setCoins.getCommandName(), setCoins);
-        commands.put(sendCoins.getCommandName(), sendCoins);
+        //commands.put(sendCoins.getCommandName(), sendCoins);
         commands.put(userBugReport.getCommandName(), userBugReport);
         commands.put(userSendReportReply.getCommandName().split(" ")[0], userSendReportReply);
         commands.put(userSendWishReply.getCommandName().split(" ")[0], userSendWishReply);
@@ -52,19 +50,19 @@ public class UserCommandsBuilder {
 
     }
 
-    public Map<String, BaseUserCommand> getCommands() {
+    public Map<String, BaseCommand<UserCommandHandler>> getCommands() {
         return commands;
     }
 
-    public void setCommands(Map<String, BaseUserCommand> commands) {
+    public void setCommands(Map<String, BaseCommand<UserCommandHandler>> commands) {
         this.commands = commands;
     }
 
-    public Map<String, BaseUserCommand> getButtonCommands() {
+    public Map<String, BaseCommand<UserCommandHandler>> getButtonCommands() {
         return buttonCommands;
     }
 
-    public void setButtonCommands(Map<String, BaseUserCommand> buttonCommands) {
+    public void setButtonCommands(Map<String, BaseCommand<UserCommandHandler>> buttonCommands) {
         this.buttonCommands = buttonCommands;
     }
 }

@@ -6,6 +6,12 @@ import org.ryjan.telegram.commands.groups.administration.Settings;
 import org.ryjan.telegram.commands.groups.administration.silence.SilenceMode;
 import org.ryjan.telegram.commands.groups.administration.Start;
 import org.ryjan.telegram.commands.groups.administration.blacklist.*;
+import org.ryjan.telegram.commands.users.owner.SetCoins;
+import org.ryjan.telegram.commands.users.user.button.bugreport.UserBugReport;
+import org.ryjan.telegram.commands.users.user.button.bugreport.UserSendReportReply;
+import org.ryjan.telegram.commands.users.user.button.bugreport.UserSendWishReply;
+import org.ryjan.telegram.handler.GroupCommandHandler;
+import org.ryjan.telegram.handler.UserCommandHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -42,13 +48,30 @@ public class GroupCommandsBuilder {
     @Autowired
     private CloseMessage closeMessage;
 
-    private Map<String, BaseCommand> commands = new HashMap<>();
-    private Map<String, BaseCommand> buttonCommands = new HashMap<>();
+    //UserCommands
+    @Autowired
+    private SetCoins setCoins;
+
+    @Autowired
+    private UserBugReport userBugReport;
+
+    @Autowired
+    private UserSendReportReply userSendReportReply;
+
+    @Autowired
+    private UserSendWishReply userSendWishReply;
+
+    private Map<String, BaseCommand<GroupCommandHandler>> commands = new HashMap<>();
+    private Map<String, BaseCommand<GroupCommandHandler>> buttonCommands = new HashMap<>();
+    private Map<String, BaseCommand<UserCommandHandler>> userCommands = new HashMap<>();
+    private Map<String, BaseCommand<UserCommandHandler>> userButtonCommands = new HashMap<>();
 
     @PostConstruct
     public void initializeCommands() {
         initializeButtonCommands();
+        initializeUserButtonCommands();
         initializeSlashCommands();
+        initializeUserSlashCommands();
     }
 
     private void initializeSlashCommands() {
@@ -75,19 +98,47 @@ public class GroupCommandsBuilder {
         //buttonCommands.put(silenceMode.getCommandName(), silenceMode);
     }
 
-    public Map<String, BaseCommand> getCommands() {
+    private void initializeUserSlashCommands() {
+        userCommands.put(setCoins.getCommandName(), setCoins);
+        //commands.put(sendCoins.getCommandName(), sendCoins);
+        userCommands.put(userBugReport.getCommandName(), userBugReport);
+        userCommands.put(userSendReportReply.getCommandName().split(" ")[0], userSendReportReply);
+        userCommands.put(userSendWishReply.getCommandName().split(" ")[0], userSendWishReply);
+    }
+
+    private void initializeUserButtonCommands() {
+
+    }
+
+    public Map<String, BaseCommand<GroupCommandHandler>> getCommands() {
         return commands;
     }
 
-    public void setCommands(Map<String, BaseCommand> commands) {
+    public void setCommands(Map<String, BaseCommand<GroupCommandHandler>> commands) {
         this.commands = commands;
     }
 
-    public Map<String, BaseCommand> getButtonCommands() {
+    public Map<String, BaseCommand<GroupCommandHandler>> getButtonCommands() {
         return buttonCommands;
     }
 
-    public void setButtonCommands(Map<String, BaseCommand> buttonCommands) {
+    public void setButtonCommands(Map<String, BaseCommand<GroupCommandHandler>> buttonCommands) {
         this.buttonCommands = buttonCommands;
+    }
+
+    public Map<String, BaseCommand<UserCommandHandler>> getUserCommands() {
+        return userCommands;
+    }
+
+    public void setUserCommands(Map<String, BaseCommand<UserCommandHandler>> userCommands) {
+        this.userCommands = userCommands;
+    }
+
+    public Map<String, BaseCommand<UserCommandHandler>> getUserButtonCommands() {
+        return userButtonCommands;
+    }
+
+    public void setUserButtonCommands(Map<String, BaseCommand<UserCommandHandler>> userButtonCommands) {
+        this.userButtonCommands = userButtonCommands;
     }
 }

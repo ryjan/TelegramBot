@@ -1,9 +1,9 @@
 package org.ryjan.telegram.commands.groups;
 
 import org.ryjan.telegram.commands.groups.config.Permission;
-import org.ryjan.telegram.commands.interfaces.IBotGroupCommand;
-import org.ryjan.telegram.handler.GroupCommandHandler;
-import org.ryjan.telegram.handler.UserCommandHandler;
+import org.ryjan.telegram.commands.interfaces.IBotCommand;
+import org.ryjan.telegram.commands.interfaces.IBotUserCommand;
+import org.ryjan.telegram.handler.CommandHandler;
 import org.ryjan.telegram.main.BotMain;
 import org.ryjan.telegram.services.*;
 import org.ryjan.telegram.utils.UpdateContext;
@@ -19,7 +19,7 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMa
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 @Service
-public abstract class BaseCommand implements IBotGroupCommand {
+public abstract class BaseCommand<T extends CommandHandler> implements IBotCommand<T> {
 
     private final String commandName;
     private final String description;
@@ -172,13 +172,12 @@ public abstract class BaseCommand implements IBotGroupCommand {
         return getUpdate().getMessage().getText().replace(command, "").trim().split(" ", expectedParts);
     }
 
-    protected abstract void executeCommand(String chatId, BotMain bot, GroupCommandHandler groupCommandHandler);
-    protected abstract void executeCommand(String chatId, BotMain bot, UserCommandHandler userCommandHandler);
+    protected abstract void executeCommand(String chatId, BotMain bot, T handler);
 
     @Override
-    public void execute(String chatId, BotMain bot, GroupCommandHandler groupCommandHandler) {
+    public void execute(String chatId, BotMain bot, T handler) {
         try {
-            executeCommand(chatId, bot, groupCommandHandler);
+            executeCommand(chatId, bot, handler);
         } catch (Exception e) {
             e.printStackTrace();
         }

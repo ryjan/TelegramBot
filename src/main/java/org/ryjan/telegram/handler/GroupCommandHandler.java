@@ -13,9 +13,9 @@ import java.io.IOException;
 import java.util.Map;
 
 @Component
-public class GroupCommandHandler {
-    private final Map<String, BaseCommand> commands;
-    private final Map<String, BaseCommand> buttonCommands;
+public class GroupCommandHandler implements CommandHandler { // переписать под единый commandHandler, наверное
+    private final Map<String, BaseCommand<GroupCommandHandler>> commands;
+    private final Map<String, BaseCommand<GroupCommandHandler>> buttonCommands;
 
     private String lastMessage;
 
@@ -31,18 +31,18 @@ public class GroupCommandHandler {
 
     public void handleCommand(Update update) throws IOException {
         if (update.getCallbackQuery() != null) {
-            handleCallBackQuery(update);
+            handleCallBackQuery(update, buttonCommands);
         } else {
             handleTextMessage(update);
         }
     }
 
-    private void handleCallBackQuery(Update update) throws IOException {
+    private void handleCallBackQuery(Update update, Map<?, ?> buttonCommands) throws IOException {
         String callbackData = update.getCallbackQuery().getData();
         String chatId = update.getCallbackQuery().getMessage().getChatId().toString();
         long userId = update.getCallbackQuery().getFrom().getId();
 
-        BaseCommand command = buttonCommands.get(callbackData);
+        BaseCommand command = (BaseCommand) buttonCommands.get(callbackData);
 
         if (command == null) return;
 
@@ -82,7 +82,7 @@ public class GroupCommandHandler {
 
     private void sendNoPermissionMessageToUser(Long userId, BaseCommand baseGroupCommand) {
         SendMessage dm = new SendMessage();
-        dm.setChatId(7009707687L);
+        dm.setChatId(userId);
         dm.setText("✨У вас нет прав для выполнения команды " + baseGroupCommand.getCommandName() + "\nНужны права: " + baseGroupCommand.getPermission());
         try {
             bot.execute(dm);
