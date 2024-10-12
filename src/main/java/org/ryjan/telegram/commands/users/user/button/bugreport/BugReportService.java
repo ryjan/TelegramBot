@@ -1,10 +1,8 @@
 package org.ryjan.telegram.commands.users.user.button.bugreport;
 
-import org.ryjan.telegram.commands.users.utils.BaseUserCommand;
 import org.ryjan.telegram.main.BotMain;
 import org.ryjan.telegram.model.users.Articles;
 import org.ryjan.telegram.repos.jpa.ArticlesRepository;
-import org.ryjan.telegram.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.data.redis.core.RedisTemplate;

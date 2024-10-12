@@ -1,6 +1,6 @@
 package org.ryjan.telegram.handler;
 
-import org.ryjan.telegram.commands.users.utils.BaseUserCommand;
+import org.ryjan.telegram.commands.users.user.BaseUserCommand;
 import org.ryjan.telegram.commands.interfaces.IBotCommand;
 import org.ryjan.telegram.builders.UserCommandsBuilder;
 import org.ryjan.telegram.main.BotMain;

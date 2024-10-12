@@ -1,6 +1,6 @@
 package org.ryjan.telegram.commands.groups.administration;
 
-import org.ryjan.telegram.commands.groups.BaseGroupCommand;
+import org.ryjan.telegram.commands.groups.BaseCommand;
 import org.ryjan.telegram.commands.groups.config.Permission;
 import org.ryjan.telegram.builders.InlineKeyboardBuilder;
 import org.ryjan.telegram.handler.GroupCommandHandler;
@@ -16,7 +16,7 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMa
 import java.util.concurrent.TimeUnit;
 
 @Component
-public class SettingsGroup extends BaseGroupCommand {
+public class Settings extends BaseCommand {
 
     @Autowired
     private GroupService groupService;
@@ -24,7 +24,7 @@ public class SettingsGroup extends BaseGroupCommand {
     @Autowired
     private RedisTemplate<String, Groups> redisTemplate;
 
-    protected SettingsGroup() {
+    protected Settings() {
         super("/settings", "⚙️Настройки", Permission.ADMIN);
     }
 

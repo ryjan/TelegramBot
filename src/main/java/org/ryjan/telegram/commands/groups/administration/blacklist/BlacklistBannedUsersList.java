@@ -1,30 +1,22 @@
 package org.ryjan.telegram.commands.groups.administration.blacklist;
 
-import com.sun.tools.javac.Main;
-import org.ryjan.telegram.commands.groups.BaseGroupCommand;
+import org.ryjan.telegram.commands.groups.BaseCommand;
 import org.ryjan.telegram.commands.groups.config.Permission;
 import org.ryjan.telegram.builders.InlineKeyboardBuilder;
 import org.ryjan.telegram.handler.GroupCommandHandler;
 import org.ryjan.telegram.main.BotMain;
 import org.ryjan.telegram.model.groups.Blacklist;
-import org.ryjan.telegram.services.BlacklistService;
-import org.ryjan.telegram.services.GroupService;
-import org.ryjan.telegram.services.MainServices;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 
 import java.text.MessageFormat;
-import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 @Component
-public class BlacklistBannedUsersList extends BaseGroupCommand {
+public class BlacklistBannedUsersList extends BaseCommand {
 
     @Autowired
     private RedisTemplate<String, List<Blacklist>> redisTemplate;

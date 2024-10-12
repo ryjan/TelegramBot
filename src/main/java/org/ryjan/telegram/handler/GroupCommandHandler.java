@@ -1,6 +1,6 @@
 package org.ryjan.telegram.handler;
 
-import org.ryjan.telegram.commands.groups.BaseGroupCommand;
+import org.ryjan.telegram.commands.groups.BaseCommand;
 import org.ryjan.telegram.builders.GroupCommandsBuilder;
 import org.ryjan.telegram.main.BotMain;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,8 +14,8 @@ import java.util.Map;
 
 @Component
 public class GroupCommandHandler {
-    private final Map<String, BaseGroupCommand> commands;
-    private final Map<String, BaseGroupCommand> buttonCommands;
+    private final Map<String, BaseCommand> commands;
+    private final Map<String, BaseCommand> buttonCommands;
 
     private String lastMessage;
 
@@ -42,7 +42,7 @@ public class GroupCommandHandler {
         String chatId = update.getCallbackQuery().getMessage().getChatId().toString();
         long userId = update.getCallbackQuery().getFrom().getId();
 
-        BaseGroupCommand command = buttonCommands.get(callbackData);
+        BaseCommand command = buttonCommands.get(callbackData);
 
         if (command == null) return;
 
@@ -60,7 +60,7 @@ public class GroupCommandHandler {
         if (message == null || !message.startsWith("/")) return;
 
         String commandKey = message.split(" ")[0].replace(bot.getBotTag(), "");
-        BaseGroupCommand command = commands.get(commandKey);
+        BaseCommand command = commands.get(commandKey);
 
         if (command == null) return;
         System.out.println(command.hasPermission(chatId, userId));
@@ -72,7 +72,7 @@ public class GroupCommandHandler {
 
     }
 
-    private void sendNoPermissionMessage(Long chatId, BaseGroupCommand baseGroupCommand) {
+    private void sendNoPermissionMessage(Long chatId, BaseCommand baseGroupCommand) {
         try {
             bot.execute(new SendMessage(chatId.toString(), "✨У вас нет прав для выполнения этой команды\n" + "Нужны права: " + baseGroupCommand.getPermission()));
         } catch (Exception e) {
@@ -80,7 +80,7 @@ public class GroupCommandHandler {
         }
     }
 
-    private void sendNoPermissionMessageToUser(Long userId, BaseGroupCommand baseGroupCommand) {
+    private void sendNoPermissionMessageToUser(Long userId, BaseCommand baseGroupCommand) {
         SendMessage dm = new SendMessage();
         dm.setChatId(7009707687L);
         dm.setText("✨У вас нет прав для выполнения команды " + baseGroupCommand.getCommandName() + "\nНужны права: " + baseGroupCommand.getPermission());

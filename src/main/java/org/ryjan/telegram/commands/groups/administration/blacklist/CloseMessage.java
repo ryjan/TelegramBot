@@ -1,13 +1,13 @@
 package org.ryjan.telegram.commands.groups.administration.blacklist;
 
-import org.ryjan.telegram.commands.groups.BaseGroupCommand;
+import org.ryjan.telegram.commands.groups.BaseCommand;
 import org.ryjan.telegram.commands.groups.config.Permission;
 import org.ryjan.telegram.handler.GroupCommandHandler;
 import org.ryjan.telegram.main.BotMain;
 import org.springframework.stereotype.Component;
 
 @Component
-public class CloseMessage extends BaseGroupCommand {
+public class CloseMessage extends BaseCommand {
     protected CloseMessage() {
         super("closeMessage", "❌Закрыть", Permission.ADMIN);
     }

@@ -1,7 +1,7 @@
 package org.ryjan.telegram.commands.users.owner;
 
 import org.ryjan.telegram.commands.users.user.UserGroup;
-import org.ryjan.telegram.commands.users.utils.BaseUserCommand;
+import org.ryjan.telegram.commands.users.user.BaseUserCommand;
 import org.ryjan.telegram.handler.UserCommandHandler;
 import org.ryjan.telegram.main.BotMain;
 import org.ryjan.telegram.model.users.BankDatabase;

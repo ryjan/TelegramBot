@@ -1,6 +1,6 @@
 package org.ryjan.telegram.commands.users.user.button.bugreport;
 
-import org.ryjan.telegram.commands.users.utils.BaseUserCommand;
+import org.ryjan.telegram.commands.users.user.BaseUserCommand;
 import org.ryjan.telegram.builders.ReplyKeyboardBuilder;
 import org.ryjan.telegram.handler.UserCommandHandler;
 import org.ryjan.telegram.main.BotMain;

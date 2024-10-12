@@ -1,16 +1,11 @@
 package org.ryjan.telegram.commands.groups.administration.blacklist;
 
-import org.ryjan.telegram.commands.groups.BaseGroupCommand;
+import org.ryjan.telegram.commands.groups.BaseCommand;
 import org.ryjan.telegram.commands.groups.config.Permission;
 import org.ryjan.telegram.builders.InlineKeyboardBuilder;
 import org.ryjan.telegram.handler.GroupCommandHandler;
 import org.ryjan.telegram.main.BotMain;
 import org.ryjan.telegram.model.groups.Blacklist;
-import org.ryjan.telegram.services.BlacklistService;
-import org.ryjan.telegram.services.GroupService;
-import org.ryjan.telegram.services.MainServices;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.ParseMode;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
@@ -20,7 +15,7 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMa
 import java.text.MessageFormat;
 
 @Component
-public class ChatBlacklist extends BaseGroupCommand {
+public class ChatBlacklist extends BaseCommand {
 
     private String leftUserFirstName;
     private String leftUserUsername;

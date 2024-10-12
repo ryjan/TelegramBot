@@ -1,24 +1,17 @@
 package org.ryjan.telegram.commands.groups.administration.blacklist;
 
-import org.ryjan.telegram.commands.groups.BaseGroupCommand;
+import org.ryjan.telegram.commands.groups.BaseCommand;
 import org.ryjan.telegram.commands.groups.config.Permission;
 import org.ryjan.telegram.handler.GroupCommandHandler;
 import org.ryjan.telegram.main.BotMain;
 import org.ryjan.telegram.model.groups.Blacklist;
-import org.ryjan.telegram.model.groups.Groups;
-import org.ryjan.telegram.services.BlacklistService;
-import org.ryjan.telegram.services.BotService;
-import org.ryjan.telegram.services.GroupService;
-import org.ryjan.telegram.services.MainServices;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.telegram.telegrambots.meta.api.objects.Chat;
-import org.telegram.telegrambots.meta.api.objects.Update;
 
 import java.text.MessageFormat;
 
 @Component
-public class BlacklistUnban extends BaseGroupCommand {
+public class BlacklistUnban extends BaseCommand {
 
     @Autowired
     private ChatBlacklist chatBlacklist;

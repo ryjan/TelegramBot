@@ -1,4 +1,4 @@
-package org.ryjan.telegram.commands.users.utils;
+package org.ryjan.telegram.commands.users.user;
 
 import org.ryjan.telegram.commands.interfaces.IBotCommand;
 import org.ryjan.telegram.utils.Translation;

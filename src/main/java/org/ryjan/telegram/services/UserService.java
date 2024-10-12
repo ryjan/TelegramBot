@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class UserService {
     @Autowired
     private JpaUserDatabaseRepository userDatabaseRepository;
+
     @Autowired
     private BankDatabaseRepository bankDatabaseRepository;
 

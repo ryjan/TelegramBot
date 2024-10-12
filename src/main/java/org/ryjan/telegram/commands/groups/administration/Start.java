@@ -1,15 +1,12 @@
 package org.ryjan.telegram.commands.groups.administration;
 
-import org.ryjan.telegram.commands.groups.BaseGroupCommand;
+import org.ryjan.telegram.commands.groups.BaseCommand;
 import org.ryjan.telegram.commands.groups.GroupPrivileges;
 import org.ryjan.telegram.commands.groups.config.Permission;
 import org.ryjan.telegram.builders.InlineKeyboardBuilder;
 import org.ryjan.telegram.handler.GroupCommandHandler;
 import org.ryjan.telegram.main.BotMain;
 import org.ryjan.telegram.model.groups.Groups;
-import org.ryjan.telegram.services.ChatSettingsService;
-import org.ryjan.telegram.services.GroupService;
-import org.ryjan.telegram.services.MainServices;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
@@ -17,12 +14,12 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 
 @Component
-public class StartGroup extends BaseGroupCommand {
+public class Start extends BaseCommand {
 
     @Autowired
-    private SettingsGroup settingsGroup;
+    private Settings settingsGroup;
 
-    public StartGroup() {
+    public Start() {
         super("/start", "Начать работу бота🤙", Permission.CREATOR); // добавить при вызове команды inline keyboard с настройками сервера
         // а лучше отдельный класс с этой командой, которая будет использоваться тут. SettingsGroup
     }

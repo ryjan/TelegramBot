@@ -1,10 +1,10 @@
 package org.ryjan.telegram.builders;
 
 import jakarta.annotation.PostConstruct;
-import org.ryjan.telegram.commands.groups.BaseGroupCommand;
-import org.ryjan.telegram.commands.groups.administration.SettingsGroup;
+import org.ryjan.telegram.commands.groups.BaseCommand;
+import org.ryjan.telegram.commands.groups.administration.Settings;
 import org.ryjan.telegram.commands.groups.administration.silence.SilenceMode;
-import org.ryjan.telegram.commands.groups.administration.StartGroup;
+import org.ryjan.telegram.commands.groups.administration.Start;
 import org.ryjan.telegram.commands.groups.administration.blacklist.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -16,10 +16,10 @@ import java.util.Map;
 public class GroupCommandsBuilder {
 
     @Autowired
-    private StartGroup startGroupCommand;
+    private Start startGroupCommand;
 
     @Autowired
-    private SettingsGroup settingsGroup;
+    private Settings settingsGroup;
 
     @Autowired
     private BlacklistSwitch blacklistSwitch;
@@ -42,8 +42,8 @@ public class GroupCommandsBuilder {
     @Autowired
     private CloseMessage closeMessage;
 
-    private Map<String, BaseGroupCommand> commands = new HashMap<>();
-    private Map<String, BaseGroupCommand> buttonCommands = new HashMap<>();
+    private Map<String, BaseCommand> commands = new HashMap<>();
+    private Map<String, BaseCommand> buttonCommands = new HashMap<>();
 
     @PostConstruct
     public void initializeCommands() {
@@ -75,19 +75,19 @@ public class GroupCommandsBuilder {
         //buttonCommands.put(silenceMode.getCommandName(), silenceMode);
     }
 
-    public Map<String, BaseGroupCommand> getCommands() {
+    public Map<String, BaseCommand> getCommands() {
         return commands;
     }
 
-    public void setCommands(Map<String, BaseGroupCommand> commands) {
+    public void setCommands(Map<String, BaseCommand> commands) {
         this.commands = commands;
     }
 
-    public Map<String, BaseGroupCommand> getButtonCommands() {
+    public Map<String, BaseCommand> getButtonCommands() {
         return buttonCommands;
     }
 
-    public void setButtonCommands(Map<String, BaseGroupCommand> buttonCommands) {
+    public void setButtonCommands(Map<String, BaseCommand> buttonCommands) {
         this.buttonCommands = buttonCommands;
     }
 }

@@ -1,16 +1,13 @@
 package org.ryjan.telegram.commands.groups;
 
-import com.sun.tools.javac.Main;
-import jakarta.annotation.PostConstruct;
 import org.ryjan.telegram.commands.groups.config.Permission;
 import org.ryjan.telegram.commands.interfaces.IBotGroupCommand;
 import org.ryjan.telegram.handler.GroupCommandHandler;
+import org.ryjan.telegram.handler.UserCommandHandler;
 import org.ryjan.telegram.main.BotMain;
 import org.ryjan.telegram.services.*;
 import org.ryjan.telegram.utils.UpdateContext;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.methods.ParseMode;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
@@ -22,12 +19,13 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMa
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 @Service
-public abstract class BaseGroupCommand implements IBotGroupCommand {
+public abstract class BaseCommand implements IBotGroupCommand {
 
     private final String commandName;
     private final String description;
     private final Permission requiredPermission;
 
+    protected UserService userService;
     protected GroupService groupService;
     protected BotService botService;
     protected ChatSettingsService chatSettingsService;
@@ -35,13 +33,14 @@ public abstract class BaseGroupCommand implements IBotGroupCommand {
 
     @Autowired
     public void setMainServices(MainServices mainServices) {
+        this.userService = mainServices.getUserService();
         this.groupService = mainServices.getGroupService();
         this.botService = mainServices.getBotService();
         this.chatSettingsService = mainServices.getChatSettingsService();
         this.blacklistService = mainServices.getBlacklistService();
     }
 
-    protected BaseGroupCommand(String commandName, String description, Permission requiredPermission) {
+    protected BaseCommand(String commandName, String description, Permission requiredPermission) {
         this.commandName = commandName;
         this.description = description;
         this.requiredPermission = requiredPermission;
@@ -174,6 +173,7 @@ public abstract class BaseGroupCommand implements IBotGroupCommand {
     }
 
     protected abstract void executeCommand(String chatId, BotMain bot, GroupCommandHandler groupCommandHandler);
+    protected abstract void executeCommand(String chatId, BotMain bot, UserCommandHandler userCommandHandler);
 
     @Override
     public void execute(String chatId, BotMain bot, GroupCommandHandler groupCommandHandler) {
