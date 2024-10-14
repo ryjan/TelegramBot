@@ -5,7 +5,7 @@ import org.ryjan.telegram.commands.groups.administration.silence.SilenceModeServ
 import org.ryjan.telegram.commands.users.user.button.bugreport.BugReportService;
 import org.ryjan.telegram.commands.users.user.button.bugreport.UserSendReportReply;
 import org.ryjan.telegram.commands.users.user.button.bugreport.UserSendWishReply;
-import org.ryjan.telegram.handler.GroupCommandHandler;
+import org.ryjan.telegram.handler.CommandsHandler;
 
 import org.ryjan.telegram.main.BotMain;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +27,7 @@ public class BotService {
 
     @Autowired
     @Lazy
-    public GroupCommandHandler groupCommandHandler;
+    public CommandsHandler groupCommandHandler;
 
     @Autowired
     @Lazy

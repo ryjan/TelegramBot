@@ -1,6 +1,6 @@
 package org.ryjan.telegram.utils;
 
-import org.ryjan.telegram.commands.users.user.UserGroup;
+import org.ryjan.telegram.commands.users.user.UserPermissions;
 
 public class Translation {
     protected String userNotFound(String username) {
@@ -11,8 +11,8 @@ public class Translation {
         return "Введена неверная команда!\nПример: " + commandName + " " + example;
     }
 
-    protected String noPermission(String commandName, UserGroup userGroup) {
-        return "У вас недостаточно прав для использования " + commandName + "\nВам нужны права: " + userGroup.getDisplayname();
+    protected String noPermission(String commandName, UserPermissions userGroup) {
+        return "У вас недостаточно прав для использования " + commandName + "\nВам нужны права: " + userGroup.getName();
     }
 
     protected String invalidAmount(String amount) {

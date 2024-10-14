@@ -1,7 +1,7 @@
 package org.ryjan.telegram.model.users;
 
 import jakarta.persistence.*;
-import org.ryjan.telegram.commands.users.user.UserGroup;
+import org.ryjan.telegram.commands.users.user.UserPermissions;
 
 import java.util.Objects;
 
@@ -29,7 +29,7 @@ public class UserDatabase {
     public UserDatabase(Long id, String userTag) {
         this.id = id;
         this.userTag = userTag;
-        this.userGroup = UserGroup.USER.getDisplayname();
+        this.userGroup = UserPermissions.USER.getName();
         this.bankDatabase = new BankDatabase();
         setBank(bankDatabase);
         bankDatabase.setTag(this.userTag);
@@ -56,8 +56,8 @@ public class UserDatabase {
         bankDatabase.setTag(this.userTag);
     }
 
-    public void setUserGroup(UserGroup userGroup) {
-        this.userGroup = userGroup.getDisplayname();
+    public void setUserGroup(UserPermissions userGroup) {
+        this.userGroup = userGroup.getName();
     }
 
     public void setBank(BankDatabase bankDatabase) {
@@ -66,7 +66,7 @@ public class UserDatabase {
     }
 
     public boolean isOwner() {
-        return UserGroup.OWNER.getDisplayname().equals(this.userGroup);
+        return UserPermissions.OWNER.getName().equals(this.userGroup);
     }
 
     @Override

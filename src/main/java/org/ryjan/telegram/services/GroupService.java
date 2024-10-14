@@ -1,17 +1,31 @@
 package org.ryjan.telegram.services;
 
+import org.ryjan.telegram.commands.groups.config.GroupPermissions;
 import org.ryjan.telegram.model.groups.ChatSettings;
 import org.ryjan.telegram.model.groups.Groups;
-import org.ryjan.telegram.repos.jpa.GroupsRepository;
+import org.ryjan.telegram.interfaces.repos.jpa.GroupsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
+import org.telegram.telegrambots.meta.api.objects.chatmember.ChatMember;
+
+import java.security.Permission;
 
 @Service
 public class GroupService extends ServiceBuilder {
 
     @Autowired
     private GroupsRepository groupsRepository;
+
+    public GroupPermissions getPermissionFromChat(Long chatId, Long userId) {
+        ChatMember chatMember = botService.getChatMember(chatId, userId);
+        String status = chatMember.getStatus();
+
+        return switch (status) {
+            case "creator" -> GroupPermissions.CREATOR;
+            case "administrator" -> GroupPermissions.ADMIN;
+            default -> GroupPermissions.ANY;
+        };
+    }
 
     public Groups findGroup(Long id) {
         return groupsRepository.findById(id).orElse(null);

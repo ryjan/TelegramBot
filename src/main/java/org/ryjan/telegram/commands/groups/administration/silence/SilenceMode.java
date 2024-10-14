@@ -1,8 +1,8 @@
 package org.ryjan.telegram.commands.groups.administration.silence;
 
 import org.ryjan.telegram.commands.groups.BaseCommand;
-import org.ryjan.telegram.commands.groups.config.Permission;
-import org.ryjan.telegram.handler.GroupCommandHandler;
+import org.ryjan.telegram.commands.groups.config.GroupPermissions;
+import org.ryjan.telegram.handler.CommandsHandler;
 import org.ryjan.telegram.main.BotMain;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -23,11 +23,11 @@ public class SilenceMode extends BaseCommand {
     private SilenceModeService silenceModeService;
 
     protected SilenceMode() {
-        super("/silence", "🤫Режим тишины", Permission.ADMIN);
+        super("/silence", "🤫Режим тишины", GroupPermissions.ADMIN);
     }
 
     @Override
-    protected void executeCommand(String chatId, BotMain bot, GroupCommandHandler commandHandler) {
+    protected void executeCommand(String chatId, BotMain bot, CommandsHandler commandHandler) {
         SendMessage message = createSendMessage(chatId);
         String[] parts = getParts(getCommandName(), 1);
 
@@ -54,7 +54,7 @@ public class SilenceMode extends BaseCommand {
 
     public void doDeleteFunction() {
         Update update = getUpdate();
-        Permission permission = getPermissionFromChat(update.getMessage().getChatId(), update.getMessage().getFrom().getId());
+        GroupPermissions permission = getPermissionFromChat(update.getMessage().getChatId(), update.getMessage().getFrom().getId());
         if (permission.getPermission() < 2) {
             return;
         }

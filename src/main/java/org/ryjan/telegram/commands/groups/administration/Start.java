@@ -2,9 +2,9 @@ package org.ryjan.telegram.commands.groups.administration;
 
 import org.ryjan.telegram.commands.groups.BaseCommand;
 import org.ryjan.telegram.commands.groups.GroupPrivileges;
-import org.ryjan.telegram.commands.groups.config.Permission;
+import org.ryjan.telegram.commands.groups.config.GroupPermissions;
 import org.ryjan.telegram.builders.InlineKeyboardBuilder;
-import org.ryjan.telegram.handler.GroupCommandHandler;
+import org.ryjan.telegram.handler.CommandsHandler;
 import org.ryjan.telegram.main.BotMain;
 import org.ryjan.telegram.model.groups.Groups;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,12 +20,12 @@ public class Start extends BaseCommand {
     private Settings settingsGroup;
 
     public Start() {
-        super("/start", "Начать работу бота🤙", Permission.CREATOR); // добавить при вызове команды inline keyboard с настройками сервера
+        super("/start", "Начать работу бота🤙", GroupPermissions.CREATOR); // добавить при вызове команды inline keyboard с настройками сервера
         // а лучше отдельный класс с этой командой, которая будет использоваться тут. SettingsGroup
     }
 
     @Override
-    protected void executeCommand(String chatId, BotMain bot, GroupCommandHandler commandHandler) {
+    protected void executeCommand(String chatId, BotMain bot, CommandsHandler commandHandler) {
         Update update = getUpdate();
         SendMessage message = createSendMessage(chatId);
         //String groupName = update.getMessage().getLeftChatMember();

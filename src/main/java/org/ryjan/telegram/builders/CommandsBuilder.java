@@ -17,7 +17,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Component
-public class GroupCommandsBuilder {
+public class CommandsBuilder {
 
     @Autowired
     private Start startGroupCommand;

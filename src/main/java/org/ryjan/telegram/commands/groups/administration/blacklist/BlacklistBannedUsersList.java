@@ -1,9 +1,9 @@
 package org.ryjan.telegram.commands.groups.administration.blacklist;
 
 import org.ryjan.telegram.commands.groups.BaseCommand;
-import org.ryjan.telegram.commands.groups.config.Permission;
+import org.ryjan.telegram.commands.groups.config.GroupPermissions;
 import org.ryjan.telegram.builders.InlineKeyboardBuilder;
-import org.ryjan.telegram.handler.GroupCommandHandler;
+import org.ryjan.telegram.handler.CommandsHandler;
 import org.ryjan.telegram.main.BotMain;
 import org.ryjan.telegram.model.groups.Blacklist;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,11 +22,11 @@ public class BlacklistBannedUsersList extends BaseCommand {
     private RedisTemplate<String, List<Blacklist>> redisTemplate;
 
     protected BlacklistBannedUsersList() {
-        super("blacklistBannedUsersList", "✨Проверить список заблокированных пользователей", Permission.ADMIN);
+        super("blacklistBannedUsersList", "✨Проверить список заблокированных пользователей", GroupPermissions.ADMIN);
     }
 
     @Override
-    protected void executeCommand(String chatId, BotMain bot, GroupCommandHandler commandHandler) {
+    protected void executeCommand(String chatId, BotMain bot, CommandsHandler commandHandler) {
         List<Blacklist> blacklistList = getBlacklist(chatId);
 
         if (blacklistList.isEmpty()) {

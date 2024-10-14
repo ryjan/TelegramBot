@@ -1,9 +1,9 @@
 package org.ryjan.telegram.commands.groups.administration.blacklist;
 
 import org.ryjan.telegram.commands.groups.BaseCommand;
-import org.ryjan.telegram.commands.groups.config.Permission;
+import org.ryjan.telegram.commands.groups.config.GroupPermissions;
 import org.ryjan.telegram.builders.InlineKeyboardBuilder;
-import org.ryjan.telegram.handler.GroupCommandHandler;
+import org.ryjan.telegram.handler.CommandsHandler;
 import org.ryjan.telegram.main.BotMain;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -16,11 +16,11 @@ public class BlacklistSwitchOff extends BaseCommand {
     ChatBlacklist chatBlacklist;
 
     protected BlacklistSwitchOff() {
-        super("blacklistOff", "Выключить черный список", Permission.CREATOR);
+        super("blacklistOff", "Выключить черный список", GroupPermissions.CREATOR);
     }
 
     @Override
-    protected void executeCommand(String chatId, BotMain bot, GroupCommandHandler commandHandler) {
+    protected void executeCommand(String chatId, BotMain bot, CommandsHandler commandHandler) {
         blacklistService.replaceBlacklistValue(Long.parseLong(chatId), "blacklist", "disabled");
         editMessage("🔓Черный список *выключен*", getKeyboard());
     }

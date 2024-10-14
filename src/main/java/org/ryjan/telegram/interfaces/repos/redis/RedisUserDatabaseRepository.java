@@ -1,4 +1,4 @@
-package org.ryjan.telegram.repos.redis;
+package org.ryjan.telegram.interfaces.repos.redis;
 
 import org.ryjan.telegram.model.users.UserDatabase;
 import org.springframework.data.redis.core.RedisHash;

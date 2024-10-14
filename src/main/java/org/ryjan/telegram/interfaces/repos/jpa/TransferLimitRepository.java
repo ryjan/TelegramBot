@@ -1,4 +1,4 @@
-package org.ryjan.telegram.repos.jpa;
+package org.ryjan.telegram.interfaces.repos.jpa;
 
 import org.ryjan.telegram.commands.users.user.transfers.TransferLimit;
 import org.ryjan.telegram.model.users.UserDatabase;

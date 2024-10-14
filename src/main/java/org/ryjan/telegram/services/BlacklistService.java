@@ -3,7 +3,7 @@ package org.ryjan.telegram.services;
 import org.ryjan.telegram.model.groups.Blacklist;
 import org.ryjan.telegram.model.groups.ChatSettings;
 import org.ryjan.telegram.model.groups.Groups;
-import org.ryjan.telegram.repos.jpa.BlacklistRepository;
+import org.ryjan.telegram.interfaces.repos.jpa.BlacklistRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

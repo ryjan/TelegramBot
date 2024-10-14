@@ -2,7 +2,7 @@ package org.ryjan.telegram.services;
 
 import org.ryjan.telegram.model.groups.ChatSettings;
 import org.ryjan.telegram.model.groups.Groups;
-import org.ryjan.telegram.repos.jpa.ChatSettingsRepository;
+import org.ryjan.telegram.interfaces.repos.jpa.ChatSettingsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

@@ -1,20 +1,25 @@
 package org.ryjan.telegram.commands.users.user;
 
-public enum UserGroup {
+import org.ryjan.telegram.interfaces.Permissions;
+
+public enum UserPermissions implements Permissions {
     OWNER("Owner"),
     FAMILY("Family"),
     ADMINISTRATOR("Administrator"),
     MODERATOR("Moderator"),
     USER("User"),
-    POOP("Poop");
+    LOW_PRIORITY("Low priority"),
+    BANNED("Banned"),
+    ANY("any");
 
     private final String displayname;
 
-    UserGroup(String displayname) {
+    UserPermissions(String displayname) {
         this.displayname = displayname;
     }
 
-    public String getDisplayname() {
+    @Override
+    public String getName() {
         return displayname;
     }
 }

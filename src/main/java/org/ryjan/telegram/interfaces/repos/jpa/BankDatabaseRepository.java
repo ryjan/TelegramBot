@@ -1,4 +1,4 @@
-package org.ryjan.telegram.repos.jpa;
+package org.ryjan.telegram.interfaces.repos.jpa;
 
 import org.ryjan.telegram.model.users.BankDatabase;
 import org.springframework.data.jpa.repository.JpaRepository;

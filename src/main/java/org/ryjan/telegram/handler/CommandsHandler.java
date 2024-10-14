@@ -1,8 +1,10 @@
 package org.ryjan.telegram.handler;
 
+import org.glassfish.grizzly.compression.lzma.impl.Base;
 import org.ryjan.telegram.commands.groups.BaseCommand;
-import org.ryjan.telegram.builders.GroupCommandsBuilder;
+import org.ryjan.telegram.builders.CommandsBuilder;
 import org.ryjan.telegram.main.BotMain;
+import org.ryjan.telegram.services.MainServices;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
@@ -13,19 +15,17 @@ import java.io.IOException;
 import java.util.Map;
 
 @Component
-public class GroupCommandHandler { // переписать под единый commandHandler, наверное
+public class CommandsHandler { // переписать под единый commandHandler, наверное
     private final Map<String, BaseCommand> groupCommands;
     private final Map<String, BaseCommand> userCommands;
     private final Map<String, BaseCommand> groupButtonCommands;
     private final Map<String, BaseCommand> userButtonCommands;
 
-    private String lastMessage;
-
     @Autowired
     @Lazy
     private BotMain bot;
 
-    public GroupCommandHandler(GroupCommandsBuilder builder) {
+    public CommandsHandler(CommandsBuilder builder) {
         groupCommands = builder.getCommands();
         userCommands = builder.getUserCommands();
         groupButtonCommands = builder.getButtonCommands();
@@ -55,35 +55,34 @@ public class GroupCommandHandler { // переписать под единый c
 
         if (command == null) return;
 
-        if (command.hasPermission(Long.valueOf(chatId), userId)) {
+        if (command.hasPermissionInGroup(Long.valueOf(chatId), userId)) {
             command.execute(chatId, bot, this);
         }
     }
 
     private void handleTextMessage(Update update, Boolean isGroup) throws IOException {
-        Long chatId = update.getMessage().getChatId();
         String message = update.getMessage().getText();
-        Long userId = update.getMessage().getFrom().getId();
-        lastMessage = message;
-
-        if (message == null) return;
-
         String commandKey = message.split(" ")[0].replace(bot.getBotTag(), "");
-        BaseCommand command;
+
         if (isGroup) {
-            command = groupCommands.get(commandKey);
+            mergedHandleTextMessage(update, groupCommands, commandKey);
         } else {
-            command = userCommands.get(commandKey);
+            mergedHandleTextMessage(update, userCommands, commandKey);
         }
+    }
+
+    private void mergedHandleTextMessage(Update update, Map<String, BaseCommand> commands, String commandKey) throws IOException {
+        Long chatId = update.getMessage().getChatId();
+        Long userId = update.getMessage().getFrom().getId();
+        BaseCommand command = commands.get(commandKey);
 
         if (command == null) return;
-        System.out.println(command.hasPermission(chatId, userId));
-        if (command.hasPermission(chatId, userId)) {
+
+        if (command.hasPermissionInUserChat(chatId) && update.getMessage().getChat().isUserChat() || command.hasPermissionInGroup(chatId, userId)) {
             command.execute(chatId.toString(), bot, this);
         } else {
-            sendNoPermissionMessageToUser(userId, command);
+            sendNoPermissionMessageToUser(chatId, command);
         }
-
     }
 
     private void sendNoPermissionMessage(Long chatId, BaseCommand baseGroupCommand) {
@@ -103,9 +102,5 @@ public class GroupCommandHandler { // переписать под единый c
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }
-
-    public String getLastMessage() {
-        return this.lastMessage;
     }
 }

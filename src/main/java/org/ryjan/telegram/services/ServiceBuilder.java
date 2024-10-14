@@ -9,6 +9,8 @@ public abstract class ServiceBuilder {
     protected ChatSettingsService chatSettingsService;
     protected GroupService groupService;
     protected UserService userService;
+    protected BankService bankService;
+    protected MessageService messageService;
 
     @Autowired
     public void setMainServices(MainServices mainServices) {
@@ -17,5 +19,7 @@ public abstract class ServiceBuilder {
         this.chatSettingsService = mainServices.getChatSettingsService();
         this.groupService = mainServices.getGroupService();
         this.userService = mainServices.getUserService();
+        this.bankService = mainServices.getBankService();
+        this.messageService = mainServices.getMessageService();
     }
 }

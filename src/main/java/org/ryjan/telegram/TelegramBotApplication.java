@@ -13,8 +13,8 @@ import org.springframework.data.redis.repository.configuration.EnableRedisReposi
 import org.springframework.scheduling.annotation.EnableScheduling;
 
 @SpringBootApplication
-@EnableJpaRepositories(basePackages = "org.ryjan.telegram.repos.jpa")
-@EnableRedisRepositories(basePackages = "org.ryjan.telegram.repos.redis")
+@EnableJpaRepositories(basePackages = "org.ryjan.telegram.interfaces.repos.jpa")
+@EnableRedisRepositories(basePackages = "org.ryjan.telegram.interfaces.repos.redis")
 @EnableCaching
 @EnableScheduling
 public class TelegramBotApplication {

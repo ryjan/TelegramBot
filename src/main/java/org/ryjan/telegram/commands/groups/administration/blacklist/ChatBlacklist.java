@@ -1,9 +1,9 @@
 package org.ryjan.telegram.commands.groups.administration.blacklist;
 
 import org.ryjan.telegram.commands.groups.BaseCommand;
-import org.ryjan.telegram.commands.groups.config.Permission;
+import org.ryjan.telegram.commands.groups.config.GroupPermissions;
 import org.ryjan.telegram.builders.InlineKeyboardBuilder;
-import org.ryjan.telegram.handler.GroupCommandHandler;
+import org.ryjan.telegram.handler.CommandsHandler;
 import org.ryjan.telegram.main.BotMain;
 import org.ryjan.telegram.model.groups.Blacklist;
 import org.springframework.stereotype.Component;
@@ -22,11 +22,11 @@ public class ChatBlacklist extends BaseCommand {
     private long leftUserId;
 
     protected ChatBlacklist() {
-        super("chatBlacklist", "Черный список", Permission.CREATOR);
+        super("chatBlacklist", "Черный список", GroupPermissions.CREATOR);
     }
 
     @Override
-    public void executeCommand(String chatId, BotMain bot, GroupCommandHandler commandHandler) {
+    public void executeCommand(String chatId, BotMain bot, CommandsHandler commandHandler) {
         Update update = getUpdate();
 
         long groupId = update.getMessage().getChat().getId();

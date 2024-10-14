@@ -1,9 +1,9 @@
 package org.ryjan.telegram.commands.groups.administration;
 
 import org.ryjan.telegram.commands.groups.BaseCommand;
-import org.ryjan.telegram.commands.groups.config.Permission;
+import org.ryjan.telegram.commands.groups.config.GroupPermissions;
 import org.ryjan.telegram.builders.InlineKeyboardBuilder;
-import org.ryjan.telegram.handler.GroupCommandHandler;
+import org.ryjan.telegram.handler.CommandsHandler;
 import org.ryjan.telegram.main.BotMain;
 import org.ryjan.telegram.model.groups.Groups;
 import org.ryjan.telegram.services.GroupService;
@@ -25,11 +25,11 @@ public class Settings extends BaseCommand {
     private RedisTemplate<String, Groups> redisTemplate;
 
     protected Settings() {
-        super("/settings", "⚙️Настройки", Permission.ADMIN);
+        super("/settings", "⚙️Настройки", GroupPermissions.ADMIN);
     }
 
     @Override
-    protected void executeCommand(String chatId, BotMain bot, GroupCommandHandler commandHandler) {
+    protected void executeCommand(String chatId, BotMain bot, CommandsHandler commandHandler) {
         String cacheKey = "groups:" + chatId;
         Groups group = redisTemplate.opsForValue().get(cacheKey);
         SendMessage message = createSendMessage(chatId);
