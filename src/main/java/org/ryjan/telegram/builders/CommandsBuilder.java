@@ -4,9 +4,10 @@ import jakarta.annotation.PostConstruct;
 import org.ryjan.telegram.commands.groups.BaseCommand;
 import org.ryjan.telegram.commands.groups.administration.Settings;
 import org.ryjan.telegram.commands.groups.administration.silence.SilenceMode;
-import org.ryjan.telegram.commands.groups.administration.Start;
+import org.ryjan.telegram.commands.groups.administration.StartGroup;
 import org.ryjan.telegram.commands.groups.administration.blacklist.*;
 import org.ryjan.telegram.commands.users.owner.SetCoins;
+import org.ryjan.telegram.commands.users.user.StartUser;
 import org.ryjan.telegram.commands.users.user.button.bugreport.UserBugReport;
 import org.ryjan.telegram.commands.users.user.button.bugreport.UserSendReportReply;
 import org.ryjan.telegram.commands.users.user.button.bugreport.UserSendWishReply;
@@ -20,7 +21,10 @@ import java.util.Map;
 public class CommandsBuilder {
 
     @Autowired
-    private Start startGroupCommand;
+    private StartGroup startGroupCommand;
+
+    @Autowired
+    private StartUser startUserCommand;
 
     @Autowired
     private Settings settingsGroup;
@@ -97,6 +101,7 @@ public class CommandsBuilder {
     }
 
     private void initializeUserSlashCommands() {
+        userCommands.put(startUserCommand.getCommandName(), startUserCommand);
         userCommands.put(setCoins.getCommandName(), setCoins);
         //commands.put(sendCoins.getCommandName(), sendCoins);
         userCommands.put(userBugReport.getCommandName(), userBugReport);

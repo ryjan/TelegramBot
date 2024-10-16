@@ -2,6 +2,7 @@ package org.ryjan.telegram.model.users;
 
 import jakarta.persistence.*;
 import org.ryjan.telegram.commands.users.user.UserPermissions;
+import org.ryjan.telegram.interfaces.Permissions;
 
 import java.util.Objects;
 
@@ -12,15 +13,12 @@ public class UserDatabase {
 
     @Id
     //@GeneratedValue (strategy = GenerationType.SEQUENCE, generator = "user_seq") // сделать присвоение через telegram.user.getId
-    @Column (name = "user_id")
     private Long id;
-    @Column (name = "user_tag")
     private String userTag;
-    @Column (name = "user_group")
     private String userGroup;
 
     @OneToOne(mappedBy = "userDatabase", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
-    private BankDatabase bankDatabase;
+    private BankDatabase bankDatabase = new BankDatabase();
 
     public UserDatabase() {
 
@@ -30,7 +28,6 @@ public class UserDatabase {
         this.id = id;
         this.userTag = userTag;
         this.userGroup = UserPermissions.USER.getName();
-        this.bankDatabase = new BankDatabase();
         setBank(bankDatabase);
         bankDatabase.setTag(this.userTag);
     }
@@ -43,12 +40,20 @@ public class UserDatabase {
         return userTag;
     }
 
+    public Permissions getUserGroupAsPermission() {
+        return UserPermissions.valueOf(userGroup);
+    }
+
     public String getUserGroup() {
         return userGroup;
     }
 
     public BankDatabase getBank() {
         return bankDatabase;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public void setUserTag(String userTag) {

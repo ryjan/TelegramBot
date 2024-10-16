@@ -14,12 +14,12 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 
 @Component
-public class Start extends BaseCommand {
+public class StartGroup extends BaseCommand {
 
     @Autowired
     private Settings settingsGroup;
 
-    public Start() {
+    public StartGroup() {
         super("/start", "Начать работу бота🤙", GroupPermissions.CREATOR); // добавить при вызове команды inline keyboard с настройками сервера
         // а лучше отдельный класс с этой командой, которая будет использоваться тут. SettingsGroup
     }

@@ -22,4 +22,9 @@ public enum UserPermissions implements Permissions {
     public String getName() {
         return displayname;
     }
+
+    @Override
+    public int getOrdinal() {
+        return ordinal();
+    }
 }

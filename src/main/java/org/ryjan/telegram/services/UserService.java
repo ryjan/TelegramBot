@@ -1,5 +1,7 @@
 package org.ryjan.telegram.services;
 
+import org.ryjan.telegram.commands.groups.config.GroupPermissions;
+import org.ryjan.telegram.commands.users.user.UserPermissions;
 import org.ryjan.telegram.interfaces.Permissions;
 import org.ryjan.telegram.model.users.UserDatabase;
 import org.ryjan.telegram.interfaces.repos.jpa.BankDatabaseRepository;
@@ -13,7 +15,7 @@ import java.security.Permission;
 
 @Service
 public class UserService {
-    private final String CACHE_KEY = "userPermission:";
+    private final String CACHE_KEY = "userDatabase:";
 
     @Autowired
     private JpaUserDatabaseRepository userDatabaseRepository;
@@ -39,13 +41,15 @@ public class UserService {
     }
 
     public Boolean hasPermission(Long userId, Permissions permissions) {
+        if (permissions == UserPermissions.ANY || permissions == GroupPermissions.ANY) return true;
+
         UserDatabase userDatabase = redisTemplate.opsForValue().get(CACHE_KEY + userId);
 
         if (userDatabase == null) {
             userDatabase = findUser(userId);
             redisTemplate.opsForValue().set(CACHE_KEY + userId, userDatabase);
         }
-        return userDatabase != null && userDatabase.getUserGroup().equals(permissions.getName());
+        return userDatabase != null && userDatabase.getUserGroupAsPermission().isAtLeast(permissions);
     }
 
     public Boolean userIsExist(Long id) {

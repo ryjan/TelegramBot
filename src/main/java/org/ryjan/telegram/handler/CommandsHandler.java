@@ -1,10 +1,8 @@
 package org.ryjan.telegram.handler;
 
-import org.glassfish.grizzly.compression.lzma.impl.Base;
 import org.ryjan.telegram.commands.groups.BaseCommand;
 import org.ryjan.telegram.builders.CommandsBuilder;
 import org.ryjan.telegram.main.BotMain;
-import org.ryjan.telegram.services.MainServices;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
@@ -60,7 +58,7 @@ public class CommandsHandler { // переписать под единый comma
         }
     }
 
-    private void handleTextMessage(Update update, Boolean isGroup) throws IOException {
+    private void handleTextMessage(Update update, Boolean isGroup) {
         String message = update.getMessage().getText();
         String commandKey = message.split(" ")[0].replace(bot.getBotTag(), "");
 
@@ -71,7 +69,7 @@ public class CommandsHandler { // переписать под единый comma
         }
     }
 
-    private void mergedHandleTextMessage(Update update, Map<String, BaseCommand> commands, String commandKey) throws IOException {
+    private void mergedHandleTextMessage(Update update, Map<String, BaseCommand> commands, String commandKey) {
         Long chatId = update.getMessage().getChatId();
         Long userId = update.getMessage().getFrom().getId();
         BaseCommand command = commands.get(commandKey);

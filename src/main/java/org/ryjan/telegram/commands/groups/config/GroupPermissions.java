@@ -18,6 +18,11 @@ public enum GroupPermissions implements Permissions {
         return String.valueOf(permission);
     }
 
+    @Override
+    public int getOrdinal() {
+        return ordinal();
+    }
+
     public int getPermission(){
         return permission;
     }

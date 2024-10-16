@@ -2,6 +2,7 @@ package org.ryjan.telegram.config;
 
 import org.ryjan.telegram.model.groups.Blacklist;
 import org.ryjan.telegram.model.groups.Groups;
+import org.ryjan.telegram.model.users.BankDatabase;
 import org.ryjan.telegram.model.users.UserDatabase;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -41,6 +42,17 @@ public class RedisConfig {
     @Bean
     public RedisTemplate<String, UserDatabase> redisUserDatabaseTemplate(RedisConnectionFactory connectionFactory) {
         RedisTemplate<String, UserDatabase> template = new RedisTemplate<>();
+        template.setConnectionFactory(connectionFactory);
+
+        template.setKeySerializer(new StringRedisSerializer());
+        template.setValueSerializer(new GenericJackson2JsonRedisSerializer());
+
+        return template;
+    }
+
+    @Bean
+    public RedisTemplate<String, BankDatabase> redisBankDatabaseTemplate(RedisConnectionFactory connectionFactory) {
+        RedisTemplate<String, BankDatabase> template = new RedisTemplate<>();
         template.setConnectionFactory(connectionFactory);
 
         template.setKeySerializer(new StringRedisSerializer());

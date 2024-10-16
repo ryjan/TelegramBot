@@ -9,7 +9,7 @@ import java.util.Objects;
 @Entity
 @SequenceGenerator(name = "user_seq", sequenceName = "user_id_seq", allocationSize = 1)
 @Table (name = "bank")
-public class BankDatabase implements Comparable<BankDatabase> {
+public class BankDatabase {
 
     @Id
     @Column (name = "id")
@@ -99,11 +99,6 @@ public class BankDatabase implements Comparable<BankDatabase> {
         BankDatabase bankDatabase = (BankDatabase) obj;
         return Objects.equals(id, bankDatabase.id) && Objects.equals(tag, bankDatabase.tag) && Objects.equals(gems, bankDatabase.gems) &&
                 Objects.equals(coins, bankDatabase.coins) && Objects.equals(userDatabase, bankDatabase.userDatabase);
-    }
-
-    @Override
-    public int compareTo(BankDatabase o) {
-        return 0;
     }
 
     @Override
