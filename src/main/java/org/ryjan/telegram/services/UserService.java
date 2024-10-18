@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.security.Permission;
+import java.util.concurrent.TimeUnit;
 
 @Service
 public class UserService {
@@ -47,9 +48,9 @@ public class UserService {
 
         if (userDatabase == null) {
             userDatabase = findUser(userId);
-            redisTemplate.opsForValue().set(CACHE_KEY + userId, userDatabase);
+            redisTemplate.opsForValue().set(CACHE_KEY + userId, userDatabase, 1, TimeUnit.HOURS);
         }
-        return userDatabase != null && userDatabase.getUserGroupAsPermission().isAtLeast(permissions);
+        return userDatabase != null && userDatabase.getUserGroup().isAtLeast(permissions);
     }
 
     public Boolean userIsExist(Long id) {

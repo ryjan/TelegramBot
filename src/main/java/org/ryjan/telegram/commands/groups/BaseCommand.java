@@ -31,6 +31,7 @@ public abstract class BaseCommand implements IBotCommand {
     protected ChatSettingsService chatSettingsService;
     protected BlacklistService blacklistService;
     protected MessageService messageService;
+    protected ArticlesService articlesService;
 
     @Autowired
     public void setMainServices(MainServices mainServices) {
@@ -40,6 +41,7 @@ public abstract class BaseCommand implements IBotCommand {
         this.chatSettingsService = mainServices.getChatSettingsService();
         this.blacklistService = mainServices.getBlacklistService();
         this.messageService = mainServices.getMessageService();
+        this.articlesService = mainServices.getArticlesService();
     }
 
     protected BaseCommand(String commandName, String description, Permissions requiredPermission) {

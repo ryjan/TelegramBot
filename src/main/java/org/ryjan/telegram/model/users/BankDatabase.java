@@ -1,6 +1,7 @@
 package org.ryjan.telegram.model.users;
 
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 
 import java.math.BigDecimal;
@@ -59,6 +60,7 @@ public class BankDatabase {
         return coins;
     }
 
+    @JsonBackReference
     public UserDatabase getUser() {
         return userDatabase;
     }

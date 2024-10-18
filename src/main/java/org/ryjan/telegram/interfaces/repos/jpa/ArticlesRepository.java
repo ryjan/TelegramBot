@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface ArticlesRepository extends JpaRepository<Articles, Long> {
+    List<Articles> findFirst10ByOrderByIdAsc();
     List<Articles> findAllByUserId(Long userId);
     List<Articles> findAllByUsername(String username);
 }

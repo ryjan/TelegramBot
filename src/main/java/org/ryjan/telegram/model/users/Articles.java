@@ -2,6 +2,9 @@ package org.ryjan.telegram.model.users;
 
 import jakarta.persistence.*;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
 @Entity
 public class Articles {
     @Id
@@ -18,6 +21,7 @@ public class Articles {
     private String text;
     private String username;
     private Long userId;
+    private String createdAt;
 
     public Articles() {
 
@@ -28,6 +32,7 @@ public class Articles {
         this.text = text;
         this.username = username;
         this.userId = userId;
+        this.createdAt = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss").format(LocalDateTime.now());
     }
 
     public Long getId() {

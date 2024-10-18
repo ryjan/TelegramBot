@@ -15,12 +15,14 @@ public class MainServices {
     private final UserService userService;
     private final BankService bankService;
     private final MessageService messageService;
+    private final ArticlesService articlesService;
 
     @Autowired
     @Lazy
     public MainServices(BotService botService, BlacklistService blacklistService,
                         ChatSettingsService chatSettingsService, GroupService groupService,
-                        UserService userService, BankService bankService, MessageService messageService) {
+                        UserService userService, BankService bankService, MessageService messageService,
+                        ArticlesService articlesService) {
         this.botService = botService;
         this.blacklistService = blacklistService;
         this.chatSettingsService = chatSettingsService;
@@ -28,6 +30,7 @@ public class MainServices {
         this.userService = userService;
         this.bankService = bankService;
         this.messageService = messageService;
+        this.articlesService = articlesService;
     }
 
     public BotService getBotService() {
@@ -56,5 +59,9 @@ public class MainServices {
 
     public MessageService getMessageService() {
         return messageService;
+    }
+
+    public ArticlesService getArticlesService() {
+        return articlesService;
     }
 }

@@ -7,6 +7,10 @@ import org.ryjan.telegram.commands.groups.administration.silence.SilenceMode;
 import org.ryjan.telegram.commands.groups.administration.StartGroup;
 import org.ryjan.telegram.commands.groups.administration.blacklist.*;
 import org.ryjan.telegram.commands.users.owner.SetCoins;
+import org.ryjan.telegram.commands.users.owner.adminpanel.AdminPanel;
+import org.ryjan.telegram.commands.users.owner.adminpanel.CheckArticles;
+import org.ryjan.telegram.commands.users.owner.adminpanel.NextArticle;
+import org.ryjan.telegram.commands.users.owner.adminpanel.wishes.FindWishes;
 import org.ryjan.telegram.commands.users.user.StartUser;
 import org.ryjan.telegram.commands.users.user.button.bugreport.UserBugReport;
 import org.ryjan.telegram.commands.users.user.button.bugreport.UserSendReportReply;
@@ -63,6 +67,18 @@ public class CommandsBuilder {
     @Autowired
     private UserSendWishReply userSendWishReply;
 
+    @Autowired
+    private AdminPanel adminPanel;
+
+    @Autowired
+    private FindWishes findWishes;
+
+    @Autowired
+    private NextArticle nextArticle;
+
+    @Autowired
+    private CheckArticles checkArticles;
+
     private Map<String, BaseCommand> commands = new HashMap<>();
     private Map<String, BaseCommand> buttonCommands = new HashMap<>();
     private Map<String, BaseCommand> userCommands = new HashMap<>();
@@ -105,12 +121,17 @@ public class CommandsBuilder {
         userCommands.put(setCoins.getCommandName(), setCoins);
         //commands.put(sendCoins.getCommandName(), sendCoins);
         userCommands.put(userBugReport.getCommandName(), userBugReport);
+
+        userCommands.put(adminPanel.getCommandName(), adminPanel);
+        userCommands.put(checkArticles.getCommandName().split(" ")[0], checkArticles);
+        userCommands.put(nextArticle.getCommandName(), nextArticle);
+
         userCommands.put(userSendReportReply.getCommandName().split(" ")[0], userSendReportReply);
         userCommands.put(userSendWishReply.getCommandName().split(" ")[0], userSendWishReply);
     }
 
     private void initializeUserButtonCommands() {
-
+        userButtonCommands.put(findWishes.getCommandName(), findWishes);// завтра доделать
     }
 
     public Map<String, BaseCommand> getCommands() {

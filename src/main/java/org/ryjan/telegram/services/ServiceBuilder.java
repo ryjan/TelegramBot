@@ -11,6 +11,7 @@ public abstract class ServiceBuilder {
     protected UserService userService;
     protected BankService bankService;
     protected MessageService messageService;
+    protected ArticlesService articlesService;
 
     @Autowired
     public void setMainServices(MainServices mainServices) {
@@ -21,5 +22,6 @@ public abstract class ServiceBuilder {
         this.userService = mainServices.getUserService();
         this.bankService = mainServices.getBankService();
         this.messageService = mainServices.getMessageService();
+        this.articlesService = mainServices.getArticlesService();
     }
 }

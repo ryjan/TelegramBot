@@ -26,6 +26,10 @@ public class ReplyKeyboardBuilder {
         return this;
     }
 
+    public void setOneTimeKeyboard(boolean oneTimeKeyboard) {
+        replyKeyboardMarkup.setOneTimeKeyboard(oneTimeKeyboard);
+    }
+
     public ReplyKeyboardMarkup build() {
         replyKeyboardMarkup.setKeyboard(keyboardRows);
         return replyKeyboardMarkup;

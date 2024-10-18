@@ -1,23 +1,32 @@
 package org.ryjan.telegram.model.users;
 
+import com.fasterxml.jackson.annotation.JsonAlias;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import org.ryjan.telegram.commands.users.user.UserPermissions;
 import org.ryjan.telegram.interfaces.Permissions;
+import org.telegram.telegrambots.meta.api.objects.User;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 
 @Entity
 @SequenceGenerator(name = "user_seq", sequenceName = "user_id_seq", allocationSize = 1)
 @Table (name = "users")
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class UserDatabase {
 
     @Id
     //@GeneratedValue (strategy = GenerationType.SEQUENCE, generator = "user_seq") // сделать присвоение через telegram.user.getId
     private Long id;
     private String userTag;
-    private String userGroup;
+    private UserPermissions userGroup;
+    private String createdAt;
 
     @OneToOne(mappedBy = "userDatabase", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+    @JsonManagedReference
     private BankDatabase bankDatabase = new BankDatabase();
 
     public UserDatabase() {
@@ -27,7 +36,9 @@ public class UserDatabase {
     public UserDatabase(Long id, String userTag) {
         this.id = id;
         this.userTag = userTag;
-        this.userGroup = UserPermissions.USER.getName();
+        this.userGroup = UserPermissions.USER;
+        this.createdAt = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss").format(LocalDateTime.now());
+
         setBank(bankDatabase);
         bankDatabase.setTag(this.userTag);
     }
@@ -41,10 +52,10 @@ public class UserDatabase {
     }
 
     public Permissions getUserGroupAsPermission() {
-        return UserPermissions.valueOf(userGroup);
+        return userGroup;
     }
 
-    public String getUserGroup() {
+    public UserPermissions getUserGroup() {
         return userGroup;
     }
 
@@ -52,8 +63,16 @@ public class UserDatabase {
         return bankDatabase;
     }
 
+    public String getCreatedAt() {
+        return createdAt;
+    }
+
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public void setCreatedAt(String createdAt) {
+        this.createdAt = createdAt;
     }
 
     public void setUserTag(String userTag) {
@@ -62,7 +81,7 @@ public class UserDatabase {
     }
 
     public void setUserGroup(UserPermissions userGroup) {
-        this.userGroup = userGroup.getName();
+        this.userGroup = userGroup;
     }
 
     public void setBank(BankDatabase bankDatabase) {
