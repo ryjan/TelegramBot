@@ -24,9 +24,10 @@ public class FindWishes extends BaseCommand {
 
     @Override
     protected void executeCommand(String chatId, BotMain bot, CommandsHandler handler) {
+        System.out.println("gsdgsdgsdfgsdfg");
         SendMessage message = createSendMessage(chatId);
+        message.setText("📃Пожелания:");
         redisTemplate.opsForValue().set(CACHE_KEY + chatId, "wish");
-        editMessage("✨🔍");
         message.setReplyMarkup(getReplyKeyboard());
         sendMessageForCommand(bot, message);
     }

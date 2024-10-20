@@ -71,13 +71,13 @@ public class CommandsBuilder {
     private AdminPanel adminPanel;
 
     @Autowired
-    private FindWishes findWishes;
-
-    @Autowired
     private NextArticle nextArticle;
 
     @Autowired
     private CheckArticles checkArticles;
+
+    @Autowired
+    private FindWishes findWishes;
 
     private Map<String, BaseCommand> commands = new HashMap<>();
     private Map<String, BaseCommand> buttonCommands = new HashMap<>();
@@ -118,6 +118,7 @@ public class CommandsBuilder {
 
     private void initializeUserSlashCommands() {
         userCommands.put(startUserCommand.getCommandName(), startUserCommand);
+        userCommands.put(findWishes.getCommandName(), findWishes);
         userCommands.put(setCoins.getCommandName(), setCoins);
         //commands.put(sendCoins.getCommandName(), sendCoins);
         userCommands.put(userBugReport.getCommandName(), userBugReport);
@@ -131,7 +132,7 @@ public class CommandsBuilder {
     }
 
     private void initializeUserButtonCommands() {
-        userButtonCommands.put(findWishes.getCommandName(), findWishes);// завтра доделать
+        userButtonCommands.put(findWishes.getCommandName(), findWishes);
     }
 
     public Map<String, BaseCommand> getCommands() {

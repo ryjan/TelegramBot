@@ -31,7 +31,7 @@ public class CommandsHandler { // переписать под единый comma
         builder.initializeCommands();
     }
 
-    public void handleCommand(Update update, Boolean isGroup) throws IOException {
+    public void handleCommand(Update update, Boolean isGroup) {
         if (update.getCallbackQuery() != null) {
             handleCallBackQuery(update, isGroup);
         } else {
@@ -39,22 +39,13 @@ public class CommandsHandler { // переписать под единый comma
         }
     }
 
-    private void handleCallBackQuery(Update update, Boolean isGroup) throws IOException {
-        String callbackData = update.getCallbackQuery().getData();
-        String chatId = update.getCallbackQuery().getMessage().getChatId().toString();
-        long userId = update.getCallbackQuery().getFrom().getId();
-
-        BaseCommand command;
+    private void handleCallBackQuery(Update update, Boolean isGroup) {
         if (isGroup) {
-            command = groupButtonCommands.get(callbackData);
+            System.out.println("List group:" + userButtonCommands);
+            mergedHandleCallBackQuery(update, groupButtonCommands);
         } else {
-            command = userButtonCommands.get(callbackData);
-        }
-
-        if (command == null) return;
-
-        if (command.hasPermissionInGroup(Long.valueOf(chatId), userId)) {
-            command.execute(chatId, bot, this);
+            System.out.println("List user:" + userButtonCommands);
+            mergedHandleCallBackQuery(update, userButtonCommands);
         }
     }
 
@@ -70,31 +61,51 @@ public class CommandsHandler { // переписать под единый comma
     }
 
     private void mergedHandleTextMessage(Update update, Map<String, BaseCommand> commands, String commandKey) {
-        Long chatId = update.getMessage().getChatId();
-        Long userId = update.getMessage().getFrom().getId();
+        long chatId = update.getMessage().getChatId();
+        long userId = update.getMessage().getFrom().getId();
         BaseCommand command = commands.get(commandKey);
 
         if (command == null) return;
 
-        if (command.hasPermissionInUserChat(chatId) && update.getMessage().getChat().isUserChat() || command.hasPermissionInGroup(chatId, userId)) {
-            command.execute(chatId.toString(), bot, this);
+        if (update.getMessage().getChat().isUserChat() && command.hasPermissionInUserChat(chatId) || command.hasPermissionInGroup(chatId, userId)) {
+            command.execute(String.valueOf(chatId), bot, this);
         } else {
-            sendNoPermissionMessageToUser(chatId, command);
+            sendNoPermissionMessageToUser(userId, command);
         }
     }
 
+    private void mergedHandleCallBackQuery(Update update, Map<String, BaseCommand> commands) {
+        String callbackData = update.getCallbackQuery().getData();
+        long chatId = update.getCallbackQuery().getMessage().getChatId();
+        long userId = update.getCallbackQuery().getFrom().getId();
+        boolean isUserChat = update.hasCallbackQuery() && update.getCallbackQuery().getMessage().isUserMessage();
+
+        BaseCommand command = commands.get(callbackData);
+        System.out.println(command);
+        if (command == null) return;
+
+        if (command.hasPermissionInUserChat(chatId) && isUserChat || command.hasPermissionInGroup(chatId, userId)) {
+            command.execute(String.valueOf(chatId), bot, this);
+        }
+
+    }
+
+    /*
     private void sendNoPermissionMessage(Long chatId, BaseCommand baseGroupCommand) {
         try {
-            bot.execute(new SendMessage(chatId.toString(), "✨У вас нет прав для выполнения этой команды\n" + "Нужны права: " + baseGroupCommand.getPermission()));
+            bot.execute(new SendMessage(chatId.toString(), "✨У вас нет прав для выполнения этой команды\n"
+                    + "Нужны права: " + baseGroupCommand.getPermission().getName()));
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
+     */
 
     private void sendNoPermissionMessageToUser(Long userId, BaseCommand baseGroupCommand) {
         SendMessage dm = new SendMessage();
         dm.setChatId(userId);
-        dm.setText("✨У вас нет прав для выполнения команды " + baseGroupCommand.getCommandName() + "\nНужны права: " + baseGroupCommand.getPermission().getName());
+        dm.setText("✨У вас нет прав для выполнения команды " + baseGroupCommand.getCommandName() + "\nНужны права: "
+                + baseGroupCommand.getPermission().getName());
         try {
             bot.execute(dm);
         } catch (Exception e) {

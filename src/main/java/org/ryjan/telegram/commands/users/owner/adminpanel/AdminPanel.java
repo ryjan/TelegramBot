@@ -29,8 +29,10 @@ public class AdminPanel extends BaseCommand {
     }
 
     public ReplyKeyboardMarkup getKeyboard() {
-        return new ReplyKeyboardBuilder()
+        ReplyKeyboardMarkup replyKeyboardMarkup = new ReplyKeyboardBuilder()
                 .addRow("📃Посмотреть обращения")
                 .build();
+        replyKeyboardMarkup.setOneTimeKeyboard(false);
+        return replyKeyboardMarkup;
     }
 }

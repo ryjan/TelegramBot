@@ -55,7 +55,7 @@ public class BotMain extends TelegramLongPollingBot {
         botService.autoExecute(update);
 
         try {
-            if (update.hasMessage() && update.getMessage().getChat().isUserChat()) {
+            if (update.hasMessage() && update.getMessage().getChat().isUserChat() || update.hasCallbackQuery() && update.getCallbackQuery().getMessage().isUserMessage()) {
                 botService.groupCommandHandler.handleCommand(update, false);
             } else {
                 botService.groupCommandHandler.handleCommand(update, true);

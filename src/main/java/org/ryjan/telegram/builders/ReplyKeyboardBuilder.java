@@ -13,7 +13,6 @@ public class ReplyKeyboardBuilder {
     public ReplyKeyboardBuilder() {
         replyKeyboardMarkup = new ReplyKeyboardMarkup();
         replyKeyboardMarkup.setResizeKeyboard(true);
-        replyKeyboardMarkup.setOneTimeKeyboard(true);
         keyboardRows = new ArrayList<>();
     }
 
