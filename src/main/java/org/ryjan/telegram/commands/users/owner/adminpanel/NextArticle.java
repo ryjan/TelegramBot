@@ -15,7 +15,8 @@ import java.util.List;
 
 @Component
 public class NextArticle extends BaseCommand {
-    private final String CACHE_KEY = "checkArticlesAnswer:";
+    private final String FIND_WISHES_CACHE_KEY = "checkArticlesAnswer:";
+    private final String CACHE_KEY = "checkArticlesListAnswer:";
 
     @Autowired
     private RedisTemplate<String, String> redisTemplate;
@@ -30,25 +31,31 @@ public class NextArticle extends BaseCommand {
     @Override
     protected void executeCommand(String chatId, BotMain bot, CommandsHandler handler) {
         SendMessage message = createSendMessage(chatId);
-        String answer = redisTemplate.opsForValue().get(CACHE_KEY + chatId);
+        String answer = redisTemplate.opsForValue().get(FIND_WISHES_CACHE_KEY + chatId);
+        System.out.println(CACHE_KEY + chatId + "startMethod");
+        System.out.println("nextArt -1");
 
-        assert answer != null;
-        if (answer.contains("wish")) {
+        if (answer != null) {
+            System.out.println("nextArt 0");
             List<Articles> articles = getArticles(chatId);
-
+            System.out.println("nextArt getArticles");
             String[] parts = answer.split(":");
-            int number = parts[1] == null ? 0 : Integer.parseInt(parts[1]);
+            System.out.println("nextArt getParts");
+            int number = Integer.parseInt(parts[1]);
             Articles article = articles.get(number);
 
-            String text = MessageFormat.format("[✉️Отправитель:](https://t.me/{0}: {1}\n\n{2})", article.getUsername(),
-                    article.getId(), article.getText());
+            String text = MessageFormat.format("✉️Отправитель: [{0}](tg://user?id={1}) \n\n{2}", article.getUsername(),
+                    String.valueOf(article.getUserId()), article.getText());
+            message.enableMarkdown(true);
             message.setText(text);
+            System.out.println("nextArt 1");
 
-            redisTemplate.opsForValue().set(CACHE_KEY + chatId, String.valueOf(number + 1));
+            String wish = "wish:" + (number + 1);
+            redisTemplate.opsForValue().set(CACHE_KEY + chatId, wish);
             sendMessageForCommand(bot, message);
             if (number == 9) {
                 redisArticlesTemplate.delete(CACHE_KEY + chatId);
-                redisTemplate.opsForValue().set(CACHE_KEY + chatId, "wish");
+                redisTemplate.opsForValue().set(CACHE_KEY + chatId, "wish:0");
             }
         }
     }
@@ -58,6 +65,7 @@ public class NextArticle extends BaseCommand {
 
         if (articles == null) {
             articles = articlesService.getFirstTenArticles();
+            System.out.println(CACHE_KEY + chatId + "getart");
             redisArticlesTemplate.opsForValue().set(CACHE_KEY + chatId, articles);
         }
         return articles;

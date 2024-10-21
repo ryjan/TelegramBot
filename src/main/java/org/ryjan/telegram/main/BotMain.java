@@ -3,6 +3,8 @@ package org.ryjan.telegram.main;
 
 import com.sun.tools.javac.Main;
 
+import org.ryjan.telegram.model.users.Articles;
+import org.ryjan.telegram.services.ArticlesService;
 import org.ryjan.telegram.services.BotService;
 
 import org.ryjan.telegram.utils.UpdateContext;
@@ -12,10 +14,13 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Lazy;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
+
+import java.util.List;
 
 @SpringBootApplication
 public class BotMain extends TelegramLongPollingBot {
@@ -55,7 +60,8 @@ public class BotMain extends TelegramLongPollingBot {
         botService.autoExecute(update);
 
         try {
-            if (update.hasMessage() && update.getMessage().getChat().isUserChat() || update.hasCallbackQuery() && update.getCallbackQuery().getMessage().isUserMessage()) {
+            if (update.hasMessage() && update.getMessage().getChat().isUserChat() || update.hasCallbackQuery()
+                    && update.getCallbackQuery().getMessage().isUserMessage()) {
                 botService.groupCommandHandler.handleCommand(update, false);
             } else {
                 botService.groupCommandHandler.handleCommand(update, true);

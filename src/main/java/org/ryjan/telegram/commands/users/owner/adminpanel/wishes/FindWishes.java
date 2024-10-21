@@ -27,7 +27,7 @@ public class FindWishes extends BaseCommand {
         System.out.println("gsdgsdgsdfgsdfg");
         SendMessage message = createSendMessage(chatId);
         message.setText("📃Пожелания:");
-        redisTemplate.opsForValue().set(CACHE_KEY + chatId, "wish");
+        redisTemplate.opsForValue().set(CACHE_KEY + chatId, "wish:0");
         message.setReplyMarkup(getReplyKeyboard());
         sendMessageForCommand(bot, message);
     }

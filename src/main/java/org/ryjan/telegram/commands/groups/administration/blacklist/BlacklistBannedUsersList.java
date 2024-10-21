@@ -39,8 +39,8 @@ public class BlacklistBannedUsersList extends BaseCommand {
         for (int i = 0; i < blacklistList.size(); i++) {
             Blacklist blacklist = blacklistList.get(i);
             String formattedDate = blacklist.getCreatedAt().replace("-", "\\-");
-            sb.append(MessageFormat.format("🎃Пользователь [{0}](https://t.me/{1}) был добавлен *{2}*", blacklist.getUserFirstname(), blacklist.getUsername(),
-                    formattedDate))
+            sb.append(MessageFormat.format("🎃Пользователь [{0}](tg://user?id={1}) был добавлен *{2}*", blacklist.getUserFirstname(),
+                            String.valueOf(blacklist.getUserId()), formattedDate))
                     .append("\n");
         }
 

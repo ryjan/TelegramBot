@@ -74,4 +74,12 @@ public class Articles {
     public void setUserId(Long userId) {
         this.userId = userId;
     }
+
+    public String getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(String createdAt) {
+        this.createdAt = createdAt;
+    }
 }
