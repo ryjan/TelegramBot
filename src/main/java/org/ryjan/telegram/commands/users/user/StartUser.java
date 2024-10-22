@@ -27,7 +27,7 @@ public class StartUser extends BaseCommand {
         SendMessage message = createSendMessage(chatId);
         Message updateMessage = getUpdate().getMessage();
         long userId = updateMessage.getFrom().getId();
-        UserDatabase userDatabase = userService.findUser(userId) == null ? new UserDatabase(userId, updateMessage.getFrom().getUserName())
+        UserDatabase userDatabase = userService.findUser(userId) == null ? new UserDatabase(userId, updateMessage.getFrom().getUserName().toLowerCase())
                 : userService.findUser(userId);
         userService.update(userDatabase);
         message.setText("✨Добавь бота в группу и пропиши в ней /start");

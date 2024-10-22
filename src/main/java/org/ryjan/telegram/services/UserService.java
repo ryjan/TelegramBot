@@ -16,7 +16,7 @@ import java.util.concurrent.TimeUnit;
 
 @Service
 public class UserService {
-    private final String CACHE_KEY = "userDatabase:";
+    public final String CACHE_KEY = "userDatabase:";
 
     @Autowired
     private JpaUserDatabaseRepository userDatabaseRepository;

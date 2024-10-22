@@ -32,15 +32,15 @@ public class NextArticle extends BaseCommand {
     protected void executeCommand(String chatId, BotMain bot, CommandsHandler handler) {
         SendMessage message = createSendMessage(chatId);
         String answer = redisTemplate.opsForValue().get(FIND_WISHES_CACHE_KEY + chatId);
-        System.out.println(CACHE_KEY + chatId + "startMethod");
-        System.out.println("nextArt -1");
 
         if (answer != null) {
-            System.out.println("nextArt 0");
             List<Articles> articles = getArticles(chatId);
-            System.out.println("nextArt getArticles");
+            if (articles == null) {
+                message.setText("✨Список пуст");
+                sendMessageForCommand(bot, message);
+                return;
+            }
             String[] parts = answer.split(":");
-            System.out.println("nextArt getParts");
             int number = Integer.parseInt(parts[1]);
             Articles article = articles.get(number);
 
@@ -48,14 +48,13 @@ public class NextArticle extends BaseCommand {
                     String.valueOf(article.getUserId()), article.getText());
             message.enableMarkdown(true);
             message.setText(text);
-            System.out.println("nextArt 1");
 
             String wish = "wish:" + (number + 1);
-            redisTemplate.opsForValue().set(CACHE_KEY + chatId, wish);
+            redisTemplate.opsForValue().set(FIND_WISHES_CACHE_KEY + chatId, wish);
             sendMessageForCommand(bot, message);
             if (number == 9) {
                 redisArticlesTemplate.delete(CACHE_KEY + chatId);
-                redisTemplate.opsForValue().set(CACHE_KEY + chatId, "wish:0");
+                redisTemplate.opsForValue().set(FIND_WISHES_CACHE_KEY + chatId, "wish:0");
             }
         }
     }
@@ -65,7 +64,6 @@ public class NextArticle extends BaseCommand {
 
         if (articles == null) {
             articles = articlesService.getFirstTenArticles();
-            System.out.println(CACHE_KEY + chatId + "getart");
             redisArticlesTemplate.opsForValue().set(CACHE_KEY + chatId, articles);
         }
         return articles;
