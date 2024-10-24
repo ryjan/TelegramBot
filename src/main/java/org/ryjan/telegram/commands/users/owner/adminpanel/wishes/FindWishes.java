@@ -6,6 +6,7 @@ import org.ryjan.telegram.commands.users.owner.adminpanel.NextArticle;
 import org.ryjan.telegram.commands.users.user.UserPermissions;
 import org.ryjan.telegram.handler.CommandsHandler;
 import org.ryjan.telegram.main.BotMain;
+import org.ryjan.telegram.services.ArticlesService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
@@ -14,7 +15,7 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMar
 
 @Component
 public class FindWishes extends BaseCommand {
-    private final String CACHE_KEY = "checkArticlesAnswer:";
+    private final String CACHE_KEY;
 
     @Autowired
     private RedisTemplate<String, String> redisTemplate;
@@ -22,8 +23,9 @@ public class FindWishes extends BaseCommand {
     @Autowired
     private NextArticle nextArticle;
 
-    protected FindWishes() {
+    protected FindWishes(ArticlesService articlesService) {
         super("findWishes", "Найти пожелания", UserPermissions.ADMINISTRATOR);
+        CACHE_KEY = articlesService.getCHECK_ARTICLES_ANSWER();
     }
 
     @Override

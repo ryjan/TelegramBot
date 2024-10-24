@@ -4,8 +4,6 @@ import com.fasterxml.jackson.annotation.JsonAlias;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
 import org.ryjan.telegram.commands.users.user.UserPermissions;
 import org.ryjan.telegram.interfaces.Permissions;
 import org.telegram.telegrambots.meta.api.objects.User;
@@ -15,8 +13,6 @@ import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 
 @Entity
-@Getter
-@Setter
 @SequenceGenerator(name = "user_seq", sequenceName = "user_id_seq", allocationSize = 1)
 @Table (name = "users")
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -51,7 +47,15 @@ public class UserDatabase {
         return id;
     }
 
+    public String getUserTag() {
+        return userTag;
+    }
+
     public Permissions getUserGroupAsPermission() {
+        return userGroup;
+    }
+
+    public UserPermissions getUserGroup() {
         return userGroup;
     }
 
@@ -59,9 +63,25 @@ public class UserDatabase {
         return bankDatabase;
     }
 
+    public String getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public void setCreatedAt(String createdAt) {
+        this.createdAt = createdAt;
+    }
+
     public void setUserTag(String userTag) {
         this.userTag = userTag;
         bankDatabase.setTag(this.userTag);
+    }
+
+    public void setUserGroup(UserPermissions userGroup) {
+        this.userGroup = userGroup;
     }
 
     public void setBank(BankDatabase bankDatabase) {

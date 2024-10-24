@@ -25,6 +25,7 @@ public class Articles {
     private String text;
     private String username;
     private Long userId;
+    private String status;
     private String createdAt;
 
     public Articles() {

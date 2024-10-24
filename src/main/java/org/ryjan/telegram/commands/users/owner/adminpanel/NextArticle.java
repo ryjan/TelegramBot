@@ -5,6 +5,7 @@ import org.ryjan.telegram.commands.users.user.UserPermissions;
 import org.ryjan.telegram.handler.CommandsHandler;
 import org.ryjan.telegram.main.BotMain;
 import org.ryjan.telegram.model.users.Articles;
+import org.ryjan.telegram.services.ArticlesService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
@@ -16,8 +17,9 @@ import java.util.concurrent.TimeUnit;
 
 @Component
 public class NextArticle extends BaseCommand {
-    private final String FIND_WISHES_CACHE_KEY = "checkArticlesAnswer:";
-    private final String CACHE_KEY = "checkArticlesListAnswer:";
+    private final String FIND_WISHES_CACHE_KEY;
+    private final String CACHE_KEY;
+    private Articles article;
 
     @Autowired
     private RedisTemplate<String, String> redisTemplate;
@@ -25,8 +27,11 @@ public class NextArticle extends BaseCommand {
     @Autowired
     private RedisTemplate<String, List<Articles>> redisArticlesTemplate;
 
-    protected NextArticle() {
+    @Autowired
+    protected NextArticle(ArticlesService articlesService) {
         super("⏭️", "Следующий артикуль", UserPermissions.ADMINISTRATOR);
+        FIND_WISHES_CACHE_KEY = articlesService.getCHECK_ARTICLES_ANSWER();
+        CACHE_KEY = articlesService.getCHECK_ARTICLES_LIST_ANSWER();
     }
 
     @Override
@@ -49,7 +54,7 @@ public class NextArticle extends BaseCommand {
                 sendMessageForCommand(bot, message);
                 return;
             }
-            Articles article = articles.get(number);
+            article = articles.get(number);
 
             String text = MessageFormat.format("✉️Отправитель: [{0}](tg://user?id={1}) \n*🕑Дата отправки: {2}*\n\n{3}", article.getUsername(),
                     String.valueOf(article.getUserId()), article.getCreatedAt(), article.getText());
@@ -64,6 +69,10 @@ public class NextArticle extends BaseCommand {
                 redisTemplate.opsForValue().set(FIND_WISHES_CACHE_KEY + chatId, "wish:0");
             }
         }
+    }
+
+    public Articles getCurrentArticle() {
+        return article;
     }
 
     private List<Articles> getArticles(String chatId) {

@@ -1,6 +1,8 @@
 package org.ryjan.telegram.builders;
 
 import jakarta.annotation.PostConstruct;
+import lombok.Getter;
+import lombok.Setter;
 import org.ryjan.telegram.commands.groups.BaseCommand;
 import org.ryjan.telegram.commands.groups.administration.Settings;
 import org.ryjan.telegram.commands.groups.administration.silence.SilenceMode;
@@ -11,6 +13,7 @@ import org.ryjan.telegram.commands.users.owner.adminpanel.AdminPanel;
 import org.ryjan.telegram.commands.users.owner.adminpanel.CheckArticles;
 import org.ryjan.telegram.commands.users.owner.adminpanel.NextArticle;
 import org.ryjan.telegram.commands.users.owner.adminpanel.wishes.FindWishes;
+import org.ryjan.telegram.commands.users.owner.adminpanel.wishes.LikeArticle;
 import org.ryjan.telegram.commands.users.user.StartUser;
 import org.ryjan.telegram.commands.users.user.button.bugreport.UserBugReport;
 import org.ryjan.telegram.commands.users.user.button.bugreport.UserSendReportReply;
@@ -21,6 +24,8 @@ import org.springframework.stereotype.Component;
 import java.util.HashMap;
 import java.util.Map;
 
+@Getter
+@Setter
 @Component
 public class CommandsBuilder {
 
@@ -72,6 +77,9 @@ public class CommandsBuilder {
 
     @Autowired
     private NextArticle nextArticle;
+
+    @Autowired
+    private LikeArticle likeArticle;
 
     @Autowired
     private CheckArticles checkArticles;
@@ -126,6 +134,7 @@ public class CommandsBuilder {
         userCommands.put(adminPanel.getCommandName(), adminPanel);
         userCommands.put(checkArticles.getCommandName().split(" ")[0], checkArticles);
         userCommands.put(nextArticle.getCommandName(), nextArticle);
+        userCommands.put(likeArticle.getCommandName(), likeArticle);
 
         userCommands.put(userSendReportReply.getCommandName().split(" ")[0], userSendReportReply);
         userCommands.put(userSendWishReply.getCommandName().split(" ")[0], userSendWishReply);
@@ -133,37 +142,5 @@ public class CommandsBuilder {
 
     private void initializeUserButtonCommands() {
         userButtonCommands.put(findWishes.getCommandName(), findWishes);
-    }
-
-    public Map<String, BaseCommand> getCommands() {
-        return commands;
-    }
-
-    public void setCommands(Map<String, BaseCommand> commands) {
-        this.commands = commands;
-    }
-
-    public Map<String, BaseCommand> getButtonCommands() {
-        return buttonCommands;
-    }
-
-    public void setButtonCommands(Map<String, BaseCommand> buttonCommands) {
-        this.buttonCommands = buttonCommands;
-    }
-
-    public Map<String, BaseCommand> getUserCommands() {
-        return userCommands;
-    }
-
-    public void setUserCommands(Map<String, BaseCommand> userCommands) {
-        this.userCommands = userCommands;
-    }
-
-    public Map<String, BaseCommand> getUserButtonCommands() {
-        return userButtonCommands;
-    }
-
-    public void setUserButtonCommands(Map<String, BaseCommand> userButtonCommands) {
-        this.userButtonCommands = userButtonCommands;
     }
 }

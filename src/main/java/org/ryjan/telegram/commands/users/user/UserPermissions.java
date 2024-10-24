@@ -9,8 +9,8 @@ public enum UserPermissions implements Permissions {
     MODERATOR("Moderator"),
     USER("User"),
     LOW_PRIORITY("Low_priority"),
-    BANNED("Banned"),
-    ANY("Any");
+    ANY("Any"),
+    BANNED("Banned");
 
     private final String displayname;
 
