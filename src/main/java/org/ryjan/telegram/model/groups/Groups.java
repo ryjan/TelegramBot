@@ -3,6 +3,8 @@ package org.ryjan.telegram.model.groups;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 import org.ryjan.telegram.commands.groups.GroupPrivileges;
 
 import java.time.LocalDateTime;
@@ -10,6 +12,8 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
+@Setter
+@Getter
 @Entity
 @Table(name = "groups", schema = "groups")
 public class Groups {
@@ -63,83 +67,4 @@ public class Groups {
         chatSetting.setGroups(this);
     }
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getGroupName() {
-        return groupName;
-    }
-
-    public void setGroupName(String groupName) {
-        this.groupName = groupName;
-    }
-
-    public String getPrivileges() {
-        return privileges;
-    }
-
-    public void setPrivileges(String privileges) {
-        this.privileges = privileges;
-    }
-
-    public String getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(String createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    public List<ChatSettings> getChatSettings() {
-        return chatSettings;
-    }
-
-    public void setChatSettings(List<ChatSettings> chatSettings) {
-        this.chatSettings = chatSettings;
-    }
-
-    public List<Blacklist> getBlacklists() {
-        return blacklists;
-    }
-
-    public void setBlacklists(List<Blacklist> blacklists) {
-        this.blacklists = blacklists;
-    }
-
-    public String getCreatorId() {
-        return creatorId;
-    }
-
-    public void setCreatorId(String creatorId) {
-        this.creatorId = creatorId;
-    }
-
-    public String getCreatorUsername() {
-        return creatorUsername;
-    }
-
-    public void setCreatorUsername(String creatorUsername) {
-        this.creatorUsername = creatorUsername;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
-    public List<GroupMemberList> getGroupMemberLists() {
-        return groupMemberLists;
-    }
-
-    public void setGroupMemberLists(List<GroupMemberList> groupMemberLists) {
-        this.groupMemberLists = groupMemberLists;
-    }
 }

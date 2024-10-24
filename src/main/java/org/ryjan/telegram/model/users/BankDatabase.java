@@ -3,11 +3,15 @@ package org.ryjan.telegram.model.users;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.math.BigDecimal;
 import java.util.Objects;
 
 @Entity
+@Getter
+@Setter
 @SequenceGenerator(name = "user_seq", sequenceName = "user_id_seq", allocationSize = 1)
 @Table (name = "bank")
 public class BankDatabase {
@@ -48,33 +52,9 @@ public class BankDatabase {
         return id;
     }
 
-    public String getTag() {
-        return tag;
-    }
-
-    public BigDecimal getGems() {
-        return gems;
-    }
-
-    public BigDecimal getCoins() {
-        return coins;
-    }
-
     @JsonBackReference
     public UserDatabase getUser() {
         return userDatabase;
-    }
-
-    public void setTag(String tag) {
-        this.tag = tag;
-    }
-
-    public void setGems(BigDecimal gems) {
-        this.gems = gems;
-    }
-
-    public void setCoins(BigDecimal coins) {
-        this.coins = coins;
     }
 
     public void setUser(UserDatabase userDatabase) {
