@@ -26,8 +26,8 @@ public class UsersController {
         return ResponseEntity.ok("User deleted successfully");
     }
 
-    @GetMapping("/getIdByUsername")
-    public Long getIdByUsername(@RequestParam String username) {
+    @GetMapping("{username}")
+    public Long getIdByUsername(@PathVariable String username) {
         return userService.findUser(username).getId();
     }
 }

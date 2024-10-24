@@ -12,6 +12,7 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 
 import java.text.MessageFormat;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 @Component
 public class NextArticle extends BaseCommand {
@@ -42,10 +43,16 @@ public class NextArticle extends BaseCommand {
             }
             String[] parts = answer.split(":");
             int number = Integer.parseInt(parts[1]);
+
+            if (number >= articles.size()) {
+                message.setText("👾Пожелания закончились");
+                sendMessageForCommand(bot, message);
+                return;
+            }
             Articles article = articles.get(number);
 
-            String text = MessageFormat.format("✉️Отправитель: [{0}](tg://user?id={1}) \n\n{2}", article.getUsername(),
-                    String.valueOf(article.getUserId()), article.getText());
+            String text = MessageFormat.format("✉️Отправитель: [{0}](tg://user?id={1}) \n*🕑Дата отправки: {2}*\n\n{3}", article.getUsername(),
+                    String.valueOf(article.getUserId()), article.getCreatedAt(), article.getText());
             message.enableMarkdown(true);
             message.setText(text);
 
@@ -64,7 +71,7 @@ public class NextArticle extends BaseCommand {
 
         if (articles == null) {
             articles = articlesService.getFirstTenArticles();
-            redisArticlesTemplate.opsForValue().set(CACHE_KEY + chatId, articles);
+            redisArticlesTemplate.opsForValue().set(CACHE_KEY + chatId, articles, 30, TimeUnit.MINUTES);
         }
         return articles;
     }

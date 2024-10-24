@@ -2,6 +2,7 @@ package org.ryjan.telegram.commands.users.owner.adminpanel.wishes;
 
 import org.ryjan.telegram.builders.ReplyKeyboardBuilder;
 import org.ryjan.telegram.commands.groups.BaseCommand;
+import org.ryjan.telegram.commands.users.owner.adminpanel.NextArticle;
 import org.ryjan.telegram.commands.users.user.UserPermissions;
 import org.ryjan.telegram.handler.CommandsHandler;
 import org.ryjan.telegram.main.BotMain;
@@ -16,7 +17,10 @@ public class FindWishes extends BaseCommand {
     private final String CACHE_KEY = "checkArticlesAnswer:";
 
     @Autowired
-    RedisTemplate<String, String> redisTemplate;
+    private RedisTemplate<String, String> redisTemplate;
+
+    @Autowired
+    private NextArticle nextArticle;
 
     protected FindWishes() {
         super("findWishes", "Найти пожелания", UserPermissions.ADMINISTRATOR);
@@ -30,6 +34,7 @@ public class FindWishes extends BaseCommand {
         redisTemplate.opsForValue().set(CACHE_KEY + chatId, "wish:0");
         message.setReplyMarkup(getReplyKeyboard());
         sendMessageForCommand(bot, message);
+        nextArticle.execute(chatId, bot, handler);
     }
 
     private ReplyKeyboardMarkup getReplyKeyboard() {
