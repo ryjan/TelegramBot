@@ -37,6 +37,7 @@ public class Articles {
         this.text = text;
         this.username = username;
         this.userId = userId;
+        this.status = "review";
         this.createdAt = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss").format(LocalDateTime.now());
     }
 }

@@ -80,7 +80,7 @@ public class NextArticle extends BaseCommand {
 
         if (articles == null) {
             articles = articlesService.getFirstTenArticles();
-            redisArticlesTemplate.opsForValue().set(CACHE_KEY + chatId, articles, 30, TimeUnit.MINUTES);
+            redisArticlesTemplate.opsForValue().set(CACHE_KEY + chatId, articles, 3, TimeUnit.MINUTES);
         }
         return articles;
     }

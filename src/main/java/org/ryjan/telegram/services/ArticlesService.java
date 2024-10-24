@@ -71,7 +71,7 @@ public class ArticlesService extends ServiceBuilder {
     }
 
     public List<Articles> getFirstTenArticles() {
-        return articlesRepository.findFirst10ByOrderByIdAsc();
+        return articlesRepository.findFirst10ByStatusOrderByIdAsc("review");
     }
 
     public void update(Articles articles) {

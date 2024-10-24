@@ -7,6 +7,7 @@ import java.util.List;
 
 public interface ArticlesRepository extends JpaRepository<Articles, Long> {
     List<Articles> findFirst10ByOrderByIdAsc();
+    List<Articles> findFirst10ByStatusOrderByIdAsc(String status);
     List<Articles> findAllByUserId(Long userId);
     List<Articles> findAllByUsername(String username);
 }
