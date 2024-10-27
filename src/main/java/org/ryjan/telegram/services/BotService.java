@@ -2,6 +2,7 @@ package org.ryjan.telegram.services;
 
 import org.ryjan.telegram.commands.groups.administration.blacklist.ChatBlacklist;
 import org.ryjan.telegram.commands.groups.administration.silence.SilenceModeService;
+import org.ryjan.telegram.commands.users.owner.adminpanel.SendMessageToUserArticle;
 import org.ryjan.telegram.commands.users.user.button.bugreport.BugReportService;
 import org.ryjan.telegram.commands.users.user.button.bugreport.UserSendReportReply;
 import org.ryjan.telegram.commands.users.user.button.bugreport.UserSendWishReply;
@@ -49,6 +50,9 @@ public class BotService {
 
     @Autowired
     private UserSendWishReply userSendWishReply;
+
+    @Autowired
+    private SendMessageToUserArticle sendMessageToUserArticle;
 
     public ChatMember getChatMember(Long chatId, Long userId) {
         GetChatMember chatMember = new GetChatMember();
@@ -120,18 +124,13 @@ public class BotService {
     }
 
     public void autoExecute(Update update) {
+        bugReportReplies(update);
+        sendMessageToUserArticle.processArticleAndNotifyUser(update); // проверить работает ли
+
+
         if (update.hasMessage() && update.getMessage().getLeftChatMember() != null) {
             String chatId = update.getMessage().getChatId().toString();
             chatBlacklist.executeCommand(chatId, bot, groupCommandHandler);
-            return;
-        }
-
-        if (update.hasMessage() && update.getMessage().getChat().isUserChat() && update.getMessage().hasText()) {
-            String text = update.getMessage().getText();
-            String commandName = text.equals(userSendReportReply.getCommandName())
-                    ? userSendReportReply.getCommandName()
-                    : userSendWishReply.getCommandName();
-            bugReportService.operationSuccessful(update, commandName);
             return;
         }
 
@@ -142,6 +141,16 @@ public class BotService {
         /*if (update.hasMyChatMember()) {
             handleChatMemberUpdate(update.getMyChatMember());
         }*/
+    }
+
+    private void bugReportReplies(Update update) {
+        if (update.hasMessage() && update.getMessage().getChat().isUserChat() && update.getMessage().hasText()) {
+            String text = update.getMessage().getText();
+            String commandName = text.equals(userSendReportReply.getCommandName())
+                    ? userSendReportReply.getCommandName()
+                    : userSendWishReply.getCommandName();
+            bugReportService.operationSuccessful(update, commandName);
+        }
     }
 
     public BotMain getBot() {

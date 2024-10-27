@@ -85,6 +85,14 @@ public abstract class BaseCommand implements IBotCommand {
         return sendMessage;
     }
 
+    protected void sendMessageForCommand(SendMessage message) {
+        try {
+            botService.getBot().execute(message);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     protected void sendMessageForCommand(BotMain bot, SendMessage message) {
         try {
             bot.execute(message);
