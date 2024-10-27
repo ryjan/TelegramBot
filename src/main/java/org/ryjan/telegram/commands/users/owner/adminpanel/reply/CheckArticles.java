@@ -1,4 +1,4 @@
-package org.ryjan.telegram.commands.users.owner.adminpanel;
+package org.ryjan.telegram.commands.users.owner.adminpanel.reply;
 
 import org.ryjan.telegram.builders.InlineKeyboardBuilder;
 import org.ryjan.telegram.commands.groups.BaseCommand;

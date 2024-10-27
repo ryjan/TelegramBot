@@ -1,16 +1,16 @@
-package org.ryjan.telegram.commands.users.owner.adminpanel;
+package org.ryjan.telegram.commands.users.owner.adminpanel.reply;
 
 import org.ryjan.telegram.commands.groups.BaseCommand;
 import org.ryjan.telegram.commands.users.user.UserPermissions;
 import org.ryjan.telegram.handler.CommandsHandler;
-import org.ryjan.telegram.interfaces.Permissions;
 import org.ryjan.telegram.main.BotMain;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
-import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
+
+import java.util.concurrent.TimeUnit;
 
 @Component
 public class SendMessageToUserArticle extends BaseCommand {
@@ -24,7 +24,6 @@ public class SendMessageToUserArticle extends BaseCommand {
     private String chatId;
     private BotMain botMain;
     private CommandsHandler commandsHandler;
-    private SendMessage message;
 
     protected SendMessageToUserArticle() {
         super("💌", "Отправить сообщение пользователю", UserPermissions.ADMINISTRATOR);
@@ -36,9 +35,11 @@ public class SendMessageToUserArticle extends BaseCommand {
         this.botMain = bot;
         this.commandsHandler = handler;
 
-        message = createSendMessage(chatId);
+        SendMessage message = createSendMessage(chatId);
         message.setText("Введите сообщение пользователю:");
-        redisTemplate.opsForValue().set("admin_state:" + chatId, "waiting_message");
+        sendMessageForCommand(message);
+
+        redisTemplate.opsForValue().set("admin_state:" + chatId, "waiting_message", 5, TimeUnit.MINUTES);
     }
 
     public void processArticleAndNotifyUser(Update update) {
@@ -47,7 +48,18 @@ public class SendMessageToUserArticle extends BaseCommand {
             assert userState != null;
 
             if ("waiting_message".equals(userState)) {
+                String adminMessage = update.getMessage().getText();
+                String userId = nextArticle.getCurrentArticle().getUserId().toString();
+
+                SendMessage message = createSendMessage(userId);
+                message.setText("✨Ответ: " + adminMessage + "\n\n" + nextArticle.getArticleParsedText());
+                message.enableMarkdown(true);
+                sendMessageForCommand(message);
+
                 message.setText("✨Сообщение отправлено успешно!");
+                message.setChatId(chatId);
+
+                redisTemplate.delete("admin_state:" + update.getMessage().getChatId());
                 sendMessageForCommand(message);
                 nextArticle.execute(chatId, botMain, commandsHandler);
             }

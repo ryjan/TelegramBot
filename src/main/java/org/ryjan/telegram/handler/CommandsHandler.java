@@ -102,12 +102,12 @@ public class CommandsHandler { // переписать под единый comma
      */
 
     private void sendNoPermissionMessageToUser(Long userId, BaseCommand baseGroupCommand) {
-        SendMessage dm = new SendMessage();
-        dm.setChatId(userId);
-        dm.setText("✨У вас нет прав для выполнения команды " + baseGroupCommand.getCommandName() + "\nНужны права: "
+        SendMessage message = new SendMessage();
+        message.setChatId(userId);
+        message.setText("✨У вас нет прав для выполнения команды " + baseGroupCommand.getCommandName() + "\nНужны права: "
                 + baseGroupCommand.getPermission().getName());
         try {
-            bot.execute(dm);
+            bot.execute(message);
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -2,7 +2,7 @@ package org.ryjan.telegram.commands.users.owner.adminpanel.wishes;
 
 import org.ryjan.telegram.builders.ReplyKeyboardBuilder;
 import org.ryjan.telegram.commands.groups.BaseCommand;
-import org.ryjan.telegram.commands.users.owner.adminpanel.NextArticle;
+import org.ryjan.telegram.commands.users.owner.adminpanel.reply.NextArticle;
 import org.ryjan.telegram.commands.users.user.UserPermissions;
 import org.ryjan.telegram.handler.CommandsHandler;
 import org.ryjan.telegram.main.BotMain;

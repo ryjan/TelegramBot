@@ -2,7 +2,7 @@ package org.ryjan.telegram.services;
 
 import org.ryjan.telegram.commands.groups.administration.blacklist.ChatBlacklist;
 import org.ryjan.telegram.commands.groups.administration.silence.SilenceModeService;
-import org.ryjan.telegram.commands.users.owner.adminpanel.SendMessageToUserArticle;
+import org.ryjan.telegram.commands.users.owner.adminpanel.reply.SendMessageToUserArticle;
 import org.ryjan.telegram.commands.users.user.button.bugreport.BugReportService;
 import org.ryjan.telegram.commands.users.user.button.bugreport.UserSendReportReply;
 import org.ryjan.telegram.commands.users.user.button.bugreport.UserSendWishReply;

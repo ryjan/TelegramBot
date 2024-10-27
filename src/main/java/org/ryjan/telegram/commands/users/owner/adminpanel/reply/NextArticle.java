@@ -1,4 +1,4 @@
-package org.ryjan.telegram.commands.users.owner.adminpanel;
+package org.ryjan.telegram.commands.users.owner.adminpanel.reply;
 
 import org.ryjan.telegram.commands.groups.BaseCommand;
 import org.ryjan.telegram.commands.users.user.UserPermissions;
@@ -20,6 +20,7 @@ public class NextArticle extends BaseCommand {
     private final String FIND_WISHES_CACHE_KEY;
     private final String CACHE_KEY;
     private Articles article;
+    private String parsedText;
 
     @Autowired
     private RedisTemplate<String, String> redisTemplate;
@@ -56,10 +57,10 @@ public class NextArticle extends BaseCommand {
             }
             article = articles.get(number);
 
-            String text = MessageFormat.format("✉️Отправитель: [{0}](tg://user?id={1}) \n*🕑Дата отправки: {2}*\n\n{3}", article.getUsername(),
+            parsedText = MessageFormat.format("✉️Отправитель: [{0}](tg://user?id={1}) \n*🕑Дата отправки: {2}*\n\n{3}", article.getUsername(),
                     String.valueOf(article.getUserId()), article.getCreatedAt(), article.getText());
             message.enableMarkdown(true);
-            message.setText(text);
+            message.setText(parsedText);
 
             String wish = "wish:" + (number + 1);
             redisTemplate.opsForValue().set(FIND_WISHES_CACHE_KEY + chatId, wish);
@@ -73,6 +74,10 @@ public class NextArticle extends BaseCommand {
 
     public Articles getCurrentArticle() {
         return article;
+    }
+
+    public String getArticleParsedText() {
+        return parsedText;
     }
 
     private List<Articles> getArticles(String chatId) {

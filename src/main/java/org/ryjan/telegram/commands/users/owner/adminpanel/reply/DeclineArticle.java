@@ -1,9 +1,8 @@
-package org.ryjan.telegram.commands.users.owner.adminpanel;
+package org.ryjan.telegram.commands.users.owner.adminpanel.reply;
 
 import org.ryjan.telegram.commands.groups.BaseCommand;
 import org.ryjan.telegram.commands.users.user.UserPermissions;
 import org.ryjan.telegram.handler.CommandsHandler;
-import org.ryjan.telegram.interfaces.Permissions;
 import org.ryjan.telegram.main.BotMain;
 import org.ryjan.telegram.model.users.Articles;
 import org.springframework.beans.factory.annotation.Autowired;

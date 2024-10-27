@@ -10,10 +10,11 @@ import org.ryjan.telegram.commands.groups.administration.StartGroup;
 import org.ryjan.telegram.commands.groups.administration.blacklist.*;
 import org.ryjan.telegram.commands.users.owner.SetCoins;
 import org.ryjan.telegram.commands.users.owner.adminpanel.AdminPanel;
-import org.ryjan.telegram.commands.users.owner.adminpanel.CheckArticles;
-import org.ryjan.telegram.commands.users.owner.adminpanel.NextArticle;
+import org.ryjan.telegram.commands.users.owner.adminpanel.reply.CheckArticles;
+import org.ryjan.telegram.commands.users.owner.adminpanel.reply.NextArticle;
+import org.ryjan.telegram.commands.users.owner.adminpanel.reply.SendMessageToUserArticle;
 import org.ryjan.telegram.commands.users.owner.adminpanel.wishes.FindWishes;
-import org.ryjan.telegram.commands.users.owner.adminpanel.wishes.LikeArticle;
+import org.ryjan.telegram.commands.users.owner.adminpanel.reply.LikeArticle;
 import org.ryjan.telegram.commands.users.user.StartUser;
 import org.ryjan.telegram.commands.users.user.button.bugreport.UserBugReport;
 import org.ryjan.telegram.commands.users.user.button.bugreport.UserSendReportReply;
@@ -87,6 +88,9 @@ public class CommandsBuilder {
     @Autowired
     private FindWishes findWishes;
 
+    @Autowired
+    private SendMessageToUserArticle sendMessageToUserArticle;
+
     private Map<String, BaseCommand> commands = new HashMap<>();
     private Map<String, BaseCommand> buttonCommands = new HashMap<>();
     private Map<String, BaseCommand> userCommands = new HashMap<>();
@@ -126,21 +130,29 @@ public class CommandsBuilder {
 
     private void initializeUserSlashCommands() {
         userCommands.put(startUserCommand.getCommandName(), startUserCommand);
-        userCommands.put(findWishes.getCommandName(), findWishes);
+        //userCommands.put(findWishes.getCommandName(), findWishes);
         userCommands.put(setCoins.getCommandName(), setCoins);
         //commands.put(sendCoins.getCommandName(), sendCoins);
-        userCommands.put(userBugReport.getCommandName(), userBugReport);
 
-        userCommands.put(adminPanel.getCommandName(), adminPanel);
-        userCommands.put(checkArticles.getCommandName().split(" ")[0], checkArticles);
-        userCommands.put(nextArticle.getCommandName(), nextArticle);
-        userCommands.put(likeArticle.getCommandName(), likeArticle);
-
-        userCommands.put(userSendReportReply.getCommandName().split(" ")[0], userSendReportReply);
-        userCommands.put(userSendWishReply.getCommandName().split(" ")[0], userSendWishReply);
+        userBugReportCommands();
+        adminPanelCommands();
     }
 
     private void initializeUserButtonCommands() {
         userButtonCommands.put(findWishes.getCommandName(), findWishes);
+    }
+
+    private void adminPanelCommands() {
+        userCommands.put(adminPanel.getCommandName(), adminPanel);
+        userCommands.put(checkArticles.getCommandName().split(" ")[0], checkArticles);
+        userCommands.put(nextArticle.getCommandName(), nextArticle);
+        userCommands.put(likeArticle.getCommandName(), likeArticle);
+        userCommands.put(sendMessageToUserArticle.getCommandName(), sendMessageToUserArticle);
+    }
+
+    private void userBugReportCommands() {
+        userCommands.put(userBugReport.getCommandName(), userBugReport);
+        userCommands.put(userSendReportReply.getCommandName().split(" ")[0], userSendReportReply);
+        userCommands.put(userSendWishReply.getCommandName().split(" ")[0], userSendWishReply);
     }
 }
