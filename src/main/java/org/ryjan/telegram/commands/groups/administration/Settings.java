@@ -55,6 +55,8 @@ public class Settings extends BaseCommand {
                 .addRow(new InlineKeyboardBuilder.ButtonRow()
                         .addButton("🔒Черный список", "blacklistStartGroup"))
                 .addRow(new InlineKeyboardBuilder.ButtonRow()
+                        .addButton("🎃Узнать ID группы", "getGroupId"))
+                .addRow(new InlineKeyboardBuilder.ButtonRow()
                         .addButton("❌Закрыть", "closeMessage"));
         inlineKeyboardMarkup.setKeyboard(keyboard.build());
 

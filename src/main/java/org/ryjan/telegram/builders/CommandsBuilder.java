@@ -4,6 +4,7 @@ import jakarta.annotation.PostConstruct;
 import lombok.Getter;
 import lombok.Setter;
 import org.ryjan.telegram.commands.groups.BaseCommand;
+import org.ryjan.telegram.commands.groups.administration.InlineGetGroupId;
 import org.ryjan.telegram.commands.groups.administration.Settings;
 import org.ryjan.telegram.commands.groups.administration.silence.SilenceMode;
 import org.ryjan.telegram.commands.groups.administration.StartGroup;
@@ -34,6 +35,9 @@ public class CommandsBuilder {
 
     @Autowired
     private Settings settingsGroup;
+
+    @Autowired
+    private InlineGetGroupId inlineGetGroupIdCommand;
 
     @Autowired
     private BlacklistSwitch blacklistSwitch;
@@ -117,6 +121,7 @@ public class CommandsBuilder {
         buttonCommands.put(blacklistUnban.getCommandName(), blacklistUnban);
 
         buttonCommands.put(settingsGroup.getCommandName(), settingsGroup);
+        buttonCommands.put(inlineGetGroupIdCommand.getCommandName(), inlineGetGroupIdCommand);
         buttonCommands.put(blacklistBannedUsers.getCommandName(), blacklistBannedUsers);
         //buttonCommands.put("settingsStartGroup", settingsGroup);
 
