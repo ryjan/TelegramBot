@@ -1,9 +1,10 @@
-package org.ryjan.telegram.commands.users.owner.adminpanel.reply;
+package org.ryjan.telegram.commands.users.owner.adminpanel.bugreport.reply;
 
 import org.ryjan.telegram.commands.groups.BaseCommand;
 import org.ryjan.telegram.commands.users.user.UserPermissions;
 import org.ryjan.telegram.handler.CommandsHandler;
 import org.ryjan.telegram.main.BotMain;
+import org.ryjan.telegram.model.users.Articles;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
@@ -49,7 +50,8 @@ public class SendMessageToUserArticle extends BaseCommand {
 
             if ("waiting_message".equals(userState)) {
                 String adminMessage = update.getMessage().getText();
-                String userId = nextArticle.getCurrentArticle().getUserId().toString();
+                Articles articles = nextArticle.getCurrentArticle();
+                String userId = articles.getUserId().toString();
 
                 SendMessage message = createSendMessage(userId);
                 message.setText("✨Ответ: " + adminMessage + "\n\n" + nextArticle.getArticleParsedText());
@@ -58,6 +60,9 @@ public class SendMessageToUserArticle extends BaseCommand {
 
                 message.setText("✨Сообщение отправлено успешно!");
                 message.setChatId(chatId);
+
+                articles.setStatus("✨Рассмотрено");
+                articlesService.addArticleToRedisQueue(articles);
 
                 redisTemplate.delete("admin_state:" + update.getMessage().getChatId());
                 sendMessageForCommand(message);

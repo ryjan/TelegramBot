@@ -1,4 +1,4 @@
-package org.ryjan.telegram.commands.users.owner.adminpanel.reply;
+package org.ryjan.telegram.commands.users.owner.adminpanel.bugreport.reply;
 
 import org.ryjan.telegram.commands.groups.BaseCommand;
 import org.ryjan.telegram.commands.users.user.UserPermissions;
@@ -62,7 +62,11 @@ public class NextArticle extends BaseCommand {
             message.enableMarkdown(true);
             message.setText(parsedText);
 
+            articles.remove(number);
+
             String wish = "wish:" + (number + 1);
+
+            redisArticlesTemplate.opsForValue().set(CACHE_KEY + chatId, articles);
             redisTemplate.opsForValue().set(FIND_WISHES_CACHE_KEY + chatId, wish);
             sendMessageForCommand(bot, message);
             if (number == 9) {

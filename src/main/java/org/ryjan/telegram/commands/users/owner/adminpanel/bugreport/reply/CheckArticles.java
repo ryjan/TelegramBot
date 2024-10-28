@@ -1,4 +1,4 @@
-package org.ryjan.telegram.commands.users.owner.adminpanel.reply;
+package org.ryjan.telegram.commands.users.owner.adminpanel.bugreport.reply;
 
 import org.ryjan.telegram.builders.InlineKeyboardBuilder;
 import org.ryjan.telegram.commands.groups.BaseCommand;
@@ -28,9 +28,7 @@ public class CheckArticles extends BaseCommand {
 
         InlineKeyboardBuilder.KeyboardLayer keyboard = new InlineKeyboardBuilder.KeyboardLayer()
                 .addRow(new InlineKeyboardBuilder.ButtonRow()
-                        .addButton("📃Пожелания", "findWishes"))
-                .addRow(new InlineKeyboardBuilder.ButtonRow()
-                        .addButton("👾Баги", "notReady"));
+                        .addButton("📃Пожелания", "findWishes"));
         inlineKeyboardMarkup.setKeyboard(keyboard.build());
 
         return inlineKeyboardMarkup;

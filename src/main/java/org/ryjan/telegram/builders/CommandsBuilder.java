@@ -10,14 +10,10 @@ import org.ryjan.telegram.commands.groups.administration.StartGroup;
 import org.ryjan.telegram.commands.groups.administration.blacklist.*;
 import org.ryjan.telegram.commands.users.owner.SetCoins;
 import org.ryjan.telegram.commands.users.owner.adminpanel.AdminPanel;
-import org.ryjan.telegram.commands.users.owner.adminpanel.reply.CheckArticles;
-import org.ryjan.telegram.commands.users.owner.adminpanel.reply.NextArticle;
-import org.ryjan.telegram.commands.users.owner.adminpanel.reply.SendMessageToUserArticle;
-import org.ryjan.telegram.commands.users.owner.adminpanel.wishes.FindWishes;
-import org.ryjan.telegram.commands.users.owner.adminpanel.reply.LikeArticle;
+import org.ryjan.telegram.commands.users.owner.adminpanel.bugreport.reply.*;
+import org.ryjan.telegram.commands.users.owner.adminpanel.bugreport.wishes.FindWishes;
 import org.ryjan.telegram.commands.users.user.StartUser;
 import org.ryjan.telegram.commands.users.user.button.bugreport.UserBugReport;
-import org.ryjan.telegram.commands.users.user.button.bugreport.UserSendReportReply;
 import org.ryjan.telegram.commands.users.user.button.bugreport.UserSendWishReply;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -68,9 +64,6 @@ public class CommandsBuilder {
     private UserBugReport userBugReport;
 
     @Autowired
-    private UserSendReportReply userSendReportReply;
-
-    @Autowired
     private UserSendWishReply userSendWishReply;
 
     @Autowired
@@ -81,6 +74,9 @@ public class CommandsBuilder {
 
     @Autowired
     private LikeArticle likeArticle;
+
+    @Autowired
+    private DeclineArticle declineArticle;
 
     @Autowired
     private CheckArticles checkArticles;
@@ -147,12 +143,12 @@ public class CommandsBuilder {
         userCommands.put(checkArticles.getCommandName().split(" ")[0], checkArticles);
         userCommands.put(nextArticle.getCommandName(), nextArticle);
         userCommands.put(likeArticle.getCommandName(), likeArticle);
+        userCommands.put(declineArticle.getCommandName(), declineArticle);
         userCommands.put(sendMessageToUserArticle.getCommandName(), sendMessageToUserArticle);
     }
 
     private void userBugReportCommands() {
         userCommands.put(userBugReport.getCommandName(), userBugReport);
-        userCommands.put(userSendReportReply.getCommandName().split(" ")[0], userSendReportReply);
         userCommands.put(userSendWishReply.getCommandName().split(" ")[0], userSendWishReply);
     }
 }

@@ -1,4 +1,4 @@
-package org.ryjan.telegram.commands.users.owner.adminpanel.reply;
+package org.ryjan.telegram.commands.users.owner.adminpanel.bugreport.reply;
 
 import org.ryjan.telegram.commands.groups.BaseCommand;
 import org.ryjan.telegram.commands.users.user.UserPermissions;
@@ -25,7 +25,8 @@ public class DeclineArticle extends BaseCommand {
         articles.setStatus("👎Отклонено");
         articlesService.addArticleToRedisQueue(articles);
         SendMessage message = createSendMessage(articles.getUserId());
-        message.setText("Ваше обращение было 👎Отклонено :(");
+        message.setText("Ваше обращение было 💔Отклонено :(\n\n" + nextArticle.getArticleParsedText());
+        message.enableMarkdown(true);
         sendMessageForCommand(bot, message);
         nextArticle.execute(chatId, bot, handler);
     }

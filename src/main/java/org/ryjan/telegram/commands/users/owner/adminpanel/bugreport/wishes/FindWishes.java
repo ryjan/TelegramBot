@@ -1,8 +1,8 @@
-package org.ryjan.telegram.commands.users.owner.adminpanel.wishes;
+package org.ryjan.telegram.commands.users.owner.adminpanel.bugreport.wishes;
 
 import org.ryjan.telegram.builders.ReplyKeyboardBuilder;
 import org.ryjan.telegram.commands.groups.BaseCommand;
-import org.ryjan.telegram.commands.users.owner.adminpanel.reply.NextArticle;
+import org.ryjan.telegram.commands.users.owner.adminpanel.bugreport.reply.NextArticle;
 import org.ryjan.telegram.commands.users.user.UserPermissions;
 import org.ryjan.telegram.handler.CommandsHandler;
 import org.ryjan.telegram.main.BotMain;
@@ -30,7 +30,6 @@ public class FindWishes extends BaseCommand {
 
     @Override
     protected void executeCommand(String chatId, BotMain bot, CommandsHandler handler) {
-        System.out.println("gsdgsdgsdfgsdfg");
         SendMessage message = createSendMessage(chatId);
         message.setText("📃Пожелания:");
         redisTemplate.opsForValue().set(CACHE_KEY + chatId, "wish:0");

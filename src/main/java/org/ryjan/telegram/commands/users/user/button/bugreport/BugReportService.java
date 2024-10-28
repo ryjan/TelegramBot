@@ -17,7 +17,7 @@ import java.util.List;
 public class BugReportService {
 
     @Autowired
-    ArticlesRepository articlesRepository;
+    private ArticlesRepository articlesRepository;
 
     @Autowired
     private RedisTemplate<String, String> redisTemplate;
@@ -26,14 +26,14 @@ public class BugReportService {
     @Lazy
     private BotMain botMain;
 
-    public void operationSuccessful(Update update, String commandName) {
+    public void operationSuccessful(Update update) {
         String chatId = update.getMessage().getChatId().toString();
         String userState = redisTemplate.opsForValue().get("user_state:" + update.getMessage().getChatId());
         assert userState != null;
         if ("waiting_message".equals(userState)) {
             String text = update.getMessage().getText();
             String username = update.getMessage().getFrom().getUserName();
-            Articles articles = new Articles(commandName, text, username, Long.parseLong(chatId));
+            Articles articles = new Articles("📃Поделиться идеей", text, username, Long.parseLong(chatId));
             update(articles);
             SendMessage message = new SendMessage();
             redisTemplate.delete("user_state:" + chatId);

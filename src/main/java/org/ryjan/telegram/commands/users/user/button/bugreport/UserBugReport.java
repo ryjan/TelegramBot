@@ -26,7 +26,7 @@ public class UserBugReport  extends BaseCommand {
 
     private ReplyKeyboardMarkup getReplyKeyboard() {
         return new ReplyKeyboardBuilder()
-                .addRow("👾Сообщить о баге", "📃Поделиться идеей")
+                .addRow("📃Поделиться идеей")
                 .build();
     }
 }

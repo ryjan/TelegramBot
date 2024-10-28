@@ -2,9 +2,8 @@ package org.ryjan.telegram.services;
 
 import org.ryjan.telegram.commands.groups.administration.blacklist.ChatBlacklist;
 import org.ryjan.telegram.commands.groups.administration.silence.SilenceModeService;
-import org.ryjan.telegram.commands.users.owner.adminpanel.reply.SendMessageToUserArticle;
+import org.ryjan.telegram.commands.users.owner.adminpanel.bugreport.reply.SendMessageToUserArticle;
 import org.ryjan.telegram.commands.users.user.button.bugreport.BugReportService;
-import org.ryjan.telegram.commands.users.user.button.bugreport.UserSendReportReply;
 import org.ryjan.telegram.commands.users.user.button.bugreport.UserSendWishReply;
 import org.ryjan.telegram.handler.CommandsHandler;
 
@@ -44,9 +43,6 @@ public class BotService {
 
     @Autowired
     private BugReportService bugReportService;
-
-    @Autowired
-    private UserSendReportReply userSendReportReply;
 
     @Autowired
     private UserSendWishReply userSendWishReply;
@@ -145,11 +141,7 @@ public class BotService {
 
     private void bugReportReplies(Update update) {
         if (update.hasMessage() && update.getMessage().getChat().isUserChat() && update.getMessage().hasText()) {
-            String text = update.getMessage().getText();
-            String commandName = text.equals(userSendReportReply.getCommandName())
-                    ? userSendReportReply.getCommandName()
-                    : userSendWishReply.getCommandName();
-            bugReportService.operationSuccessful(update, commandName);
+            bugReportService.operationSuccessful(update);
         }
     }
 

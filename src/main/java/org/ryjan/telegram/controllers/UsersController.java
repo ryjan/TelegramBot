@@ -12,7 +12,10 @@ import org.springframework.web.bind.annotation.*;
 public class UsersController {
 
     @Autowired
-    RedisTemplate<String, UserDatabase> redisTemplate;
+    RedisTemplate<String, UserDatabase> redisUserDatabaseTemplate;
+
+    @Autowired
+    RedisTemplate<String, String> redisTemplate;
 
     @Autowired
     private UserService userService;
@@ -21,13 +24,20 @@ public class UsersController {
     public ResponseEntity<String> deleteUser(@RequestParam Long userId) {
         UserDatabase user = userService.findUser(userId);
         userService.delete(user);
-        redisTemplate.delete(userService.CACHE_KEY + user);
+        redisUserDatabaseTemplate.delete(userService.CACHE_KEY + user);
 
         return ResponseEntity.ok("User deleted successfully");
     }
 
     @GetMapping("{username}")
-    public Long getIdByUsername(@PathVariable String username) {
-        return userService.findUser(username).getId();
+    public String getIdByUsername(@PathVariable String username) {
+        String userId = redisTemplate.opsForValue().get(username);
+
+        if (userId == null) {
+            userId = String.valueOf(userService.findUser(username).getId());
+            redisTemplate.opsForValue().set(username, userId);
+        }
+
+        return userId;
     }
 }

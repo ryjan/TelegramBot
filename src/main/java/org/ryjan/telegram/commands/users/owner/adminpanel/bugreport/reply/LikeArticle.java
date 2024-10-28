@@ -1,4 +1,4 @@
-package org.ryjan.telegram.commands.users.owner.adminpanel.reply;
+package org.ryjan.telegram.commands.users.owner.adminpanel.bugreport.reply;
 
 import org.ryjan.telegram.commands.groups.BaseCommand;
 import org.ryjan.telegram.commands.users.user.UserPermissions;
@@ -25,7 +25,8 @@ public class LikeArticle extends BaseCommand {
         articles.setStatus("🩷Одобрено");
         articlesService.addArticleToRedisQueue(articles);
         SendMessage message = createSendMessage(articles.getUserId());
-        message.setText("Ваше обращение было 🩷Одобрено :)");
+        message.setText("Ваше обращение было 🩷Одобрено :)\n\n" + nextArticle.getArticleParsedText());
+        message.enableMarkdown(true);
         sendMessageForCommand(bot, message);
         nextArticle.execute(chatId, bot, handler);
     }
