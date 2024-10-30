@@ -1,4 +1,4 @@
-package org.ryjan.telegram.commands.users.owner.adminpanel.bugreport.reply;
+package org.ryjan.telegram.commands.users.admin.adminpanel.bugreport.reply;
 
 import org.ryjan.telegram.commands.groups.BaseCommand;
 import org.ryjan.telegram.commands.users.user.UserPermissions;

@@ -1,6 +1,6 @@
-package org.ryjan.telegram.commands.users.owner.adminpanel;
+package org.ryjan.telegram.commands.users.admin.adminpanel;
 
-import org.ryjan.telegram.commands.users.owner.adminpanel.bugreport.reply.NextArticle;
+import org.ryjan.telegram.commands.users.admin.adminpanel.bugreport.reply.NextArticle;
 import org.ryjan.telegram.services.ServiceBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;

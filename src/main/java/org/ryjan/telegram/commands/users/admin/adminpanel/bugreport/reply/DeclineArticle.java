@@ -1,4 +1,4 @@
-package org.ryjan.telegram.commands.users.owner.adminpanel.bugreport.reply;
+package org.ryjan.telegram.commands.users.admin.adminpanel.bugreport.reply;
 
 import org.ryjan.telegram.commands.groups.BaseCommand;
 import org.ryjan.telegram.commands.users.user.UserPermissions;
@@ -10,22 +10,22 @@ import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 
 @Component
-public class LikeArticle extends BaseCommand {
+public class DeclineArticle extends BaseCommand {
 
     @Autowired
     private NextArticle nextArticle;
 
-    protected LikeArticle() {
-        super("🩷", "Поставить одобрение артиклю", UserPermissions.ADMINISTRATOR);
+    protected DeclineArticle() {
+        super("👎", "Отклонить обращение", UserPermissions.ADMINISTRATOR);
     }
 
     @Override
     protected void executeCommand(String chatId, BotMain bot, CommandsHandler handler) {
         Articles articles = nextArticle.getCurrentArticle();
-        articles.setStatus("🩷Одобрено");
+        articles.setStatus("👎Отклонено");
         articlesService.addArticleToRedisQueue(articles);
         SendMessage message = createSendMessage(articles.getUserId());
-        message.setText("Ваше обращение было 🩷Одобрено :)\n\n" + nextArticle.getArticleParsedText());
+        message.setText("Ваше обращение было 💔Отклонено :(\n\n" + nextArticle.getArticleParsedText());
         message.enableMarkdown(true);
         sendMessageForCommand(bot, message);
         nextArticle.execute(chatId, bot, handler);
