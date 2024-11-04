@@ -13,6 +13,8 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 
+import java.util.concurrent.TimeUnit;
+
 @Component
 public class FindGroupOwner extends BaseCommand {
     private final String CACHE_KEY = "owner_state:";
@@ -52,7 +54,7 @@ public class FindGroupOwner extends BaseCommand {
 
             if (group == null) {
                 group = groupService.findGroup(Long.valueOf(groupId));
-                redisGroupsTemplate.opsForValue().set(GROUP_CACHE_KEY + chatId, group);
+                redisGroupsTemplate.opsForValue().set(GROUP_CACHE_KEY + chatId, group, 1, TimeUnit.HOURS);
                 if (group == null) {
                     message.setText("Group is not found.");
                     sendMessageForCommand(message);
