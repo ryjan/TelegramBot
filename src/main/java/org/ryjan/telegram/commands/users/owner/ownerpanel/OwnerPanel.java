@@ -19,8 +19,8 @@ public class OwnerPanel extends BaseCommand {
     @Override
     protected void executeCommand(String chatId, BotMain bot, CommandsHandler handler) {
         SendMessage message = createSendMessage(chatId);
-        message.setReplyMarkup(getKeyboard());
         message.setText(getDescription() + ":");
+        message.setReplyMarkup(getKeyboard());
         sendMessageForCommand(bot, message);
     }
 

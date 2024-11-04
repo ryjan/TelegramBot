@@ -28,7 +28,7 @@ public class OwnerGroupSettings extends BaseCommand {
         ReplyKeyboardMarkup replyKeyboardMarkup = new ReplyKeyboardBuilder()
                 .addRow("Find group")
                 .build();
-        replyKeyboardMarkup.setOneTimeKeyboard(false);
+        replyKeyboardMarkup.setOneTimeKeyboard(true);
         return replyKeyboardMarkup;
     }
 }

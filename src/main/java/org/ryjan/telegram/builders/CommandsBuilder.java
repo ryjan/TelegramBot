@@ -4,6 +4,7 @@ import jakarta.annotation.PostConstruct;
 import lombok.Getter;
 import lombok.Setter;
 import org.ryjan.telegram.commands.groups.BaseCommand;
+import org.ryjan.telegram.commands.groups.GroupPrivileges;
 import org.ryjan.telegram.commands.groups.administration.InlineGetGroupId;
 import org.ryjan.telegram.commands.groups.administration.Settings;
 import org.ryjan.telegram.commands.groups.administration.silence.SilenceMode;
@@ -13,14 +14,17 @@ import org.ryjan.telegram.commands.users.admin.adminpanel.bugreport.reply.*;
 import org.ryjan.telegram.commands.users.owner.SetCoins;
 import org.ryjan.telegram.commands.users.admin.adminpanel.AdminPanel;
 import org.ryjan.telegram.commands.users.admin.adminpanel.bugreport.wishes.FindWishes;
+import org.ryjan.telegram.commands.users.owner.ownerpanel.*;
 import org.ryjan.telegram.commands.users.user.StartUser;
 import org.ryjan.telegram.commands.users.user.button.bugreport.UserBugReport;
 import org.ryjan.telegram.commands.users.user.button.bugreport.UserSendWishReply;
+import org.ryjan.telegram.model.groups.Groups;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.Consumer;
 
 @Getter
 @Setter
@@ -60,7 +64,7 @@ public class CommandsBuilder {
     @Autowired
     private CloseMessage closeMessage;
 
-    //UserCommands
+    // UserCommands
     @Autowired
     private SetCoins setCoins;
 
@@ -89,12 +93,28 @@ public class CommandsBuilder {
     private FindWishes findWishes;
 
     @Autowired
+    private OwnerPanel ownerPanel;
+
+    @Autowired
+    private ChangeGroupPrivilege changeGroupPrivilege;
+
+    @Autowired
+    private FindGroupOwner findGroupOwner;
+
+    @Autowired
+    private OwnerGroupSettings ownerGroupSettings;
+
+    @Autowired
     private SendMessageToUserArticle sendMessageToUserArticle;
+
+    @Autowired
+    private SetPrivileges setPrivileges;
 
     private Map<String, BaseCommand> commands = new HashMap<>();
     private Map<String, BaseCommand> buttonCommands = new HashMap<>();
     private Map<String, BaseCommand> userCommands = new HashMap<>();
     private Map<String, BaseCommand> userButtonCommands = new HashMap<>();
+    private Map<String, Consumer<Groups>> userActionsCommands = new HashMap<>(); // for a future
 
     @PostConstruct
     public void initializeCommands() {
@@ -131,16 +151,29 @@ public class CommandsBuilder {
 
     private void initializeUserSlashCommands() {
         userCommands.put(startUserCommand.getCommandName(), startUserCommand);
-        //userCommands.put(findWishes.getCommandName(), findWishes);
+
         userCommands.put(setCoins.getCommandName(), setCoins);
-        //commands.put(sendCoins.getCommandName(), sendCoins);
 
         userBugReportCommands();
+        ownerPanelCommands();
         adminPanelCommands();
     }
 
     private void initializeUserButtonCommands() {
         userButtonCommands.put(findWishes.getCommandName(), findWishes);
+    }
+
+    private void ownerPanelCommands() {
+        userCommands.put(ownerPanel.getCommandName(), ownerPanel);
+        userCommands.put(findGroupOwner.getCommandName().split(" ")[0], findGroupOwner);
+        userCommands.put(ownerGroupSettings.getCommandName().split(" ")[0], ownerGroupSettings);
+
+        userButtonCommands.put(changeGroupPrivilege.getCommandName(), changeGroupPrivilege);
+        userButtonCommands.put(changeGroupPrivilege.getPrivilegePremiumCallBack(), setPrivileges);
+        userButtonCommands.put(changeGroupPrivilege.getPrivilegeVipCallBack(), setPrivileges);
+        userButtonCommands.put(changeGroupPrivilege.getPrivilegeBaseCallBack(), setPrivileges);
+
+
     }
 
     private void adminPanelCommands() {

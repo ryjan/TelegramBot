@@ -50,6 +50,11 @@ public class FindGroupOwner extends BaseCommand {
         if ("waiting_message".equals(ownerState)) {
             SendMessage message = createSendMessage(chatId);
             groupId = update.getMessage().getText();
+
+            if (groupId == null) {
+                return;
+            }
+
             Groups group = redisGroupsTemplate.opsForValue().get(GROUP_CACHE_KEY + chatId);
 
             if (group == null) {
@@ -57,15 +62,18 @@ public class FindGroupOwner extends BaseCommand {
                 redisGroupsTemplate.opsForValue().set(GROUP_CACHE_KEY + chatId, group, 1, TimeUnit.HOURS);
                 if (group == null) {
                     message.setText("Group is not found.");
+                    redisGroupsTemplate.delete(CACHE_KEY + chatId);
                     sendMessageForCommand(message);
                     return;
                 }
             }
 
-            message.setText(String.format("Group id: %s\nGroup name: %s\nCreator id: %s\nCreator username: %s\nCurrent privilege: %s\nCreated at: %s",
+            message.setText(String.format("Group id: *%s*\nGroup name: *%s*\nCreator id: *%s*\nCreator username: *%s*\nCurrent privilege: *%s*\nCreated at: *%s*",
                     group.getId(), group.getGroupName(), group.getCreatorId(), group.getCreatorUsername(),
                     group.getPrivileges(), group.getCreatedAt()));
+            message.enableMarkdown(true);
             message.setReplyMarkup(getKeyboard());
+            redisGroupsTemplate.delete(CACHE_KEY + chatId);
             sendMessageForCommand(message);
         }
     }

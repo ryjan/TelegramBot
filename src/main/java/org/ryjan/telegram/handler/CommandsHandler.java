@@ -3,6 +3,7 @@ package org.ryjan.telegram.handler;
 import org.ryjan.telegram.commands.groups.BaseCommand;
 import org.ryjan.telegram.builders.CommandsBuilder;
 import org.ryjan.telegram.main.BotMain;
+import org.ryjan.telegram.model.groups.Groups;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
@@ -11,6 +12,7 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 
 import java.io.IOException;
 import java.util.Map;
+import java.util.function.Consumer;
 
 @Component
 public class CommandsHandler { // переписать под единый commandHandler, наверное
@@ -18,6 +20,7 @@ public class CommandsHandler { // переписать под единый comma
     private final Map<String, BaseCommand> userCommands;
     private final Map<String, BaseCommand> groupButtonCommands;
     private final Map<String, BaseCommand> userButtonCommands;
+    private final Map<String, Consumer<Groups>> userActionsCommands;
 
     @Autowired
     @Lazy
@@ -28,6 +31,7 @@ public class CommandsHandler { // переписать под единый comma
         userCommands = builder.getUserCommands();
         groupButtonCommands = builder.getButtonCommands();
         userButtonCommands = builder.getUserButtonCommands();
+        userActionsCommands = builder.getUserActionsCommands();
         builder.initializeCommands();
     }
 
@@ -81,7 +85,7 @@ public class CommandsHandler { // переписать под единый comma
         boolean isUserChat = update.hasCallbackQuery() && update.getCallbackQuery().getMessage().isUserMessage();
 
         BaseCommand command = commands.get(callbackData);
-        System.out.println(command);
+        System.out.println("CallbackData: " + command);
         if (command == null) return;
 
         if (command.hasPermissionInUserChat(chatId) && isUserChat || command.hasPermissionInGroup(chatId, userId)) {

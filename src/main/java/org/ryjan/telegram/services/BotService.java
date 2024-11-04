@@ -3,6 +3,8 @@ package org.ryjan.telegram.services;
 import org.ryjan.telegram.commands.groups.administration.blacklist.ChatBlacklist;
 import org.ryjan.telegram.commands.groups.administration.silence.SilenceModeService;
 import org.ryjan.telegram.commands.users.admin.adminpanel.bugreport.reply.SendMessageToUserArticle;
+import org.ryjan.telegram.commands.users.owner.ownerpanel.ChangeGroupPrivilege;
+import org.ryjan.telegram.commands.users.owner.ownerpanel.FindGroupOwner;
 import org.ryjan.telegram.commands.users.user.button.bugreport.BugReportService;
 import org.ryjan.telegram.commands.users.user.button.bugreport.UserSendWishReply;
 import org.ryjan.telegram.handler.CommandsHandler;
@@ -49,6 +51,12 @@ public class BotService {
 
     @Autowired
     private SendMessageToUserArticle sendMessageToUserArticle;
+
+    @Autowired
+    private ChangeGroupPrivilege changeGroupPrivilege;
+
+    @Autowired
+    private FindGroupOwner findGroupOwner;
 
     public ChatMember getChatMember(Long chatId, Long userId) {
         GetChatMember chatMember = new GetChatMember();
@@ -121,7 +129,8 @@ public class BotService {
 
     public void autoExecute(Update update) {
         bugReportReplies(update);
-        sendMessageToUserArticle.processArticleAndNotifyUser(update); // проверить работает ли
+        findGroupOwner.sendKeyboard(update);
+        sendMessageToUserArticle.processArticleAndNotifyUser(update);
 
 
         if (update.hasMessage() && update.getMessage().getLeftChatMember() != null) {
