@@ -2,6 +2,7 @@ package org.ryjan.telegram.commands.groups.administration;
 
 import org.ryjan.telegram.commands.groups.BaseCommand;
 import org.ryjan.telegram.commands.groups.GroupPrivileges;
+import org.ryjan.telegram.commands.groups.GroupStatus;
 import org.ryjan.telegram.commands.groups.config.GroupPermissions;
 import org.ryjan.telegram.builders.InlineKeyboardBuilder;
 import org.ryjan.telegram.handler.CommandsHandler;
@@ -40,7 +41,7 @@ public class StartGroup extends BaseCommand {
         String groupName = update.getMessage().getChat().getTitle();
         String creatorName = update.getMessage().getFrom().getUserName();
         Long creatorId = update.getMessage().getFrom().getId();
-        Groups group = new Groups(Long.valueOf(chatId), groupName, GroupPrivileges.BASE, "registered",  creatorId.toString(), creatorName);
+        Groups group = new Groups(Long.valueOf(chatId), groupName, GroupPrivileges.BASE, GroupStatus.ACTIVE.getDisplayName(), creatorId.toString(), creatorName);
         chatSettingsService.addChatSettings(group, "blacklist", "disabled");
         chatSettingsService.addChatSettings(group, "aboba", "ggs");
 

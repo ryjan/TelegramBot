@@ -39,7 +39,7 @@ public class FindGroupOwner extends BaseCommand {
         this.chatId = chatId;
         SendMessage message = createSendMessage(chatId);
         message.setText("Write the group ID");
-        redisTemplate.opsForValue().set(CACHE_KEY + chatId, "waiting_message");
+        redisTemplate.opsForValue().set(CACHE_KEY + chatId, "waiting_message", 15, TimeUnit.MINUTES);
         sendMessageForCommand(message);
     }
 

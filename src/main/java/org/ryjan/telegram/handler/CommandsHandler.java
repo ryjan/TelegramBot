@@ -4,6 +4,7 @@ import org.ryjan.telegram.commands.groups.BaseCommand;
 import org.ryjan.telegram.builders.CommandsBuilder;
 import org.ryjan.telegram.main.BotMain;
 import org.ryjan.telegram.model.groups.Groups;
+import org.ryjan.telegram.services.GroupService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
@@ -25,6 +26,9 @@ public class CommandsHandler { // переписать под единый comma
     @Autowired
     @Lazy
     private BotMain bot;
+
+    @Autowired
+    private GroupService groupService;
 
     public CommandsHandler(CommandsBuilder builder) {
         groupCommands = builder.getCommands();
@@ -85,10 +89,10 @@ public class CommandsHandler { // переписать под единый comma
         boolean isUserChat = update.hasCallbackQuery() && update.getCallbackQuery().getMessage().isUserMessage();
 
         BaseCommand command = commands.get(callbackData);
-        System.out.println("CallbackData: " + command);
+        //System.out.println("CallbackData: " + command);
         if (command == null) return;
 
-        if (command.hasPermissionInUserChat(chatId) && isUserChat || command.hasPermissionInGroup(chatId, userId)) {
+        if (command.hasPermissionInUserChat(chatId) && isUserChat || command.hasPermissionInGroup(chatId, userId) && !groupService.isGroupBanned(chatId)) {
             command.execute(String.valueOf(chatId), bot, this);
         }
 
