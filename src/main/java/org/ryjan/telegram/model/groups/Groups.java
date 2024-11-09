@@ -8,6 +8,7 @@ import lombok.Setter;
 import org.ryjan.telegram.commands.groups.GroupPrivileges;
 
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
@@ -52,7 +53,7 @@ public class Groups {
         this.creatorId = creatorId;
         this.creatorUsername = creatorUsername;
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
-        this.createdAt = LocalDateTime.now().format(formatter);
+        this.createdAt = LocalDateTime.now(ZoneId.of("Europe/Moscow")).format(formatter);
         setBlacklists(blacklists);
     }
 
