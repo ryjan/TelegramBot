@@ -64,7 +64,13 @@ public class FindGroupOwner extends BaseCommand {
             Groups group = redisGroupsTemplate.opsForValue().get(GROUP_CACHE_KEY + chatId);
 
             if (group == null) {
-                group = groupService.findGroup(Long.valueOf(groupId));
+                try {
+                    group = groupService.findGroup(Long.valueOf(groupId));
+                } catch (NumberFormatException e) {
+                    message.setText("Write the correct group id");
+                    sendMessageForCommand(message);
+                    return;
+                }
                 redisGroupsTemplate.opsForValue().set(GROUP_CACHE_KEY + chatId, group, 1, TimeUnit.HOURS);
                 if (group == null) {
                     message.setText("Group is not found.");

@@ -36,7 +36,7 @@ public class SetPrivileges extends BaseCommand {
             group.setPrivileges(privilege);
             groupService.update(group);
             redisGroupsTemplate.opsForValue().set(GROUP_CACHE_KEY + chatId, group);
-            message.setText("Group privilege has updated to *" + privilege + "* successfully");
+            message.setText("Group privilege has been updated to *" + privilege + "* successfully");
             message.enableMarkdown(true);
             sendMessageForCommand(message);
         }

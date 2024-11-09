@@ -49,11 +49,11 @@ public class BanGroup extends BaseCommand {
         Groups group = redisGroupsTemplate.opsForValue().get(GROUP_CACHE_KEY + chatId);
         if (status) {
             group.setStatus(GroupStatus.BANNED.getDisplayName());
-            message.setText("✨Group status has changed to *" + textStatus + "* successfully!");
+            message.setText("✨Group status been has changed to *" + textStatus + "* successfully!");
             editMessage(findGroupOwner.getParsedMessageWithStatus(group.getStatus()), findGroupOwner.getKeyboard(true));
         } else {
             group.setStatus(GroupStatus.ACTIVE.getDisplayName());
-            message.setText("✨Group status has changed to *" + textStatus + "* successfully!");
+            message.setText("✨Group status been has changed to *" + textStatus + "* successfully!");
             editMessage(findGroupOwner.getParsedMessageWithStatus(group.getStatus()), findGroupOwner.getKeyboard(false));
         }
         groupService.update(group);
