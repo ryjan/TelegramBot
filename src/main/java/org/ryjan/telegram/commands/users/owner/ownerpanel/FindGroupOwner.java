@@ -1,7 +1,10 @@
 package org.ryjan.telegram.commands.users.owner.ownerpanel;
 
+import lombok.Getter;
 import org.ryjan.telegram.builders.InlineKeyboardBuilder;
 import org.ryjan.telegram.commands.groups.BaseCommand;
+import org.ryjan.telegram.commands.groups.GroupPrivileges;
+import org.ryjan.telegram.commands.groups.GroupStatus;
 import org.ryjan.telegram.commands.users.user.UserPermissions;
 import org.ryjan.telegram.handler.CommandsHandler;
 import org.ryjan.telegram.main.BotMain;
@@ -20,7 +23,10 @@ public class FindGroupOwner extends BaseCommand {
     private final String CACHE_KEY = "owner_state:";
     private final String GROUP_CACHE_KEY = "owner_group_state:";
 
-    public String groupId;
+    private String chatId;
+    private Groups group;
+    @Getter
+    private SendMessage message;
 
     @Autowired
     private RedisTemplate<String, String> redisTemplate;
@@ -28,7 +34,7 @@ public class FindGroupOwner extends BaseCommand {
     @Autowired
     private RedisTemplate<String, Groups> redisGroupsTemplate;
 
-    private String chatId;
+    public String groupId;
 
     protected FindGroupOwner() {
         super("Find group", "Set group privileges", UserPermissions.OWNER);
@@ -37,7 +43,7 @@ public class FindGroupOwner extends BaseCommand {
     @Override
     protected void executeCommand(String chatId, BotMain bot, CommandsHandler handler) {
         this.chatId = chatId;
-        SendMessage message = createSendMessage(chatId);
+        message = createSendMessage(chatId);
         message.setText("Write the group ID");
         redisTemplate.opsForValue().set(CACHE_KEY + chatId, "waiting_message", 15, TimeUnit.MINUTES);
         sendMessageForCommand(message);
@@ -67,25 +73,40 @@ public class FindGroupOwner extends BaseCommand {
                     return;
                 }
             }
-
-            message.setText(String.format("Group id: *%s*\nGroup name: *%s*\nCreator id: *%s*\nCreator username: *%s*\nCurrent privilege: *%s*\nCreated at: *%s*",
+            this.group = group;
+            message.setText(String.format("Group id: *%s*\nGroup name: *%s*\nCreator id: *%s*\nCreator username: *%s*\nCurrent privilege: *%s*\nStatus: *%s*\nCreated at: *%s*",
                     group.getId(), group.getGroupName(), group.getCreatorId(), group.getCreatorUsername(),
-                    group.getPrivileges(), group.getCreatedAt()));
+                    group.getPrivileges(), group.getStatus(), group.getCreatedAt()));
             message.enableMarkdown(true);
-            message.setReplyMarkup(getKeyboard());
+            if (group.getStatus().equals(GroupStatus.BANNED.getDisplayName())) {
+                message.setReplyMarkup(getKeyboard(true));
+            } else {
+                message.setReplyMarkup(getKeyboard(false));
+            }
             redisGroupsTemplate.delete(CACHE_KEY + chatId);
             sendMessageForCommand(message);
         }
     }
 
-    private InlineKeyboardMarkup getKeyboard() {
+    public InlineKeyboardMarkup getKeyboard(boolean isBanKeyboard) {
+        String buttonName = isBanKeyboard ? "💢Unban group" : "💢Ban group";
+        String banStatus = isBanKeyboard ? "unbanGroup" : "banGroup";
+
         InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
 
         InlineKeyboardBuilder.KeyboardLayer keyboard = new InlineKeyboardBuilder.KeyboardLayer()
                 .addRow(new InlineKeyboardBuilder.ButtonRow()
-                        .addButton("Change group privilege", "changeGroupPrivilege"));
+                        .addButton("©️Change group privilege", "changeGroupPrivilege")
+                        .addButton(buttonName, banStatus));
         inlineKeyboardMarkup.setKeyboard(keyboard.build());
 
         return inlineKeyboardMarkup;
     }
+
+    public String getParsedMessageWithStatus(String status) {
+        return String.format("Group id: *%s*\nGroup name: *%s*\nCreator id: *%s*\nCreator username: *%s*\nCurrent privilege: *%s*\nStatus: *%s*\nCreated at: *%s*",
+                group.getId(), group.getGroupName(), group.getCreatorId(), group.getCreatorUsername(),
+                group.getPrivileges(),status, group.getCreatedAt());
+    }
 }
+

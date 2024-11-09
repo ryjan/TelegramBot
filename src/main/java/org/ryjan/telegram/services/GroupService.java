@@ -1,5 +1,6 @@
 package org.ryjan.telegram.services;
 
+import lombok.Getter;
 import org.ryjan.telegram.commands.groups.GroupStatus;
 import org.ryjan.telegram.commands.groups.config.GroupPermissions;
 import org.ryjan.telegram.model.groups.ChatSettings;
@@ -14,7 +15,10 @@ import java.security.Permission;
 
 @Service
 public class GroupService extends ServiceBuilder {
-    private final String CACHE_KEY = "group_statuss:";
+    @Getter
+    private final String CACHE_KEY = "group_status:";
+    @Getter
+    private final String OWNER_GROUP_STATE_CACHE_KEY = "owner_group_state:";
 
     @Autowired
     private GroupsRepository groupsRepository;

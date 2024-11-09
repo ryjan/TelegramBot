@@ -105,6 +105,10 @@ public abstract class BaseCommand implements IBotCommand {
         messageService.editMessage(text, getUpdate());
     }
 
+    protected void editMessage(SendMessage message) {
+        messageService.editMessage(message, getUpdate());
+    }
+
     protected void editMessage(String text, InlineKeyboardMarkup inlineKeyboardMarkup) {
         messageService.editMessage(text, inlineKeyboardMarkup, getUpdate());
     }

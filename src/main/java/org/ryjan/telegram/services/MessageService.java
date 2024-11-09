@@ -40,7 +40,24 @@ public class MessageService extends ServiceBuilder {
         editMessageText.setChatId(update.getCallbackQuery().getMessage().getChatId());
         editMessageText.setMessageId(update.getCallbackQuery().getMessage().getMessageId());
         editMessageText.setText(text);
-        editMessageText.setParseMode(ParseMode.MARKDOWN);
+        editMessageText.enableMarkdown(true);
+
+        try {
+            botService.getBot().execute(editMessageText);
+        } catch (TelegramApiException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void editMessage(SendMessage message, Update update) {
+        EditMessageText editMessageText = new EditMessageText();
+        editMessageText.setChatId(update.getCallbackQuery().getMessage().getChatId());
+        editMessageText.setMessageId(update.getCallbackQuery().getMessage().getMessageId());
+        editMessageText.setText(message.getText());
+        editMessageText.enableMarkdown(true);
+        if (message.getReplyMarkup() != null) {
+            editMessageText.setReplyMarkup((InlineKeyboardMarkup) message.getReplyMarkup());
+        }
 
         try {
             botService.getBot().execute(editMessageText);
@@ -54,7 +71,7 @@ public class MessageService extends ServiceBuilder {
         editMessageText.setChatId(update.getCallbackQuery().getMessage().getChatId());
         editMessageText.setMessageId(update.getCallbackQuery().getMessage().getMessageId());
         editMessageText.setText(text);
-        editMessageText.setParseMode(ParseMode.MARKDOWNV2);
+        editMessageText.enableMarkdown(true);
         editMessageText.setReplyMarkup(inlineKeyboardMarkup);
         try {
             botService.getBot().execute(editMessageText);

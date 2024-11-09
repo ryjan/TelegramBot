@@ -110,6 +110,9 @@ public class CommandsBuilder {
     @Autowired
     private SetPrivileges setPrivileges;
 
+    @Autowired
+    private BanGroup banGroup;
+
     private Map<String, BaseCommand> commands = new HashMap<>();
     private Map<String, BaseCommand> buttonCommands = new HashMap<>();
     private Map<String, BaseCommand> userCommands = new HashMap<>();
@@ -172,6 +175,9 @@ public class CommandsBuilder {
         userButtonCommands.put(changeGroupPrivilege.getPrivilegePremiumCallBack(), setPrivileges);
         userButtonCommands.put(changeGroupPrivilege.getPrivilegeVipCallBack(), setPrivileges);
         userButtonCommands.put(changeGroupPrivilege.getPrivilegeBaseCallBack(), setPrivileges);
+
+        userButtonCommands.put(banGroup.getCommandName(), banGroup);
+        userButtonCommands.put(banGroup.unbanGroupCallback(), banGroup);
 
 
     }

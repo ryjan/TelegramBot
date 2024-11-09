@@ -4,6 +4,7 @@ import org.ryjan.telegram.interfaces.Permissions;
 
 public enum UserPermissions implements Permissions {
     OWNER("Owner"),
+    TRUSTED("Trusted"),
     FAMILY("Family"),
     ADMINISTRATOR("Administrator"),
     MODERATOR("Moderator"),

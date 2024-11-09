@@ -52,7 +52,7 @@ public class Groups {
         this.creatorId = creatorId;
         this.creatorUsername = creatorUsername;
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
-        this.createdAt = LocalDateTime.parse(LocalDateTime.now().format(formatter), formatter).toString();
+        this.createdAt = LocalDateTime.now().format(formatter);
         setBlacklists(blacklists);
     }
 
