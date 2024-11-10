@@ -1,12 +1,9 @@
-package org.ryjan.telegram.commands.users.owner.ownerpanel;
+package org.ryjan.telegram.commands.users.owner.ownerpanel.groups;
 
-import lombok.Getter;
 import org.ryjan.telegram.builders.InlineKeyboardBuilder;
 import org.ryjan.telegram.commands.groups.BaseCommand;
-import org.ryjan.telegram.commands.groups.GroupPrivileges;
 import org.ryjan.telegram.commands.users.user.UserPermissions;
 import org.ryjan.telegram.handler.CommandsHandler;
-import org.ryjan.telegram.interfaces.Permissions;
 import org.ryjan.telegram.main.BotMain;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;

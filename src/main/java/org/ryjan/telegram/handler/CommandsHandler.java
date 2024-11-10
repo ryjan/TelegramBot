@@ -1,5 +1,6 @@
 package org.ryjan.telegram.handler;
 
+import org.glassfish.grizzly.compression.lzma.impl.Base;
 import org.ryjan.telegram.commands.groups.BaseCommand;
 import org.ryjan.telegram.builders.CommandsBuilder;
 import org.ryjan.telegram.main.BotMain;
@@ -21,6 +22,7 @@ public class CommandsHandler { // переписать под единый comma
     private final Map<String, BaseCommand> userCommands;
     private final Map<String, BaseCommand> groupButtonCommands;
     private final Map<String, BaseCommand> userButtonCommands;
+    private final Map<String, BaseCommand> replyCommands;
     private final Map<String, Consumer<Groups>> userActionsCommands;
 
     @Autowired
@@ -35,6 +37,7 @@ public class CommandsHandler { // переписать под единый comma
         userCommands = builder.getUserCommands();
         groupButtonCommands = builder.getButtonCommands();
         userButtonCommands = builder.getUserButtonCommands();
+        replyCommands = builder.getReplyCommands();
         userActionsCommands = builder.getUserActionsCommands();
         builder.initializeCommands();
     }
@@ -60,9 +63,20 @@ public class CommandsHandler { // переписать под единый comma
     private void handleTextMessage(Update update, Boolean isGroup) {
         String message = update.getMessage().getText();
         String commandKey = message.split(" ")[0].replace(bot.getBotTag(), "");
+        boolean isReplyCommand = false;
+
+        for (String commandName : replyCommands.keySet()) {
+            if (message.replace(bot.getBotTag(), "").equals(commandName)) {
+                commandKey = commandName;
+                isReplyCommand = true;
+                break;
+            }
+        }
 
         if (isGroup) {
             mergedHandleTextMessage(update, groupCommands, commandKey);
+        } else if (isReplyCommand) {
+            mergedHandleTextMessage(update, replyCommands, commandKey);
         } else {
             mergedHandleTextMessage(update, userCommands, commandKey);
         }

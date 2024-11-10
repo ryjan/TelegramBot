@@ -1,4 +1,4 @@
-package org.ryjan.telegram.commands.users.owner.ownerpanel;
+package org.ryjan.telegram.commands.users.owner.ownerpanel.users;
 
 import org.ryjan.telegram.builders.ReplyKeyboardBuilder;
 import org.ryjan.telegram.commands.groups.BaseCommand;
@@ -11,22 +11,23 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
 
 @Component
-public class OwnerGroupSettings extends BaseCommand {
-    protected OwnerGroupSettings() {
-        super("Group settings", "Owner group settings", UserPermissions.OWNER);
+public class OwnerUserSettings extends BaseCommand {
+
+    protected OwnerUserSettings() {
+        super("User settings", "User settings", UserPermissions.OWNER);
     }
 
     @Override
     protected void executeCommand(String chatId, BotMain bot, CommandsHandler handler) {
         SendMessage message = createSendMessage(chatId);
-        message.setText("Group settings:");
+        message.setText("User settings:");
         message.setReplyMarkup(getKeyboard());
         sendMessageForCommand(message);
     }
 
     public ReplyKeyboardMarkup getKeyboard() {
         ReplyKeyboardMarkup replyKeyboardMarkup = new ReplyKeyboardBuilder()
-                .addRow("Find group")
+                .addRow("Find user")
                 .build();
         replyKeyboardMarkup.setOneTimeKeyboard(true);
         return replyKeyboardMarkup;

@@ -1,4 +1,4 @@
-package org.ryjan.telegram.commands.users.owner.ownerpanel;
+package org.ryjan.telegram.commands.users.owner.ownerpanel.groups;
 
 import lombok.Getter;
 import org.ryjan.telegram.builders.InlineKeyboardBuilder;
@@ -66,8 +66,9 @@ public class OwnerFindGroup extends BaseCommand {
                 try {
                     group = groupService.findGroup(Long.valueOf(groupId));
                 } catch (NumberFormatException e) {
-                    message.setText("Write the correct group id");
+                    message.setText("Write the correct group id. Try again.");
                     sendMessageForCommand(message);
+                    redisGroupsTemplate.delete(CACHE_KEY + chatId);
                     return;
                 }
                 redisGroupsTemplate.opsForValue().set(GROUP_CACHE_KEY + chatId, group, 1, TimeUnit.HOURS);

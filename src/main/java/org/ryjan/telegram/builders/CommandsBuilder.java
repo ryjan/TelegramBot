@@ -15,6 +15,9 @@ import org.ryjan.telegram.commands.users.owner.SetCoins;
 import org.ryjan.telegram.commands.users.admin.adminpanel.AdminPanel;
 import org.ryjan.telegram.commands.users.admin.adminpanel.bugreport.wishes.FindWishes;
 import org.ryjan.telegram.commands.users.owner.ownerpanel.*;
+import org.ryjan.telegram.commands.users.owner.ownerpanel.groups.*;
+import org.ryjan.telegram.commands.users.owner.ownerpanel.users.OwnerFindUser;
+import org.ryjan.telegram.commands.users.owner.ownerpanel.users.OwnerUserSettings;
 import org.ryjan.telegram.commands.users.user.StartUser;
 import org.ryjan.telegram.commands.users.user.button.bugreport.UserBugReport;
 import org.ryjan.telegram.commands.users.user.button.bugreport.UserSendWishReply;
@@ -105,7 +108,13 @@ public class CommandsBuilder {
     private OwnerFindGroup findGroupOwner;
 
     @Autowired
+    private OwnerFindUser findUserOwner;
+
+    @Autowired
     private OwnerGroupSettings ownerGroupSettings;
+
+    @Autowired
+    private OwnerUserSettings ownerUserSettings;
 
     @Autowired
     private SendMessageToUserArticle sendMessageToUserArticle;
@@ -120,7 +129,8 @@ public class CommandsBuilder {
     private Map<String, BaseCommand> buttonCommands = new HashMap<>();
     private Map<String, BaseCommand> userCommands = new HashMap<>();
     private Map<String, BaseCommand> userButtonCommands = new HashMap<>();
-    private Map<String, Consumer<Groups>> userActionsCommands = new HashMap<>(); // for a future
+    private Map<String, BaseCommand> replyCommands = new HashMap<>();
+    private Map<String, Consumer<Groups>> userActionsCommands = new HashMap<>(); // for the future
 
     @PostConstruct
     public void initializeCommands() {
@@ -172,8 +182,10 @@ public class CommandsBuilder {
 
     private void ownerPanelCommands() {
         userCommands.put(ownerPanel.getCommandName(), ownerPanel);
-        userCommands.put(findGroupOwner.getCommandName().split(" ")[0], findGroupOwner);
-        userCommands.put(ownerGroupSettings.getCommandName().split(" ")[0], ownerGroupSettings);
+        replyCommands.put(findGroupOwner.getCommandName(), findGroupOwner);
+        replyCommands.put(findUserOwner.getCommandName(), findUserOwner);
+        replyCommands.put(ownerGroupSettings.getCommandName(), ownerGroupSettings);
+        replyCommands.put(ownerUserSettings.getCommandName(), ownerUserSettings);
 
         userButtonCommands.put(changeGroupPrivilege.getCommandName(), changeGroupPrivilege);
         userButtonCommands.put(changeGroupPrivilege.getPrivilegePremiumCallBack(), setPrivileges);

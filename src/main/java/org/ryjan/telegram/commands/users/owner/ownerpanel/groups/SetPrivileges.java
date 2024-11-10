@@ -1,10 +1,8 @@
-package org.ryjan.telegram.commands.users.owner.ownerpanel;
+package org.ryjan.telegram.commands.users.owner.ownerpanel.groups;
 
 import org.ryjan.telegram.commands.groups.BaseCommand;
-import org.ryjan.telegram.commands.groups.GroupPrivileges;
 import org.ryjan.telegram.commands.users.user.UserPermissions;
 import org.ryjan.telegram.handler.CommandsHandler;
-import org.ryjan.telegram.interfaces.Permissions;
 import org.ryjan.telegram.main.BotMain;
 import org.ryjan.telegram.model.groups.Groups;
 import org.ryjan.telegram.services.GroupService;

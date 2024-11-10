@@ -1,10 +1,10 @@
 package org.ryjan.telegram.services;
 
-import org.ryjan.telegram.commands.groups.administration.blacklist.ChatBlacklist;
+import org.ryjan.telegram.commands.groups.administration.blacklist.BlacklistChatAdministration;
 import org.ryjan.telegram.commands.groups.administration.silence.SilenceModeService;
 import org.ryjan.telegram.commands.users.admin.adminpanel.bugreport.reply.SendMessageToUserArticle;
-import org.ryjan.telegram.commands.users.owner.ownerpanel.ChangeGroupPrivilege;
-import org.ryjan.telegram.commands.users.owner.ownerpanel.OwnerFindGroup;
+import org.ryjan.telegram.commands.users.owner.ownerpanel.groups.ChangeGroupPrivilege;
+import org.ryjan.telegram.commands.users.owner.ownerpanel.groups.OwnerFindGroup;
 import org.ryjan.telegram.commands.users.user.button.bugreport.BugReportService;
 import org.ryjan.telegram.commands.users.user.button.bugreport.UserSendWishReply;
 import org.ryjan.telegram.handler.CommandsHandler;
@@ -41,7 +41,7 @@ public class BotService {
 
     @Autowired
     @Lazy
-    private ChatBlacklist chatBlacklist;
+    private BlacklistChatAdministration chatBlacklist;
 
     @Autowired
     private BugReportService bugReportService;

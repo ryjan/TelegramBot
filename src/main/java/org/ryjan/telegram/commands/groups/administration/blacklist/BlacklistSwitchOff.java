@@ -13,7 +13,7 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMa
 public class BlacklistSwitchOff extends BaseCommand {
 
     @Autowired
-    ChatBlacklist chatBlacklist;
+    BlacklistChatAdministration chatBlacklist;
 
     protected BlacklistSwitchOff() {
         super("blacklistOff", "Выключить черный список", GroupPermissions.CREATOR);

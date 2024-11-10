@@ -14,7 +14,7 @@ import java.text.MessageFormat;
 public class BlacklistUnban extends BaseCommand {
 
     @Autowired
-    private ChatBlacklist chatBlacklist;
+    private BlacklistChatAdministration chatBlacklist;
 
     protected BlacklistUnban() {
         super("blacklistUnban", "Разблокировать пользователя", GroupPermissions.ADMIN);

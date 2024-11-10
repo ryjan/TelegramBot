@@ -12,7 +12,7 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 public class BlacklistSwitch extends BaseCommand {
 
     @Autowired
-    ChatBlacklist chatBlacklist;
+    BlacklistChatAdministration chatBlacklist;
 
     @Autowired
     BlacklistSwitchOn blacklistSwitchOn;

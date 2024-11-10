@@ -15,13 +15,13 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMa
 import java.text.MessageFormat;
 
 @Component
-public class ChatBlacklist extends BaseCommand {
+public class BlacklistChatAdministration extends BaseCommand {
 
     private String leftUserFirstName;
     private String leftUserUsername;
     private long leftUserId;
 
-    protected ChatBlacklist() {
+    protected BlacklistChatAdministration() {
         super("chatBlacklist", "Черный список", GroupPermissions.CREATOR);
     }
 
