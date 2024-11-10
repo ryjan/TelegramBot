@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 
 @Component
-public class UserSendWishReply extends BaseCommand {
+public class UserSendWishReply extends BaseCommand { // is not usable
 
     @Autowired
     private RedisTemplate<String, String> redisTemplate;

@@ -4,7 +4,7 @@ import org.ryjan.telegram.commands.groups.administration.blacklist.ChatBlacklist
 import org.ryjan.telegram.commands.groups.administration.silence.SilenceModeService;
 import org.ryjan.telegram.commands.users.admin.adminpanel.bugreport.reply.SendMessageToUserArticle;
 import org.ryjan.telegram.commands.users.owner.ownerpanel.ChangeGroupPrivilege;
-import org.ryjan.telegram.commands.users.owner.ownerpanel.FindGroupOwner;
+import org.ryjan.telegram.commands.users.owner.ownerpanel.OwnerFindGroup;
 import org.ryjan.telegram.commands.users.user.button.bugreport.BugReportService;
 import org.ryjan.telegram.commands.users.user.button.bugreport.UserSendWishReply;
 import org.ryjan.telegram.handler.CommandsHandler;
@@ -56,7 +56,7 @@ public class BotService {
     private ChangeGroupPrivilege changeGroupPrivilege;
 
     @Autowired
-    private FindGroupOwner findGroupOwner;
+    private OwnerFindGroup findGroupOwner;
 
     public ChatMember getChatMember(Long chatId, Long userId) {
         GetChatMember chatMember = new GetChatMember();

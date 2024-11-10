@@ -3,7 +3,6 @@ package org.ryjan.telegram.commands.users.owner.ownerpanel;
 import lombok.Getter;
 import org.ryjan.telegram.builders.InlineKeyboardBuilder;
 import org.ryjan.telegram.commands.groups.BaseCommand;
-import org.ryjan.telegram.commands.groups.GroupPrivileges;
 import org.ryjan.telegram.commands.groups.GroupStatus;
 import org.ryjan.telegram.commands.users.user.UserPermissions;
 import org.ryjan.telegram.handler.CommandsHandler;
@@ -19,7 +18,7 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMa
 import java.util.concurrent.TimeUnit;
 
 @Component
-public class FindGroupOwner extends BaseCommand {
+public class OwnerFindGroup extends BaseCommand {
     private final String CACHE_KEY = "owner_state:";
     private final String GROUP_CACHE_KEY = "owner_group_state:";
 
@@ -36,7 +35,7 @@ public class FindGroupOwner extends BaseCommand {
 
     public String groupId;
 
-    protected FindGroupOwner() {
+    protected OwnerFindGroup() {
         super("Find group", "Set group privileges", UserPermissions.OWNER);
     }
 

@@ -4,12 +4,12 @@ import jakarta.annotation.PostConstruct;
 import lombok.Getter;
 import lombok.Setter;
 import org.ryjan.telegram.commands.groups.BaseCommand;
-import org.ryjan.telegram.commands.groups.GroupPrivileges;
 import org.ryjan.telegram.commands.groups.administration.InlineGetGroupId;
 import org.ryjan.telegram.commands.groups.administration.Settings;
 import org.ryjan.telegram.commands.groups.administration.silence.SilenceMode;
 import org.ryjan.telegram.commands.groups.administration.StartGroup;
 import org.ryjan.telegram.commands.groups.administration.blacklist.*;
+import org.ryjan.telegram.commands.groups.user.GroupBugReport;
 import org.ryjan.telegram.commands.users.admin.adminpanel.bugreport.reply.*;
 import org.ryjan.telegram.commands.users.owner.SetCoins;
 import org.ryjan.telegram.commands.users.admin.adminpanel.AdminPanel;
@@ -72,6 +72,9 @@ public class CommandsBuilder {
     private UserBugReport userBugReport;
 
     @Autowired
+    private GroupBugReport groupBugReport;
+
+    @Autowired
     private UserSendWishReply userSendWishReply;
 
     @Autowired
@@ -99,7 +102,7 @@ public class CommandsBuilder {
     private ChangeGroupPrivilege changeGroupPrivilege;
 
     @Autowired
-    private FindGroupOwner findGroupOwner;
+    private OwnerFindGroup findGroupOwner;
 
     @Autowired
     private OwnerGroupSettings ownerGroupSettings;
@@ -121,20 +124,21 @@ public class CommandsBuilder {
 
     @PostConstruct
     public void initializeCommands() {
-        initializeButtonCommands();
+        initializeGroupButtonCommands();
         initializeUserButtonCommands();
-        initializeSlashCommands();
+        initializeGroupSlashCommands();
         initializeUserSlashCommands();
     }
 
-    private void initializeSlashCommands() {
+    private void initializeGroupSlashCommands() {
         commands.put(startGroupCommand.getCommandName(), startGroupCommand);
         commands.put(blacklistSwitch.getCommandName(), blacklistSwitch);
         commands.put(settingsGroup.getCommandName(), settingsGroup);
         commands.put(silenceMode.getCommandName(), silenceMode);
+        commands.put(groupBugReport.getCommandName(), groupBugReport);
     }
 
-    private void initializeButtonCommands() {
+    private void initializeGroupButtonCommands() {
         buttonCommands.put(blacklistSwitch.getCommandName(), blacklistSwitch);
         buttonCommands.put("blacklistStartGroup", blacklistSwitch);
 

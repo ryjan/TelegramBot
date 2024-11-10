@@ -4,7 +4,6 @@ import org.ryjan.telegram.commands.groups.BaseCommand;
 import org.ryjan.telegram.commands.groups.GroupStatus;
 import org.ryjan.telegram.commands.users.user.UserPermissions;
 import org.ryjan.telegram.handler.CommandsHandler;
-import org.ryjan.telegram.interfaces.Permissions;
 import org.ryjan.telegram.main.BotMain;
 import org.ryjan.telegram.model.groups.Groups;
 import org.ryjan.telegram.services.GroupService;
@@ -25,7 +24,7 @@ public class BanGroup extends BaseCommand {
     private RedisTemplate<String, Groups> redisGroupsTemplate;
 
     @Autowired
-    private FindGroupOwner findGroupOwner;
+    private OwnerFindGroup findGroupOwner;
 
     protected BanGroup(GroupService groupService) {
         super("banGroup", "Ban the group", UserPermissions.TRUSTED);
