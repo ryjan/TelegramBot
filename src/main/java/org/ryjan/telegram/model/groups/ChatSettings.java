@@ -1,6 +1,8 @@
 package org.ryjan.telegram.model.groups;
 
 import jakarta.persistence.*;
+import org.ryjan.telegram.commands.groups.GroupChatSettings;
+import org.ryjan.telegram.commands.groups.GroupSwitch;
 
 @Entity
 @Table(name = "chat_settings", schema = "groups")
@@ -29,8 +31,15 @@ public class ChatSettings {
 
     }
 
-    public ChatSettings(String settingKey, String settingValue, Groups group) {
-        this.settingKey = settingKey;
+    public ChatSettings(Groups group, GroupChatSettings groupChatSettings, GroupSwitch groupSwitch) {
+        this.settingKey = groupChatSettings.getDisplayname();
+        this.settingValue = groupSwitch.getDisplayname();
+        this.group = group;
+        this.groupId = group.getId();
+    }
+
+    public ChatSettings(Groups group, GroupChatSettings groupChatSettings, String settingValue) {
+        this.settingKey = groupChatSettings.getDisplayname();
         this.settingValue = settingValue;
         this.group = group;
         this.groupId = group.getId();
@@ -67,6 +76,10 @@ public class ChatSettings {
 
     public String getSettingValue() {
         return settingValue;
+    }
+
+    public void setSettingValue(GroupSwitch groupSwitch) {
+        this.settingValue = groupSwitch.getDisplayname();
     }
 
     public void setSettingValue(String settingValue) {

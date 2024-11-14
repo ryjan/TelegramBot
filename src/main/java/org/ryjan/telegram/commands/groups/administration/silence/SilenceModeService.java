@@ -1,5 +1,7 @@
 package org.ryjan.telegram.commands.groups.administration.silence;
 
+import org.ryjan.telegram.commands.groups.GroupChatSettings;
+import org.ryjan.telegram.commands.groups.GroupSwitch;
 import org.ryjan.telegram.model.groups.ChatSettings;
 import org.ryjan.telegram.services.ChatSettingsService;
 import org.ryjan.telegram.services.GroupService;
@@ -14,6 +16,9 @@ import java.util.concurrent.TimeUnit;
 
 @Service
 public class SilenceModeService {
+    private final String SILENCE_MODE_KEY = GroupChatSettings.SILENCE_MODE.getDisplayname();
+    private final String SILENCE_MODE_END_TIME_KEY = GroupChatSettings.SILENCE_MODE_END_TIME.getDisplayname();
+    private final ChatSettingsService chatSettingsService;
 
     @Autowired
     @Lazy
@@ -21,10 +26,6 @@ public class SilenceModeService {
 
     @Autowired
     private RedisTemplate<String, String> redisTemplate;
-
-    private final String SILENCE_MODE_KEY = "silenceMode";
-    private final String SILENCE_MODE_END_TIME_KEY = "silenceModeEndTime";
-    private final ChatSettingsService chatSettingsService;
 
     @Autowired
     public SilenceModeService(MainServices mainServices) {
@@ -34,30 +35,30 @@ public class SilenceModeService {
     public boolean isSilenceModeEnabled(Long groupId) {
         String cachedValue = redisTemplate.opsForValue().get(SILENCE_MODE_KEY + groupId);
         if (cachedValue != null) {
-            return "enabled".equals(cachedValue);
+            return GroupSwitch.ON.getDisplayname().equals(cachedValue);
         }
 
         ChatSettings chatSettings = chatSettingsService.findChatSettings(groupId, SILENCE_MODE_KEY);
-        if (chatSettings != null && chatSettings.getSettingValue().equals("enabled")) {
-            redisTemplate.opsForValue().set(SILENCE_MODE_KEY + groupId, "enabled", 1, TimeUnit.HOURS);
+        if (chatSettings != null && chatSettings.getSettingValue().equals(GroupSwitch.ON.getDisplayname())) {
+            redisTemplate.opsForValue().set(SILENCE_MODE_KEY + groupId, GroupSwitch.ON.getDisplayname(), 1, TimeUnit.HOURS);
             return true;
         }
 
-        redisTemplate.opsForValue().set(SILENCE_MODE_KEY + groupId, "disabled", 1, TimeUnit.HOURS);
+        redisTemplate.opsForValue().set(SILENCE_MODE_KEY + groupId, GroupSwitch.OFF.getDisplayname(), 1, TimeUnit.HOURS);
         return false;
     }
 
     public void enableSilenceMode(Long groupId, LocalDateTime endTime) {
-        chatSettingsService.addChatSettings(groupId, SILENCE_MODE_KEY, "enabled");
-        chatSettingsService.addChatSettings(groupId, SILENCE_MODE_END_TIME_KEY, String.valueOf(endTime));
-        redisTemplate.opsForValue().set(SILENCE_MODE_KEY + groupId, "enabled", 1, TimeUnit.HOURS);
+        chatSettingsService.addChatSettings(groupId, GroupChatSettings.SILENCE_MODE, GroupSwitch.ON);
+        chatSettingsService.addChatSettings(groupId, GroupChatSettings.SILENCE_MODE_END_TIME, String.valueOf(endTime));
+        redisTemplate.opsForValue().set(SILENCE_MODE_KEY + groupId, GroupSwitch.ON.getDisplayname(), 1, TimeUnit.HOURS);
         redisTemplate.opsForValue().set(SILENCE_MODE_END_TIME_KEY + groupId, String.valueOf(endTime), 1, TimeUnit.HOURS);
     }
 
     public void disableSilenceMode(Long groupId) {
-        chatSettingsService.addChatSettings(groupId, SILENCE_MODE_KEY, "disabled");
-        chatSettingsService.addChatSettings(groupId, SILENCE_MODE_END_TIME_KEY, "ended");
-        redisTemplate.opsForValue().set(SILENCE_MODE_KEY + groupId, "disabled", 1, TimeUnit.HOURS);
+        chatSettingsService.addChatSettings(groupId, GroupChatSettings.SILENCE_MODE, GroupSwitch.OFF);
+        chatSettingsService.addChatSettings(groupId, GroupChatSettings.SILENCE_MODE_END_TIME, "ended"); // просто удалить chatSettings с postgres
+        redisTemplate.opsForValue().set(SILENCE_MODE_KEY + groupId, GroupSwitch.OFF.getDisplayname(), 1, TimeUnit.HOURS);
         redisTemplate.delete(SILENCE_MODE_END_TIME_KEY + groupId);
     }
 

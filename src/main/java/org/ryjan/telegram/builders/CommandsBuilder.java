@@ -4,10 +4,10 @@ import jakarta.annotation.PostConstruct;
 import lombok.Getter;
 import lombok.Setter;
 import org.ryjan.telegram.commands.groups.BaseCommand;
+import org.ryjan.telegram.commands.groups.administration.GroupSettings;
 import org.ryjan.telegram.commands.groups.administration.InlineGetGroupId;
-import org.ryjan.telegram.commands.groups.administration.Settings;
 import org.ryjan.telegram.commands.groups.administration.silence.SilenceMode;
-import org.ryjan.telegram.commands.groups.administration.StartGroup;
+import org.ryjan.telegram.commands.groups.administration.GroupStart;
 import org.ryjan.telegram.commands.groups.administration.blacklist.*;
 import org.ryjan.telegram.commands.groups.user.GroupBugReport;
 import org.ryjan.telegram.commands.users.admin.adminpanel.bugreport.reply.*;
@@ -35,13 +35,13 @@ import java.util.function.Consumer;
 public class CommandsBuilder {
 
     @Autowired
-    private StartGroup startGroupCommand;
+    private GroupStart startGroupCommand;
 
     @Autowired
     private StartUser startUserCommand;
 
     @Autowired
-    private Settings settingsGroup;
+    private GroupSettings settingsGroup;
 
     @Autowired
     private InlineGetGroupId inlineGetGroupIdCommand;

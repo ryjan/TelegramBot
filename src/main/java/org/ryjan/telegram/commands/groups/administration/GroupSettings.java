@@ -16,7 +16,7 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMa
 import java.util.concurrent.TimeUnit;
 
 @Component
-public class Settings extends BaseCommand {
+public class GroupSettings extends BaseCommand {
 
     @Autowired
     private GroupService groupService;
@@ -24,7 +24,7 @@ public class Settings extends BaseCommand {
     @Autowired
     private RedisTemplate<String, Groups> redisTemplate;
 
-    protected Settings() {
+    protected GroupSettings() {
         super("/settings", "⚙️Настройки", GroupPermissions.ADMIN);
     }
 

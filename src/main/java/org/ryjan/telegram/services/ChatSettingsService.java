@@ -1,5 +1,7 @@
 package org.ryjan.telegram.services;
 
+import org.ryjan.telegram.commands.groups.GroupChatSettings;
+import org.ryjan.telegram.commands.groups.GroupSwitch;
 import org.ryjan.telegram.model.groups.ChatSettings;
 import org.ryjan.telegram.model.groups.Groups;
 import org.ryjan.telegram.interfaces.repos.jpa.ChatSettingsRepository;
@@ -12,33 +14,50 @@ public class ChatSettingsService extends ServiceBuilder {
     @Autowired
     private ChatSettingsRepository chatSettingsRepository;
 
-    public void addChatSettings(Long groupId, String settingsKey, String settingsValue) {
+    public void addChatSettings(Long groupId, GroupChatSettings groupChatSettings, GroupSwitch groupSwitch) {
         Groups group = groupService.findGroup(groupId);
-        ChatSettings chatSettings = findChatSettings(groupId, settingsKey);
+        ChatSettings chatSettings = findChatSettings(groupId, groupChatSettings);
         if (chatSettings == null) {
-            chatSettings = new ChatSettings(settingsKey, settingsValue, group);
+            chatSettings = new ChatSettings(group, groupChatSettings, groupSwitch);
             group.addChatSetting(chatSettings);
             groupService.update(group);
         } else {
-            chatSettings.setSettingValue(settingsValue);
+            chatSettings.setSettingValue(groupSwitch);
             update(chatSettings);
         }
     }
 
-    public void addChatSettings(Groups group, String settingsKey, String settingsValue) {
-        ChatSettings chatSettings = findChatSettings(group.getId(), settingsKey);
+    public void addChatSettings(Groups group, GroupChatSettings groupChatSettings, GroupSwitch groupSwitch) {
+        ChatSettings chatSettings = findChatSettings(group.getId(), groupChatSettings);
         if (chatSettings == null) {
-            chatSettings = new ChatSettings(settingsKey, settingsValue, group);
+            chatSettings = new ChatSettings(group, groupChatSettings, groupSwitch);
             group.addChatSetting(chatSettings);
             groupService.update(group);
         } else {
-            chatSettings.setSettingValue(settingsValue);
+            chatSettings.setSettingValue(groupSwitch);
             update(chatSettings);
         }
     }
 
-    public ChatSettings findChatSettings(Long groupId, String settingsKey) {
-        return chatSettingsRepository.findByGroupIdAndSettingKey(groupId, settingsKey);
+    public void addChatSettings(Long groupId, GroupChatSettings groupChatSettings, String settingValue) {
+        Groups group = groupService.findGroup(groupId);
+        ChatSettings chatSettings = findChatSettings(groupId, groupChatSettings);
+        if (chatSettings == null) {
+            chatSettings = new ChatSettings(group, groupChatSettings, settingValue);
+            group.addChatSetting(chatSettings);
+            groupService.update(group);
+        } else {
+            chatSettings.setSettingValue(settingValue);
+            update(chatSettings);
+        }
+    }
+
+    public ChatSettings findChatSettings(Long groupId, GroupChatSettings groupChatSettings) {
+        return chatSettingsRepository.findByGroupIdAndSettingKey(groupId, groupChatSettings.getDisplayname());
+    }
+
+    public ChatSettings findChatSettings(Long groupId, String groupChatSettings) {
+        return chatSettingsRepository.findByGroupIdAndSettingKey(groupId, groupChatSettings);
     }
 
     public ChatSettings chatSettingsCheckKeyValue(long groupId, String key, String value) {

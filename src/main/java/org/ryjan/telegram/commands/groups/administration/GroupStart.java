@@ -1,8 +1,6 @@
 package org.ryjan.telegram.commands.groups.administration;
 
-import org.ryjan.telegram.commands.groups.BaseCommand;
-import org.ryjan.telegram.commands.groups.GroupPrivileges;
-import org.ryjan.telegram.commands.groups.GroupStatus;
+import org.ryjan.telegram.commands.groups.*;
 import org.ryjan.telegram.commands.groups.config.GroupPermissions;
 import org.ryjan.telegram.builders.InlineKeyboardBuilder;
 import org.ryjan.telegram.handler.CommandsHandler;
@@ -15,12 +13,12 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 
 @Component
-public class StartGroup extends BaseCommand {
+public class GroupStart extends BaseCommand {
 
     @Autowired
-    private Settings settingsGroup;
+    private GroupSettings settingsGroup;
 
-    public StartGroup() {
+    public GroupStart() {
         super("/start", "Начать работу бота🤙", GroupPermissions.CREATOR); // добавить при вызове команды inline keyboard с настройками сервера
         // а лучше отдельный класс с этой командой, которая будет использоваться тут. SettingsGroup
     }
@@ -42,8 +40,8 @@ public class StartGroup extends BaseCommand {
         String creatorName = update.getMessage().getFrom().getUserName();
         Long creatorId = update.getMessage().getFrom().getId();
         Groups group = new Groups(Long.valueOf(chatId), groupName, GroupPrivileges.BASE, GroupStatus.ACTIVE.getDisplayName(), creatorId.toString(), creatorName);
-        chatSettingsService.addChatSettings(group, "blacklist", "disabled");
-        chatSettingsService.addChatSettings(group, "aboba", "ggs");
+        chatSettingsService.addChatSettings(group, GroupChatSettings.BLACKLIST, GroupSwitch.OFF);
+        chatSettingsService.addChatSettings(group, GroupChatSettings.LEVELS, GroupSwitch.ON);
 
         message.setText("Бот успешно зарегистрирован🤙\n⚙️Настройки:");
         message.setReplyMarkup(settingsGroup.getKeyboard());
