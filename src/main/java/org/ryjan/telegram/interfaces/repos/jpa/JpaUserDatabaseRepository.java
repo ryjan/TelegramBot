@@ -5,10 +5,10 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface JpaUserDatabaseRepository extends JpaRepository<UserDatabase, Long> {
     UserDatabase findUserDatabaseById(Long userId);
-    UserDatabase findByUserTag(String tag);
+    UserDatabase findByUsername(String tag);
 
-    boolean existsByUserTag(String username);
- //   boolean existsById(long id);
+    boolean existsByUsername(String username);
+ // boolean existsById(long id);
 
 
 

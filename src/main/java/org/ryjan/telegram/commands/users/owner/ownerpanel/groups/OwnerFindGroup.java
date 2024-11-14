@@ -33,6 +33,7 @@ public class OwnerFindGroup extends BaseCommand {
     @Autowired
     private RedisTemplate<String, Groups> redisGroupsTemplate;
 
+    @Getter
     public String groupId;
 
     protected OwnerFindGroup() {
@@ -48,7 +49,7 @@ public class OwnerFindGroup extends BaseCommand {
         sendMessageForCommand(message);
     }
 
-    public void sendKeyboard(Update update) {
+    public void sendMessageWithKeyboard(Update update) {
         String ownerState = redisTemplate.opsForValue().get(CACHE_KEY + chatId);
 
         assert ownerState != null;
@@ -60,7 +61,7 @@ public class OwnerFindGroup extends BaseCommand {
                 return;
             }
 
-            Groups group = redisGroupsTemplate.opsForValue().get(GROUP_CACHE_KEY + chatId);
+            Groups group = redisGroupsTemplate.opsForValue().get(GROUP_CACHE_KEY + groupId);
 
             if (group == null) {
                 try {
@@ -71,7 +72,7 @@ public class OwnerFindGroup extends BaseCommand {
                     redisGroupsTemplate.delete(CACHE_KEY + chatId);
                     return;
                 }
-                redisGroupsTemplate.opsForValue().set(GROUP_CACHE_KEY + chatId, group, 1, TimeUnit.HOURS);
+                redisGroupsTemplate.opsForValue().set(GROUP_CACHE_KEY + groupId, group, 1, TimeUnit.HOURS);
                 if (group == null) {
                     message.setText("Group is not found.");
                     redisGroupsTemplate.delete(CACHE_KEY + chatId);

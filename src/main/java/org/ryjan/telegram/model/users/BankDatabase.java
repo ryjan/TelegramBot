@@ -84,7 +84,7 @@ public class BankDatabase {
     public BankDatabase createBank(UserDatabase userDatabase) {
         BankDatabase bankDatabase = new BankDatabase();
         bankDatabase.setUser(userDatabase);
-        bankDatabase.setTag(userDatabase.getUserTag());
+        bankDatabase.setTag(userDatabase.getUsername());
         return bankDatabase;
     }
 

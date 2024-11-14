@@ -19,6 +19,9 @@ public class SetPrivileges extends BaseCommand {
     @Autowired
     private RedisTemplate<String, Groups> redisGroupsTemplate;
 
+    @Autowired
+    private OwnerFindGroup ownerFindGroup;
+
     public SetPrivileges(GroupService groupService) {
         super("setPrivilege", "Set privilege", UserPermissions.OWNER);
         GROUP_CACHE_KEY = groupService.getOWNER_GROUP_STATE_CACHE_KEY();
@@ -27,13 +30,13 @@ public class SetPrivileges extends BaseCommand {
     @Override
     protected void executeCommand(String chatId, BotMain bot, CommandsHandler handler) {
         SendMessage message = createSendMessage(chatId);
-        Groups group = redisGroupsTemplate.opsForValue().get(GROUP_CACHE_KEY + chatId);
+        Groups group = redisGroupsTemplate.opsForValue().get(GROUP_CACHE_KEY + ownerFindGroup.getGroupId());
         CallbackQuery callbackQuery = getUpdate().getCallbackQuery();
         if (group != null) {
             String privilege = callbackQuery.getData().split(":")[1];
             group.setPrivileges(privilege);
             groupService.update(group);
-            redisGroupsTemplate.opsForValue().set(GROUP_CACHE_KEY + chatId, group);
+            redisGroupsTemplate.opsForValue().set(GROUP_CACHE_KEY + ownerFindGroup.getGroupId(), group);
             message.setText("Group privilege has been updated to *" + privilege + "* successfully");
             message.enableMarkdown(true);
             sendMessageForCommand(message);

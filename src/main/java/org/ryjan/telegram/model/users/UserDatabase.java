@@ -1,12 +1,10 @@
 package org.ryjan.telegram.model.users;
 
-import com.fasterxml.jackson.annotation.JsonAlias;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import org.ryjan.telegram.commands.users.user.UserPermissions;
 import org.ryjan.telegram.interfaces.Permissions;
-import org.telegram.telegrambots.meta.api.objects.User;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -21,7 +19,7 @@ public class UserDatabase {
     @Id
     //@GeneratedValue (strategy = GenerationType.SEQUENCE, generator = "user_seq") // сделать присвоение через telegram.user.getId
     private Long id;
-    private String userTag;
+    private String username;
     private UserPermissions userGroup;
     private String createdAt;
 
@@ -35,20 +33,20 @@ public class UserDatabase {
 
     public UserDatabase(Long id, String userTag) {
         this.id = id;
-        this.userTag = userTag;
+        this.username = userTag;
         this.userGroup = UserPermissions.USER;
         this.createdAt = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss").format(LocalDateTime.now());
 
         setBank(bankDatabase);
-        bankDatabase.setTag(this.userTag);
+        bankDatabase.setTag(this.username);
     }
 
     public long getId() {
         return id;
     }
 
-    public String getUserTag() {
-        return userTag;
+    public String getUsername() {
+        return username;
     }
 
     public Permissions getUserGroupAsPermission() {
@@ -75,9 +73,9 @@ public class UserDatabase {
         this.createdAt = createdAt;
     }
 
-    public void setUserTag(String userTag) {
-        this.userTag = userTag;
-        bankDatabase.setTag(this.userTag);
+    public void setUsername(String userTag) {
+        this.username = userTag;
+        bankDatabase.setTag(this.username);
     }
 
     public void setUserGroup(UserPermissions userGroup) {
@@ -95,7 +93,7 @@ public class UserDatabase {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, userTag, userGroup, bankDatabase);
+        return Objects.hash(id, username, userGroup, bankDatabase);
     }
 
     @Override
@@ -104,12 +102,12 @@ public class UserDatabase {
         if (obj == null || getClass() != obj.getClass()) return false;
 
         UserDatabase other = (UserDatabase) obj;
-        return  Objects.equals(id, other.id) && Objects.equals(userTag, other.userTag) &&
+        return  Objects.equals(id, other.id) && Objects.equals(username, other.username) &&
                 Objects.equals(userGroup, other.userGroup) && Objects.equals(bankDatabase, other.bankDatabase);
     }
 
     @Override
     public String toString() {
-        return "User [id=" + id + ",\n userTag=" + userTag + ",\n userGroup=" + userGroup + "]";
+        return "User [id=" + id + ",\n userTag=" + username + ",\n userGroup=" + userGroup + "]";
     }
 }

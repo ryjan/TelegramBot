@@ -11,7 +11,6 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.security.Permission;
 import java.util.concurrent.TimeUnit;
 
 @Service
@@ -33,8 +32,11 @@ public class UserService {
         return userDatabaseRepository.save(userDatabase);
     }
 
-    public UserDatabase findUser(String username) {
-        return userDatabaseRepository.findByUserTag(username);
+    public UserDatabase findUser(String usernameOrId) {
+        if (isNumeric(usernameOrId)) {
+            return userDatabaseRepository.findById(Long.parseLong(usernameOrId)).orElse(null);
+        }
+        return userDatabaseRepository.findByUsername(usernameOrId);
     }
 
     public UserDatabase findUser(Long id) {
@@ -58,7 +60,7 @@ public class UserService {
     }
 
     public Boolean userIsExist(String username) {
-        return userDatabaseRepository.existsByUserTag(username);
+        return userDatabaseRepository.existsByUsername(username);
     }
 
     public void update(UserDatabase userDatabase) {
@@ -67,5 +69,14 @@ public class UserService {
 
     public void delete(UserDatabase userDatabase) {
         userDatabaseRepository.delete(userDatabase);
+    }
+
+    private boolean isNumeric(String string) {
+        try {
+            Long.parseLong(string);
+            return true;
+        } catch (NumberFormatException e) {
+            return false;
+        }
     }
 }

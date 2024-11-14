@@ -45,7 +45,7 @@ public class BanGroup extends BaseCommand {
         SendMessage message = createSendMessage(chatId);
         message.enableMarkdown(true);
         String textStatus = status ? "BANNED" : "UNBANNED";
-        Groups group = redisGroupsTemplate.opsForValue().get(GROUP_CACHE_KEY + chatId);
+        Groups group = redisGroupsTemplate.opsForValue().get(GROUP_CACHE_KEY + findGroupOwner.getGroupId());
         if (status) {
             group.setStatus(GroupStatus.BANNED.getDisplayName());
             message.setText("✨Group status been has changed to *" + textStatus + "* successfully!");
@@ -56,7 +56,7 @@ public class BanGroup extends BaseCommand {
             editMessage(findGroupOwner.getParsedMessageWithStatus(group.getStatus()), findGroupOwner.getKeyboard(false));
         }
         groupService.update(group);
-        redisGroupsTemplate.opsForValue().set(GROUP_CACHE_KEY + chatId, group, 15, TimeUnit.MINUTES);
+        redisGroupsTemplate.opsForValue().set(GROUP_CACHE_KEY + findGroupOwner.getGroupId(), group, 15, TimeUnit.MINUTES);
         sendMessageForCommand(message);
     }
 

@@ -5,6 +5,7 @@ import org.ryjan.telegram.commands.groups.administration.silence.SilenceModeServ
 import org.ryjan.telegram.commands.users.admin.adminpanel.bugreport.reply.SendMessageToUserArticle;
 import org.ryjan.telegram.commands.users.owner.ownerpanel.groups.ChangeGroupPrivilege;
 import org.ryjan.telegram.commands.users.owner.ownerpanel.groups.OwnerFindGroup;
+import org.ryjan.telegram.commands.users.owner.ownerpanel.users.OwnerFindUser;
 import org.ryjan.telegram.commands.users.user.button.bugreport.BugReportService;
 import org.ryjan.telegram.commands.users.user.button.bugreport.UserSendWishReply;
 import org.ryjan.telegram.handler.CommandsHandler;
@@ -56,7 +57,10 @@ public class BotService {
     private ChangeGroupPrivilege changeGroupPrivilege;
 
     @Autowired
-    private OwnerFindGroup findGroupOwner;
+    private OwnerFindUser ownerFindUser;
+
+    @Autowired
+    private OwnerFindGroup ownerFindGroup;
 
     public ChatMember getChatMember(Long chatId, Long userId) {
         GetChatMember chatMember = new GetChatMember();
@@ -129,7 +133,8 @@ public class BotService {
 
     public void autoExecute(Update update) {
         bugReportReplies(update);
-        findGroupOwner.sendKeyboard(update);
+        ownerFindGroup.sendMessageWithKeyboard(update);
+        ownerFindUser.sendMessageWithKeyboard(update);
         sendMessageToUserArticle.processArticleAndNotifyUser(update);
 
 
