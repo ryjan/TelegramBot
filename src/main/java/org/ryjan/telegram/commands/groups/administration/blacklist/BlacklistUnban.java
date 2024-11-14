@@ -23,10 +23,10 @@ public class BlacklistUnban extends BaseCommand {
     @Override
     protected void executeCommand(String chatId, BotMain bot, CommandsHandler commandHandler) {
         System.out.println(chatBlacklist.getLeftUserId());
-        blacklistUnban(chatId, chatBlacklist.getLeftUserId(), bot);
+        blacklistUnban(chatId, chatBlacklist.getLeftUserId());
     }
 
-    private void blacklistUnban(String chatId, Long userId, BotMain bot) {
+    private void blacklistUnban(String chatId, Long userId) {
         botService.unbanUser(chatId, userId);
         Blacklist blacklist = blacklistService.findBlacklist(userId);
         blacklistService.delete(blacklist);

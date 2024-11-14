@@ -1,6 +1,8 @@
 package org.ryjan.telegram.commands.groups.administration.blacklist;
 
 import org.ryjan.telegram.commands.groups.BaseCommand;
+import org.ryjan.telegram.commands.groups.GroupChatSettings;
+import org.ryjan.telegram.commands.groups.GroupSwitch;
 import org.ryjan.telegram.commands.groups.config.GroupPermissions;
 import org.ryjan.telegram.handler.CommandsHandler;
 import org.ryjan.telegram.main.BotMain;
@@ -29,10 +31,10 @@ public class BlacklistSwitch extends BaseCommand {
         Update update = getUpdate();
 
         if (blacklistService.blacklistStatus(update.getCallbackQuery().getMessage().getChatId())) {
-            blacklistService.replaceBlacklistValue(Long.parseLong(chatId), "blacklist", "enabled");
+            blacklistService.replaceBlacklistValue(Long.parseLong(chatId), GroupChatSettings.BLACKLIST.getDisplayname(), GroupSwitch.ON.getDisplayname());
             editMessage("🔒Черный список *включен*", blacklistSwitchOn.getKeyboard());
         } else {
-            blacklistService.replaceBlacklistValue(Long.parseLong(chatId), "blacklist", "disabled");
+            blacklistService.replaceBlacklistValue(Long.parseLong(chatId), GroupChatSettings.BLACKLIST.getDisplayname(), GroupSwitch.ON.getDisplayname());
             editMessage("🔓Черный список *выключен*", blacklistSwitchOff.getKeyboard());
         }
     }
