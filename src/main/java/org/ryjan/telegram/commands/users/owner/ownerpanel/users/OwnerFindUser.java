@@ -5,7 +5,7 @@ import org.ryjan.telegram.commands.groups.BaseCommand;
 import org.ryjan.telegram.commands.users.user.UserPermissions;
 import org.ryjan.telegram.handler.CommandsHandler;
 import org.ryjan.telegram.main.BotMain;
-import org.ryjan.telegram.model.users.UserDatabase;
+import org.ryjan.telegram.model.users.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
@@ -20,7 +20,7 @@ public class OwnerFindUser extends BaseCommand {
     private final String USER_CACHE_KEY = "owner_user_state:";
 
     private String chatId;
-    private UserDatabase user;
+    private User user;
 
     @Getter
     private SendMessage message;
@@ -29,7 +29,7 @@ public class OwnerFindUser extends BaseCommand {
     private RedisTemplate<String, String> redisTemplate;
 
     @Autowired
-    private RedisTemplate<String, UserDatabase> redisGroupsTemplate;
+    private RedisTemplate<String, User> redisGroupsTemplate;
 
     public String userId;
 
@@ -54,7 +54,7 @@ public class OwnerFindUser extends BaseCommand {
             SendMessage message = createSendMessage(chatId);
             userId = update.getMessage().getText().trim().replace("@", "").toLowerCase();
 
-            UserDatabase user = redisGroupsTemplate.opsForValue().get(USER_CACHE_KEY + userId);
+            User user = redisGroupsTemplate.opsForValue().get(USER_CACHE_KEY + userId);
 
             if (user == null) {
                 try {

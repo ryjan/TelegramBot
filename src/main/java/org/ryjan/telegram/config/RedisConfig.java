@@ -3,8 +3,8 @@ package org.ryjan.telegram.config;
 import org.ryjan.telegram.model.groups.Blacklist;
 import org.ryjan.telegram.model.groups.Groups;
 import org.ryjan.telegram.model.users.Articles;
-import org.ryjan.telegram.model.users.BankDatabase;
-import org.ryjan.telegram.model.users.UserDatabase;
+import org.ryjan.telegram.model.users.Bank;
+import org.ryjan.telegram.model.users.User;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.cache.RedisCacheConfiguration;
@@ -61,8 +61,8 @@ public class RedisConfig {
     }
 
     @Bean
-    public RedisTemplate<String, UserDatabase> redisUserDatabaseTemplate(RedisConnectionFactory connectionFactory) {
-        RedisTemplate<String, UserDatabase> template = new RedisTemplate<>();
+    public RedisTemplate<String, User> redisUserDatabaseTemplate(RedisConnectionFactory connectionFactory) {
+        RedisTemplate<String, User> template = new RedisTemplate<>();
         template.setConnectionFactory(connectionFactory);
 
         template.setKeySerializer(new StringRedisSerializer());
@@ -72,8 +72,8 @@ public class RedisConfig {
     }
 
     @Bean
-    public RedisTemplate<String, BankDatabase> redisBankDatabaseTemplate(RedisConnectionFactory connectionFactory) {
-        RedisTemplate<String, BankDatabase> template = new RedisTemplate<>();
+    public RedisTemplate<String, Bank> redisBankDatabaseTemplate(RedisConnectionFactory connectionFactory) {
+        RedisTemplate<String, Bank> template = new RedisTemplate<>();
         template.setConnectionFactory(connectionFactory);
 
         template.setKeySerializer(new StringRedisSerializer());

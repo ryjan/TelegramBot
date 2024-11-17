@@ -3,7 +3,7 @@ package org.ryjan.telegram.services;
 import org.ryjan.telegram.commands.groups.config.GroupPermissions;
 import org.ryjan.telegram.commands.users.user.UserPermissions;
 import org.ryjan.telegram.interfaces.Permissions;
-import org.ryjan.telegram.model.users.UserDatabase;
+import org.ryjan.telegram.model.users.User;
 import org.ryjan.telegram.interfaces.repos.jpa.BankDatabaseRepository;
 import org.ryjan.telegram.interfaces.repos.jpa.JpaUserDatabaseRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,38 +21,38 @@ public class UserService {
     private JpaUserDatabaseRepository userDatabaseRepository;
 
     @Autowired
-    RedisTemplate<String, UserDatabase> redisTemplate;
+    RedisTemplate<String, User> redisTemplate;
 
     @Autowired
     private BankDatabaseRepository bankDatabaseRepository;
 
     @Transactional
-    public UserDatabase createUser(Long id, String username) {
-        UserDatabase userDatabase = new UserDatabase(id, username);
-        return userDatabaseRepository.save(userDatabase);
+    public User createUser(Long id, String username) {
+        User user = new User(id, username);
+        return userDatabaseRepository.save(user);
     }
 
-    public UserDatabase findUser(String usernameOrId) {
+    public User findUser(String usernameOrId) {
         if (isNumeric(usernameOrId)) {
             return userDatabaseRepository.findById(Long.parseLong(usernameOrId)).orElse(null);
         }
         return userDatabaseRepository.findByUsername(usernameOrId);
     }
 
-    public UserDatabase findUser(Long id) {
+    public User findUser(Long id) {
         return userDatabaseRepository.findById(id).orElse(null);
     }
 
     public Boolean hasPermission(Long userId, Permissions permissions) {
         if (permissions == UserPermissions.ANY || permissions == GroupPermissions.ANY) return true;
 
-        UserDatabase userDatabase = redisTemplate.opsForValue().get(CACHE_KEY + userId);
+        User user = redisTemplate.opsForValue().get(CACHE_KEY + userId);
 
-        if (userDatabase == null) {
-            userDatabase = findUser(userId);
-            redisTemplate.opsForValue().set(CACHE_KEY + userId, userDatabase, 1, TimeUnit.HOURS);
+        if (user == null) {
+            user = findUser(userId);
+            redisTemplate.opsForValue().set(CACHE_KEY + userId, user, 1, TimeUnit.HOURS);
         }
-        return userDatabase != null && userDatabase.getUserGroup().isAtLeast(permissions);
+        return user != null && user.getUserGroup().isAtLeast(permissions);
     }
 
     public Boolean userIsExist(Long id) {
@@ -63,12 +63,12 @@ public class UserService {
         return userDatabaseRepository.existsByUsername(username);
     }
 
-    public void update(UserDatabase userDatabase) {
-        userDatabaseRepository.save(userDatabase);
+    public void update(User user) {
+        userDatabaseRepository.save(user);
     }
 
-    public void delete(UserDatabase userDatabase) {
-        userDatabaseRepository.delete(userDatabase);
+    public void delete(User user) {
+        userDatabaseRepository.delete(user);
     }
 
     private boolean isNumeric(String string) {

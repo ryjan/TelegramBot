@@ -1,6 +1,6 @@
 package org.ryjan.telegram.controllers;
 
-import org.ryjan.telegram.model.users.UserDatabase;
+import org.ryjan.telegram.model.users.User;
 import org.ryjan.telegram.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 public class UsersController {
 
     @Autowired
-    RedisTemplate<String, UserDatabase> redisUserDatabaseTemplate;
+    RedisTemplate<String, User> redisUserDatabaseTemplate;
 
     @Autowired
     RedisTemplate<String, String> redisTemplate;
@@ -22,7 +22,7 @@ public class UsersController {
 
     @DeleteMapping("/delete")
     public ResponseEntity<String> deleteUser(@RequestParam Long userId) {
-        UserDatabase user = userService.findUser(userId);
+        User user = userService.findUser(userId);
         userService.delete(user);
         redisUserDatabaseTemplate.delete(userService.CACHE_KEY + user);
 

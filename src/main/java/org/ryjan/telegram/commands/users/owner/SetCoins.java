@@ -4,8 +4,8 @@ import org.ryjan.telegram.commands.groups.BaseCommand;
 import org.ryjan.telegram.commands.groups.config.GroupPermissions;
 import org.ryjan.telegram.handler.CommandsHandler;
 import org.ryjan.telegram.main.BotMain;
-import org.ryjan.telegram.model.users.BankDatabase;
-import org.ryjan.telegram.model.users.UserDatabase;
+import org.ryjan.telegram.model.users.Bank;
+import org.ryjan.telegram.model.users.User;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 
@@ -32,8 +32,8 @@ public class SetCoins extends BaseCommand {
 
         String username = parts[0];
         String amountString = parts[1];
-        UserDatabase userDatabase = userService.findUser(username.substring(1)); // оптимизировать под redis
-        if (userDatabase == null) {
+        User user = userService.findUser(username.substring(1)); // оптимизировать под redis
+        if (user == null) {
             message.setText("👾Пользователь не найден" + username);
             sendMessageForCommand(bot, message);
             return;
@@ -41,9 +41,9 @@ public class SetCoins extends BaseCommand {
 
         try {
             BigDecimal amount = new BigDecimal(amountString);
-            BankDatabase bankDatabase = userDatabase.getBank();
-            bankDatabase.setCoins(amount);
-            userService.update(userDatabase);
+            Bank bank = user.getBank();
+            bank.setCoins(amount);
+            userService.update(user);
             message.setText("Успешно🤙\nПользователю " + username + " выставлено " + amount + "🪙");
         } catch (IllegalArgumentException e) {
             message.setText("❌Неверно введена сумма" + amountString);

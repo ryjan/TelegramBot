@@ -1,7 +1,7 @@
 package org.ryjan.telegram.commands.users.user.transfers;
 
 import org.ryjan.telegram.config.BotConfig;
-import org.ryjan.telegram.model.users.UserDatabase;
+import org.ryjan.telegram.model.users.User;
 import org.ryjan.telegram.interfaces.repos.jpa.TransferLimitRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,8 +16,8 @@ public class TransferLimitService {
 
     public static final BigDecimal DAILY_LIMIT = BotConfig.DAILY_LIMIT;
 
-    public boolean canTransfer(UserDatabase userDatabase, BigDecimal amount) {
-        TransferLimit limit = getOrCreateLimit(userDatabase);
+    public boolean canTransfer(User user, BigDecimal amount) {
+        TransferLimit limit = getOrCreateLimit(user);
 
         if (!limit.getLastTransferDate().equals(LocalDate.now())) {
             limit.setDailyTransferAmount(BigDecimal.ZERO);
@@ -29,8 +29,8 @@ public class TransferLimitService {
         return newTotal.compareTo(DAILY_LIMIT) <= 0;
     }
 
-    public void recordTransfer(UserDatabase userDatabase, BigDecimal amount) {
-        TransferLimit limit = getOrCreateLimit(userDatabase);
+    public void recordTransfer(User user, BigDecimal amount) {
+        TransferLimit limit = getOrCreateLimit(user);
 
         if (!limit.getLastTransferDate().equals(LocalDate.now())) {
             limit.setDailyTransferAmount(amount);
@@ -40,11 +40,11 @@ public class TransferLimitService {
         }
     }
 
-    private TransferLimit getOrCreateLimit(UserDatabase userDatabase) {
-        TransferLimit limit = transferLimitRepository.findByUserDatabase(userDatabase);
+    private TransferLimit getOrCreateLimit(User user) {
+        TransferLimit limit = transferLimitRepository.findByUser(user);
         if (limit == null) {
             limit = new TransferLimit();
-            limit.setUserDatabase(userDatabase);
+            limit.setUser(user);
             limit.setDailyTransferAmount(BigDecimal.ZERO);
             limit.setLastTransferDate(LocalDate.now());
         }

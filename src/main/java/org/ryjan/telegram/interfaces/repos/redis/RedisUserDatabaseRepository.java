@@ -1,13 +1,12 @@
 package org.ryjan.telegram.interfaces.repos.redis;
 
-import org.ryjan.telegram.model.users.UserDatabase;
+import org.ryjan.telegram.model.users.User;
 import org.springframework.data.redis.core.RedisHash;
 import org.springframework.data.repository.CrudRepository;
-import org.telegram.telegrambots.meta.api.objects.User;
 
 @RedisHash("User")
-public interface RedisUserDatabaseRepository extends CrudRepository<UserDatabase, Long> {
-    UserDatabase findByUserTag(String tag);
+public interface RedisUserDatabaseRepository extends CrudRepository<User, Long> {
+    User findByUserTag(String tag);
 
     Boolean existsByUserTag(String username);
 }
