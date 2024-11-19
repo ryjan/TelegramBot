@@ -3,14 +3,18 @@ package org.ryjan.telegram.services;
 import org.ryjan.telegram.commands.groups.config.GroupPermissions;
 import org.ryjan.telegram.commands.users.user.UserPermissions;
 import org.ryjan.telegram.interfaces.Permissions;
+import org.ryjan.telegram.kafka.UserConsumer;
+import org.ryjan.telegram.kafka.UserProducer;
 import org.ryjan.telegram.model.users.User;
 import org.ryjan.telegram.interfaces.repos.jpa.BankDatabaseRepository;
 import org.ryjan.telegram.interfaces.repos.jpa.JpaUserDatabaseRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 @Service
@@ -18,18 +22,16 @@ public class UserService {
     public final String CACHE_KEY = "userDatabase:";
 
     @Autowired
+    private UserProducer userProducer;
+
+    @Autowired
+    private RedisTemplate<String, User> redisTemplate;
+
+    @Autowired
     private JpaUserDatabaseRepository userDatabaseRepository;
 
-    @Autowired
-    RedisTemplate<String, User> redisTemplate;
-
-    @Autowired
-    private BankDatabaseRepository bankDatabaseRepository;
-
-    @Transactional
-    public User createUser(Long id, String username) {
-        User user = new User(id, username);
-        return userDatabaseRepository.save(user);
+    public void processAndSendUser(User user) {
+        userProducer.sendUser(user);
     }
 
     public User findUser(String usernameOrId) {
@@ -65,6 +67,10 @@ public class UserService {
 
     public void update(User user) {
         userDatabaseRepository.save(user);
+    }
+
+    public void saveAll(List<User> users) {
+        userDatabaseRepository.saveAll(users);
     }
 
     public void delete(User user) {
