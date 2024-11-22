@@ -7,6 +7,7 @@ import org.ryjan.telegram.interfaces.Permissions;
 import org.ryjan.telegram.main.BotMain;
 import org.ryjan.telegram.model.users.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Component;
 
@@ -14,7 +15,7 @@ import org.springframework.stereotype.Component;
 public class ChatXpListener extends BaseCommand {
 
     @Autowired
-    private KafkaTemplate<String, User> kafkaTemplate;
+    private RedisTemplate<String, User> userRedisTemplate;
 
     protected ChatXpListener() {
         super("chatXpListener", "Checks the message and accrues xp", GroupPermissions.ANY);
@@ -24,6 +25,4 @@ public class ChatXpListener extends BaseCommand {
     protected void executeCommand(String chatId, BotMain bot, CommandsHandler handler) {
 
     }
-
-
 }

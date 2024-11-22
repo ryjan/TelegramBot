@@ -2,6 +2,7 @@ package org.ryjan.telegram.services;
 
 import org.ryjan.telegram.commands.groups.administration.blacklist.BlacklistChatAdministration;
 import org.ryjan.telegram.commands.groups.administration.silence.SilenceModeService;
+import org.ryjan.telegram.commands.groups.level.XpService;
 import org.ryjan.telegram.commands.users.admin.adminpanel.bugreport.reply.SendMessageToUserArticle;
 import org.ryjan.telegram.commands.users.owner.ownerpanel.groups.ChangeGroupPrivilege;
 import org.ryjan.telegram.commands.users.owner.ownerpanel.groups.OwnerFindGroup;
@@ -61,6 +62,8 @@ public class BotService {
 
     @Autowired
     private OwnerFindGroup ownerFindGroup;
+    @Autowired
+    private XpService xpService;
 
     public ChatMember getChatMember(Long chatId, Long userId) {
         GetChatMember chatMember = new GetChatMember();
@@ -132,11 +135,15 @@ public class BotService {
     }
 
     public void autoExecute(Update update) {
+
         bugReportReplies(update);
         ownerFindGroup.sendMessageWithKeyboard(update);
         ownerFindUser.sendMessageWithKeyboard(update);
         sendMessageToUserArticle.processArticleAndNotifyUser(update);
 
+        if (update.hasMessage() && !update.getMessage().getChat().isUserChat()) {
+            xpService.chatXpListener(String.valueOf(update.getMessage().getFrom().getId()), update.getMessage().getText());
+        }
 
         if (update.hasMessage() && update.getMessage().getLeftChatMember() != null) {
             String chatId = update.getMessage().getChatId().toString();

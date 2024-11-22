@@ -13,7 +13,7 @@ public class UserConsumer extends ServiceBuilder {
 
     @KafkaListener(topics = "user-xp-topic", groupId = "user-xp-topic")
     @Transactional
-    public void consume(List<User> users) {
+    public void consumeUserXp(List<User> users) {
         userService.saveAll(users);
     }
 }
