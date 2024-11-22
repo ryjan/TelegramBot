@@ -11,7 +11,7 @@ import java.util.List;
 @Service
 public class UserConsumer extends ServiceBuilder {
 
-    @KafkaListener(topics = "user-xp-topic", groupId = "user-xp-topic")
+    @KafkaListener(topics = "user-xp-topic", groupId = "user-xp-topic", containerFactory = "kafkaListenerContainerFactory")
     @Transactional
     public void consumeUserXp(List<User> users) {
         userService.saveAll(users);

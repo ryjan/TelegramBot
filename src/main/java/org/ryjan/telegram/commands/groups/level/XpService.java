@@ -50,6 +50,8 @@ public class XpService extends ServiceBuilder {
     }
 
     private double calculateXp(String message) {
+        if (message.startsWith("/")) return 0;
+
         double messageLengthWeight = 0.5;
         double punctuationWeight = 2.0;
         double bonusForWords = 1.0;
