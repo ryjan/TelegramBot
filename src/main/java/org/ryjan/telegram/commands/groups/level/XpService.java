@@ -18,10 +18,10 @@ public class XpService extends ServiceBuilder {
     @Autowired
     private RedisTemplate<String, User> userRedisTemplate;
 
-    public void chatXpListener(String userId, String message) {
+    public void chatXpListener(String userId, String username, String message) {
         User user = userRedisTemplate.opsForValue().get(userId);
         if (user == null) {
-            user = userService.findUser(userId);
+            user = userService.findUser(userId) != null ? userService.findUser(userId) : new User(Long.valueOf(userId), username.toLowerCase());
         }
         double xp = calculateXp(message);
         user.setXp(user.getXp() + xp);
@@ -32,19 +32,19 @@ public class XpService extends ServiceBuilder {
         userService.processAndSendUser(user);
     }
 
-    private double xpForNextLevel(int currentLevel, double xp) {
-        return xp * Math.pow(currentLevel, 1.5);
+    private double xpForNextLevel(int currentLevel) {
+        return 100 * Math.pow(currentLevel, 1.5);
     }
 
     private int getLevel(int currentLevel, double currentXp) {
         int level = currentLevel;
-        double xpRequired = xpForNextLevel(currentLevel, currentXp);
+        double xpRequired = xpForNextLevel(currentLevel);
 
         while (currentXp >= xpRequired) {
             currentXp -= xpRequired;
             level++;
 
-            xpRequired = xpForNextLevel(currentLevel, level);
+            xpRequired = xpForNextLevel(currentLevel);
         }
         return level;
     }

@@ -30,7 +30,7 @@ public class User {
 
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     @JsonManagedReference
-    private Bank bank = new Bank();
+    private Bank banks = new Bank();
 
     public User() {
 
@@ -44,12 +44,12 @@ public class User {
         this.xp = 0.0;
         this.createdAt = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss").format(LocalDateTime.now());
 
-        setBank(bank);
-        bank.setUsername(this.username);
+        setBanks(banks);
+        banks.setUsername(this.username);
     }
 
-    public void setBank(Bank bank) {
-        this.bank = bank;
+    public void setBanks(Bank bank) {
+        this.banks = bank;
         bank.setUser(this);
     }
 
@@ -59,7 +59,7 @@ public class User {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, username, userGroup, bank);
+        return Objects.hash(id, username, userGroup, banks);
     }
 
     @Override
@@ -69,7 +69,7 @@ public class User {
 
         User other = (User) obj;
         return  Objects.equals(id, other.id) && Objects.equals(username, other.username) &&
-                Objects.equals(userGroup, other.userGroup) && Objects.equals(bank, other.bank);
+                Objects.equals(userGroup, other.userGroup) && Objects.equals(banks, other.banks);
     }
 
     @Override

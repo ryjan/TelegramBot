@@ -41,7 +41,7 @@ public class SetCoins extends BaseCommand {
 
         try {
             BigDecimal amount = new BigDecimal(amountString);
-            Bank bank = user.getBank();
+            Bank bank = user.getBanks();
             bank.setCoins(amount);
             userService.update(user);
             message.setText("Успешно🤙\nПользователю " + username + " выставлено " + amount + "🪙");

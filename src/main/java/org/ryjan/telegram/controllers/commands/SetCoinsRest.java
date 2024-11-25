@@ -19,7 +19,7 @@ public class SetCoinsRest {
             return "User not found";
         }
 
-        Bank bank = user.getBank();
+        Bank bank = user.getBanks();
         bank.setCoins(amount);
         userService.update(user);
         return "Operation successful!";

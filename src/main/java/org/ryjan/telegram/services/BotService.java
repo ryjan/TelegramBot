@@ -20,6 +20,7 @@ import org.telegram.telegrambots.meta.api.methods.groupadministration.GetChatMem
 import org.telegram.telegrambots.meta.api.methods.groupadministration.UnbanChatMember;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.ChatMemberUpdated;
+import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.chatmember.ChatMember;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
@@ -141,8 +142,9 @@ public class BotService {
         ownerFindUser.sendMessageWithKeyboard(update);
         sendMessageToUserArticle.processArticleAndNotifyUser(update);
 
-        if (update.hasMessage() && !update.getMessage().getChat().isUserChat()) {
-            xpService.chatXpListener(String.valueOf(update.getMessage().getFrom().getId()), update.getMessage().getText());
+        if (update.hasMessage() && !update.getMessage().getChat().isUserChat() && !update.getMessage().getFrom().getIsBot()) {
+            Message message = update.getMessage();
+            xpService.chatXpListener(String.valueOf(message.getFrom().getId()), message.getFrom().getUserName(), message.getText());
         }
 
         if (update.hasMessage() && update.getMessage().getLeftChatMember() != null) {

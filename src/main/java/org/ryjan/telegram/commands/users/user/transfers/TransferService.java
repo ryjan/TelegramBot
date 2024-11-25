@@ -27,8 +27,8 @@ public class TransferService {
             return "!canTransfer";
         }
 
-        Bank fromBank = fromUser.getBank();
-        Bank toBank = toUser.getBank();
+        Bank fromBank = fromUser.getBanks();
+        Bank toBank = toUser.getBanks();
 
         if (fromBank.getCoins().compareTo(amount) < 0) {
             return "У вас недостаточно монет 😥";
