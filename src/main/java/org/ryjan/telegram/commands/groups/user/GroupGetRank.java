@@ -8,10 +8,12 @@ import org.ryjan.telegram.handler.CommandsHandler;
 import org.ryjan.telegram.interfaces.Permissions;
 import org.ryjan.telegram.main.BotMain;
 import org.ryjan.telegram.model.users.User;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.GetFile;
 import org.telegram.telegrambots.meta.api.methods.GetUserProfilePhotos;
+import org.telegram.telegrambots.meta.api.methods.send.SendDocument;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.methods.send.SendPhoto;
 import org.telegram.telegrambots.meta.api.objects.InputFile;
@@ -25,12 +27,16 @@ import javax.imageio.stream.ImageOutputStream;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.awt.image.RenderedImage;
+import java.io.InputStream;
 
 @Component
 public class GroupGetRank extends BaseCommand {
     @Value("${bot.token}")
     private String token;
     private String fileId;
+
+    @Autowired
+    private BotMain botMain;
 
     protected GroupGetRank() {
         super("/rank", "💖Получить карточку профиля", GroupPermissions.ANY);
@@ -40,12 +46,14 @@ public class GroupGetRank extends BaseCommand {
     protected void executeCommand(String chatId, BotMain bot, CommandsHandler handler) throws Exception {
         Message message = getUpdate().getMessage();
         User user = userService.findUser(message.getFrom().getId());
-        File card = generateLevelCard(user.getUsername(), user.getLevel(), user.getXp(), 123123);
+        File card = generateLevelCard(user.getUsername(), user.getLevel(), user.getXp(), 123213);
+
+        InputStream inputStream = getClass().getClassLoader().getResourceAsStream("file_0.jpg");
 
         SendPhoto photo = new SendPhoto();
-        photo.setChatId(chatId);
+        photo.setChatId(getUpdate().getMessage().getChatId());
         photo.setPhoto(new InputFile(card));
-        bot.execute(photo);
+        botMain.execute(photo);
     }
 
     private File generateLevelCard(String username, int level, double xp, double xpForNextLevel) throws Exception {
@@ -75,35 +83,5 @@ public class GroupGetRank extends BaseCommand {
         File file = new File("level_card.png");
         ImageIO.write(image, "png", file);
         return file;
-    }
-
-    private void fetchUserAvatar(Long userId, BotMain bot) {
-        try {
-            GetUserProfilePhotos photoRequest = new GetUserProfilePhotos();
-            photoRequest.setUserId(userId);
-            photoRequest.setLimit(1);
-
-            UserProfilePhotos photos = bot.execute(photoRequest);
-
-            if (photos.getTotalCount() > 0) {
-                fileId = photos.getPhotos().getFirst().getFirst().getFileId();
-            }
-        } catch (TelegramApiException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    private void downloadAvatar(String fieldId, BotMain bot) {
-        try {
-            GetFile getFileRequest = new GetFile();
-            getFileRequest.setFileId(fieldId);
-
-            org.telegram.telegrambots.meta.api.objects.File file = bot.execute(getFileRequest);
-            String filePath = file.getFilePath();
-
-            //String url = String.format("https://api.telegram.org/file/bot%s/", token) + filePath;
-        } catch (TelegramApiException e) {
-            throw new RuntimeException(e);
-        }
     }
 }

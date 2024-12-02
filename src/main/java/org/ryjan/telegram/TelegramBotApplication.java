@@ -17,6 +17,10 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.data.redis.repository.configuration.EnableRedisRepositories;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.telegram.telegrambots.bots.DefaultBotOptions;
+import org.telegram.telegrambots.bots.TelegramLongPollingBot;
+import org.telegram.telegrambots.meta.TelegramBotsApi;
+import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
+import org.telegram.telegrambots.updatesreceivers.DefaultBotSession;
 
 @SpringBootApplication
 @EnableJpaRepositories(basePackages = "org.ryjan.telegram.interfaces.repos.jpa")
@@ -29,23 +33,6 @@ public class TelegramBotApplication {
 
     public static void main(String[] args) {
         SpringApplication.run(TelegramBotApplication.class, args);
-    }
-
-    @Bean
-    public DefaultBotOptions defaultBotOptions() {
-        DefaultBotOptions options = new DefaultBotOptions();
-
-        RequestConfig requestConfig = RequestConfig.custom()
-                .setConnectTimeout(10000)
-                .setSocketTimeout(10000)
-                .build();
-
-        CloseableHttpClient httpClient = HttpClients.custom()
-                .setDefaultRequestConfig(requestConfig)
-                .build();
-
-        options.setHttpContext((HttpContext) httpClient);
-        return options;
     }
 
     @PostConstruct

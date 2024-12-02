@@ -19,10 +19,17 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.DefaultBotOptions;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
+import org.telegram.telegrambots.meta.TelegramBotsApi;
+import org.telegram.telegrambots.meta.api.methods.send.SendDocument;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
+import org.telegram.telegrambots.meta.api.methods.send.SendPhoto;
+import org.telegram.telegrambots.meta.api.objects.InputFile;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
+import org.telegram.telegrambots.updatesreceivers.DefaultBotSession;
 
+import java.io.File;
+import java.io.InputStream;
 import java.util.List;
 
 @Component
@@ -43,11 +50,7 @@ public class BotMain extends TelegramLongPollingBot {
 
     private Update update;
 
-    public BotMain(DefaultBotOptions options) {
-        super(options);
-    }
-
-    public void sendMessage(String chatId, String text) {
+    public void sendMessage(String chatId, String text) throws TelegramApiException {
         SendMessage message = new SendMessage();
         message.setChatId(chatId);
         message.setText(text);
