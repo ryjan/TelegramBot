@@ -133,7 +133,7 @@ public abstract class BaseCommand implements IBotCommand {
         return getUpdate().getMessage().getText().replace(command, "").trim().split(" ", expectedParts);
     }
 
-    protected abstract void executeCommand(String chatId, BotMain bot, CommandsHandler handler);
+    protected abstract void executeCommand(String chatId, BotMain bot, CommandsHandler handler) throws Exception;
 
     @Override
     public void execute(String chatId, BotMain bot, CommandsHandler commandHandler) {

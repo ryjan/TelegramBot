@@ -14,7 +14,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.stereotype.Component;
+import org.telegram.telegrambots.bots.DefaultBotOptions;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
@@ -22,12 +25,11 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 import java.util.List;
 
-@SpringBootApplication
+@Component
 public class BotMain extends TelegramLongPollingBot {
 
     @Autowired
     BotService botService;
-
     @Value("${bot.token}")
     private String token;
     @Value("${bot.username}")
@@ -37,9 +39,13 @@ public class BotMain extends TelegramLongPollingBot {
 
     public static final Logger LOGGER = LoggerFactory.getLogger(Main.class);
 
-    private static final String OWNER_ID = "2323";
+    private static final String OWNER_ID = "7009707687";
 
     private Update update;
+
+    public BotMain(DefaultBotOptions options) {
+        super(options);
+    }
 
     public void sendMessage(String chatId, String text) {
         SendMessage message = new SendMessage();

@@ -10,6 +10,7 @@ import org.ryjan.telegram.commands.groups.administration.silence.SilenceMode;
 import org.ryjan.telegram.commands.groups.administration.GroupStart;
 import org.ryjan.telegram.commands.groups.administration.blacklist.*;
 import org.ryjan.telegram.commands.groups.user.GroupBugReport;
+import org.ryjan.telegram.commands.groups.user.GroupGetRank;
 import org.ryjan.telegram.commands.users.admin.adminpanel.bugreport.reply.*;
 import org.ryjan.telegram.commands.users.owner.SetCoins;
 import org.ryjan.telegram.commands.users.admin.adminpanel.AdminPanel;
@@ -125,6 +126,9 @@ public class CommandsBuilder {
     @Autowired
     private BanGroup banGroup;
 
+    @Autowired
+    private GroupGetRank groupGetRank;
+
     private Map<String, BaseCommand> commands = new HashMap<>();
     private Map<String, BaseCommand> buttonCommands = new HashMap<>();
     private Map<String, BaseCommand> userCommands = new HashMap<>();
@@ -146,6 +150,7 @@ public class CommandsBuilder {
         commands.put(settingsGroup.getCommandName(), settingsGroup);
         commands.put(silenceMode.getCommandName(), silenceMode);
         commands.put(groupBugReport.getCommandName(), groupBugReport);
+        commands.put(groupGetRank.getCommandName(), groupGetRank);
     }
 
     private void initializeGroupButtonCommands() {
