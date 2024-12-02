@@ -31,6 +31,23 @@ public class TelegramBotApplication {
         SpringApplication.run(TelegramBotApplication.class, args);
     }
 
+    @Bean
+    public DefaultBotOptions defaultBotOptions() {
+        DefaultBotOptions options = new DefaultBotOptions();
+
+        RequestConfig requestConfig = RequestConfig.custom()
+                .setConnectTimeout(10000)
+                .setSocketTimeout(10000)
+                .build();
+
+        CloseableHttpClient httpClient = HttpClients.custom()
+                .setDefaultRequestConfig(requestConfig)
+                .build();
+
+        options.setHttpContext((HttpContext) httpClient);
+        return options;
+    }
+
     @PostConstruct
     public void getServerPort() {
         System.out.println("Server is running on port: " + 
