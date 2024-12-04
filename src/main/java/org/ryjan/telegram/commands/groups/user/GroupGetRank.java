@@ -1,13 +1,18 @@
 package org.ryjan.telegram.commands.groups.user;
 
+import java.awt.geom.Ellipse2D;
+import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import org.ryjan.telegram.commands.groups.BaseCommand;
 import org.ryjan.telegram.commands.groups.config.GroupPermissions;
+import org.ryjan.telegram.commands.groups.level.XpService;
 import org.ryjan.telegram.config.BotConfig;
 import org.ryjan.telegram.handler.CommandsHandler;
 import org.ryjan.telegram.interfaces.Permissions;
 import org.ryjan.telegram.main.BotMain;
 import org.ryjan.telegram.model.users.User;
+import org.ryjan.telegram.utils.RankImageGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -38,6 +43,9 @@ public class GroupGetRank extends BaseCommand {
     @Autowired
     private BotMain botMain;
 
+    @Autowired
+    private XpService xpService;
+
     protected GroupGetRank() {
         super("/rank", "💖Получить карточку профиля", GroupPermissions.ANY);
     }
@@ -46,42 +54,16 @@ public class GroupGetRank extends BaseCommand {
     protected void executeCommand(String chatId, BotMain bot, CommandsHandler handler) throws Exception {
         Message message = getUpdate().getMessage();
         User user = userService.findUser(message.getFrom().getId());
-        File card = generateLevelCard(user.getUsername(), user.getLevel(), user.getXp(), 123213);
 
-        InputStream inputStream = getClass().getClassLoader().getResourceAsStream("file_0.jpg");
+        //InputStream inputStream = getClass().getClassLoader().getResourceAsStream("/defaultImage.jpg");
+        byte[] image = RankImageGenerator.generateRankImage(user.getUsername(), user.getLevel(), user.getXp(),
+                xpService.xpForNextLevel(user.getLevel()), null);
+        InputStream inputStream = new ByteArrayInputStream(image);
 
         SendPhoto photo = new SendPhoto();
         photo.setChatId(getUpdate().getMessage().getChatId());
-        photo.setPhoto(new InputFile(card));
+        photo.setPhoto(new InputFile(inputStream, "rank_image.png"));
+        photo.setReplyToMessageId(message.getMessageId());
         botMain.execute(photo);
-    }
-
-    private File generateLevelCard(String username, int level, double xp, double xpForNextLevel) throws Exception {
-        int width = 800, height = 200;
-        BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
-        Graphics2D g = image.createGraphics();
-
-        g.setColor(Color.DARK_GRAY);
-        g.fillRect(0, 0, width, height);
-
-        g.setColor(Color.WHITE);
-        g.setFont(new Font("Times New Roman", Font.BOLD, 24));
-        g.drawString(username, 50, 50);
-
-        int progressBarWidth = 600;
-        int progressBarHeight = 30;
-        double progress = xp / xpForNextLevel;
-
-        g.setColor(Color.CYAN);
-        g.fillRect(50, 120, (int) (progress * progressBarWidth), progressBarHeight);
-
-        g.setColor(Color.WHITE);
-        g.drawString(String.format("%.0f / %.0f XP", xp, xpForNextLevel), 50, 170);
-
-        g.dispose();
-
-        File file = new File("level_card.png");
-        ImageIO.write(image, "png", file);
-        return file;
     }
 }

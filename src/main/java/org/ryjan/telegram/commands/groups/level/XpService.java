@@ -32,7 +32,7 @@ public class XpService extends ServiceBuilder {
         userService.processAndSendUser(user);
     }
 
-    private double xpForNextLevel(int currentLevel) {
+    public double xpForNextLevel(int currentLevel) {
         return 100 * Math.pow(currentLevel, 1.5);
     }
 
