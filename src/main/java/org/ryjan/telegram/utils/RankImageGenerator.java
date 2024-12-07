@@ -48,7 +48,7 @@ public class RankImageGenerator {
         g.setColor(Color.GRAY);
         g.fillRect(progressBarX, progressBarY, progressBarWidth, progressBarHeight);
         g.setColor(Color.CYAN);
-        g.fillRect(progressBarX, progressBarY, (int)(progressBarWidth * (level / 100.0)), progressBarHeight);
+        g.fillRect(progressBarX, progressBarY, (int)(progressBarWidth * (xp / xpForNextLevel)), progressBarHeight);
 
         g.setColor(Color.WHITE);
         g.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
