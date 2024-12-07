@@ -1,5 +1,6 @@
 package org.ryjan.telegram.commands.groups;
 
+import lombok.Getter;
 import org.ryjan.telegram.commands.groups.config.GroupPermissions;
 import org.ryjan.telegram.commands.interfaces.IBotCommand;
 import org.ryjan.telegram.handler.CommandsHandler;
@@ -9,21 +10,22 @@ import org.ryjan.telegram.services.*;
 import org.ryjan.telegram.utils.UpdateContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.telegram.telegrambots.meta.api.methods.ParseMode;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
-import org.telegram.telegrambots.meta.api.methods.updatingmessages.DeleteMessage;
-import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.chatmember.ChatMember;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
-import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 @Service
 public abstract class BaseCommand implements IBotCommand {
 
+    @Getter
     private final String commandName;
+    @Getter
     private final String description;
+    @Getter
     private final Permissions requiredPermission;
+    @Getter
+    private final Integer requiredLevel;
 
     protected UserService userService;
     protected GroupService groupService;
@@ -48,10 +50,22 @@ public abstract class BaseCommand implements IBotCommand {
         this.commandName = commandName;
         this.description = description;
         this.requiredPermission = requiredPermission;
+        this.requiredLevel = 0;
+    }
+
+    protected BaseCommand(String commandName, String description, Permissions requiredPermission, Integer requiredLevel) {
+        this.commandName = commandName;
+        this.description = description;
+        this.requiredPermission = requiredPermission;
+        this.requiredLevel = requiredLevel;
     }
 
     public GroupPermissions getPermissionFromChat(Long chatId, Long userId) {
         return groupService.getPermissionFromChat(chatId, userId);
+    }
+
+    public boolean hasRequiredLevel(Long userId) {
+        return userService.hasRequiredLevel(userId, requiredLevel);
     }
 
     public boolean hasPermissionInGroup(Long chatId, Long userId) {
@@ -70,7 +84,7 @@ public abstract class BaseCommand implements IBotCommand {
     }
 
     public boolean hasPermissionInUserChat(Long userId) {
-        return userService.hasPermission(userId, requiredPermission);
+        return userService.hasRequiredPermission(userId, requiredPermission);
     }
 
     protected SendMessage createSendMessage(Long chatId) {
@@ -144,21 +158,7 @@ public abstract class BaseCommand implements IBotCommand {
         }
     }
 
-    public String getCommandName() {
-        return commandName;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public Permissions getPermission() {
-        return requiredPermission;
-    }
-
     protected Update getUpdate() {
         return UpdateContext.getInstance().getUpdate();
     }
-
-
 }

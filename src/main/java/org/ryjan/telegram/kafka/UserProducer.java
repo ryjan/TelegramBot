@@ -13,5 +13,6 @@ public class UserProducer {
 
     public void sendUser(User user) {
         kafkaTemplate.send("user-xp-topic", user);
+
     }
 }

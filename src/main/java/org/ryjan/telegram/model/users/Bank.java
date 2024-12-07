@@ -23,9 +23,8 @@ public class Bank {
     private BigDecimal gems;
     private BigDecimal coins;
 
-    @OneToOne
+    @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
     @MapsId
-    @JoinColumn(name = "id", referencedColumnName = "user_id")
     @Getter(AccessLevel.NONE)
     private User user;
 
@@ -52,10 +51,9 @@ public class Bank {
     }
 
     public Bank createBank(User user) {
-        Bank bank = new Bank();
-        bank.setUser(user);
-        bank.setUsername(user.getUsername());
-        return bank;
+        this.user = user;
+        this.setUsername(user.getUsername());
+        return this;
     }
 
     @Override

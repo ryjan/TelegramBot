@@ -30,7 +30,7 @@ public class User {
 
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     @JsonManagedReference
-    private Bank banks = new Bank();
+    private Bank banks;
 
     public User() {
 
@@ -44,13 +44,16 @@ public class User {
         this.xp = 0.0;
         this.createdAt = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss").format(LocalDateTime.now());
 
-        setBanks(banks);
-        banks.setUsername(this.username);
+        this.banks = new Bank();
+        this.banks.setUser(this);
+        this.banks.setUsername(this.username);
     }
 
     public void setBanks(Bank bank) {
-        this.banks = bank;
-        bank.setUser(this);
+        if (bank != null) {
+            this.banks = bank;
+            banks.setUser(this);
+        }
     }
 
     public boolean isOwner() {

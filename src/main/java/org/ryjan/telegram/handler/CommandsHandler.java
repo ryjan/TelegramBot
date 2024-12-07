@@ -1,6 +1,5 @@
 package org.ryjan.telegram.handler;
 
-import org.glassfish.grizzly.compression.lzma.impl.Base;
 import org.ryjan.telegram.commands.groups.BaseCommand;
 import org.ryjan.telegram.builders.CommandsBuilder;
 import org.ryjan.telegram.main.BotMain;
@@ -12,7 +11,6 @@ import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
-import java.io.IOException;
 import java.util.Map;
 import java.util.function.Consumer;
 
@@ -89,7 +87,7 @@ public class CommandsHandler { // переписать под единый comma
 
         if (command == null) return;
 
-        if (update.getMessage().getChat().isUserChat() && command.hasPermissionInUserChat(chatId) || command.hasPermissionInGroup(chatId, userId)) {
+        if ((update.getMessage().getChat().isUserChat() && command.hasPermissionInUserChat(chatId) || command.hasPermissionInGroup(chatId, userId)) && command.hasRequiredLevel(userId)) {
             command.execute(String.valueOf(chatId), bot, this);
         } else {
             sendNoPermissionMessageToUser(userId, command);
@@ -127,7 +125,7 @@ public class CommandsHandler { // переписать под единый comma
         SendMessage message = new SendMessage();
         message.setChatId(userId);
         message.setText("✨У вас нет прав для выполнения команды " + baseGroupCommand.getCommandName() + "\nНужны права: "
-                + baseGroupCommand.getPermission().getName());
+                + baseGroupCommand.getRequiredPermission().getName());
         try {
             bot.execute(message);
         } catch (Exception e) {

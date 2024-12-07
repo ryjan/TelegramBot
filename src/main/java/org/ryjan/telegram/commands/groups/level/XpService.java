@@ -1,6 +1,7 @@
 package org.ryjan.telegram.commands.groups.level;
 
 import org.ryjan.telegram.commands.groups.BaseCommand;
+import org.ryjan.telegram.config.RedisConfig;
 import org.ryjan.telegram.handler.CommandsHandler;
 import org.ryjan.telegram.interfaces.Permissions;
 import org.ryjan.telegram.main.BotMain;
@@ -14,6 +15,7 @@ import java.util.concurrent.TimeUnit;
 
 @Service
 public class XpService extends ServiceBuilder {
+    private final String CACHE_KEY = RedisConfig.USER_CACHE_KEY;
 
     @Autowired
     private RedisTemplate<String, User> userRedisTemplate;
@@ -21,14 +23,14 @@ public class XpService extends ServiceBuilder {
     public void chatXpListener(String userId, String username, String message) {
         User user = userRedisTemplate.opsForValue().get(userId);
         if (user == null) {
-            user = userService.findUser(userId) != null ? userService.findUser(userId) : new User(Long.valueOf(userId), username.toLowerCase());
+            user = userService.findUser(userId) != null ? userService.findUser(userId) : userService.createUser(new User(Long.valueOf(userId), username.toLowerCase()));
         }
         double xp = calculateXp(message);
         user.setXp(user.getXp() + xp);
         int level = getLevel(user.getLevel(), user.getXp());
         user.setLevel(level);
 
-        userRedisTemplate.opsForValue().set(userId, user, 30, TimeUnit.MINUTES);
+        userRedisTemplate.opsForValue().set(CACHE_KEY + user.getId(), user, 30, TimeUnit.MINUTES);
         userService.processAndSendUser(user);
     }
 

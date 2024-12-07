@@ -19,6 +19,7 @@ import java.util.List;
 
 @Configuration
 public class RedisConfig {
+    public static final String USER_CACHE_KEY = "users:";
 
     @Bean
     public RedisCacheConfiguration cacheConfiguration() {

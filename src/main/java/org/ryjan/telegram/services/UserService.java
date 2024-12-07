@@ -2,6 +2,7 @@ package org.ryjan.telegram.services;
 
 import org.ryjan.telegram.commands.groups.config.GroupPermissions;
 import org.ryjan.telegram.commands.users.user.UserPermissions;
+import org.ryjan.telegram.config.RedisConfig;
 import org.ryjan.telegram.interfaces.Permissions;
 import org.ryjan.telegram.kafka.UserProducer;
 import org.ryjan.telegram.model.users.User;
@@ -9,68 +10,92 @@ import org.ryjan.telegram.interfaces.repos.jpa.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 @Service
 public class UserService {
-    public final String CACHE_KEY = "userDatabase:";
+    public final String CACHE_KEY = RedisConfig.USER_CACHE_KEY;
 
     @Autowired
     private UserProducer userProducer;
 
     @Autowired
-    private RedisTemplate<String, User> redisTemplate;
+    private RedisTemplate<String, User> userRedisTemplate;
 
     @Autowired
-    private UserRepository userDatabaseRepository;
+    private UserRepository userRepository;
 
     public void processAndSendUser(User user) {
         userProducer.sendUser(user);
     }
 
+    @Transactional
+    public User createUser(User user) {
+        if (findUser(user.getId()) != null) {
+            return findUser(user.getId());
+        }
+        return userRepository.save(user);
+    }
+
     public User findUser(String usernameOrId) {
         if (isNumeric(usernameOrId)) {
-            return userDatabaseRepository.findById(Long.parseLong(usernameOrId)).orElse(null);
+            findUser(Long.parseLong(usernameOrId));
         }
-        return userDatabaseRepository.findByUsername(usernameOrId);
+        return userRepository.findByUsername(usernameOrId);
     }
 
     public User findUser(Long id) {
-        return userDatabaseRepository.findById(id).orElse(null);
-    }
-
-    public Boolean hasPermission(Long userId, Permissions permissions) {
-        if (permissions == UserPermissions.ANY || permissions == GroupPermissions.ANY) return true;
-
-        User user = redisTemplate.opsForValue().get(CACHE_KEY + userId);
+        User user = userRedisTemplate.opsForValue().get(CACHE_KEY + id);
 
         if (user == null) {
-            user = findUser(userId);
-            redisTemplate.opsForValue().set(CACHE_KEY + userId, user, 1, TimeUnit.HOURS);
+            user = userRepository.findById(id).orElse(null);
+            assert user != null;
+            userRedisTemplate.opsForValue().set(CACHE_KEY + id, user, 10, TimeUnit.MINUTES);
         }
-        return user != null && user.getUserGroup().isAtLeast(permissions);
+        return user;
+    }
+
+    public Boolean hasRequiredPermission(Long userId, Permissions requiredPermission) {
+        if (requiredPermission == UserPermissions.ANY || requiredPermission == GroupPermissions.ANY) return true;
+        User user = findUser(userId);
+        return user != null && user.getUserGroup().isAtLeast(requiredPermission);
+    }
+
+    public Boolean hasRequiredLevel(Long userId, Integer requiredLevel) {
+        if (requiredLevel == 0) return true;
+        User user = findUser(userId);
+        return user != null && user.getLevel() >= requiredLevel;
     }
 
     public Boolean userIsExist(Long id) {
-        return userDatabaseRepository.existsById(id);
+        return userRepository.existsById(id);
     }
 
     public Boolean userIsExist(String username) {
-        return userDatabaseRepository.existsByUsername(username);
+        return userRepository.existsByUsername(username);
+    }
+
+    public void flush() {
+        userRepository.flush();
     }
 
     public void update(User user) {
-        userDatabaseRepository.save(user);
+        userRepository.save(user);
     }
 
     public void saveAll(List<User> users) {
-        userDatabaseRepository.saveAll(users);
+        userRepository.saveAll(users);
+    }
+
+    public void saveAllAndFlush(List<User> users) {
+        userRepository.saveAllAndFlush(users);
     }
 
     public void delete(User user) {
-        userDatabaseRepository.delete(user);
+        userRepository.delete(user);
     }
 
     private boolean isNumeric(String string) {
@@ -81,4 +106,6 @@ public class UserService {
             return false;
         }
     }
+
+
 }

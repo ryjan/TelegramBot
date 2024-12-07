@@ -15,5 +15,6 @@ public class UserConsumer extends ServiceBuilder {
     @Transactional
     public void consumeUserXp(List<User> users) {
         userService.saveAll(users);
+        userService.flush();
     }
 }
