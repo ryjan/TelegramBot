@@ -56,8 +56,8 @@ public class RankImageGenerator {
         FontMetrics fontMetrics = g.getFontMetrics();
         int textX = progressBarX + progressBarWidth / 2;
         int textY = (height + fontMetrics.getHeight()) / 2 - fontMetrics.getDescent();
-        g.drawString(username, textX, textY);
-        g.drawString("#" + level, textX, textY + fontMetrics.getHeight());
+        //g.drawString(username, textX, textY);
+        g.drawString("Уровень: " + level, textX, textY + fontMetrics.getHeight());
         g.dispose();
 
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
