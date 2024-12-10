@@ -3,6 +3,9 @@ package org.ryjan.telegram.commands.groups.user;
 import java.awt.geom.Ellipse2D;
 import java.io.*;
 
+import com.squareup.okhttp.OkHttpClient;
+import com.squareup.okhttp.Request;
+import com.squareup.okhttp.Response;
 import org.ryjan.telegram.commands.groups.BaseCommand;
 import org.ryjan.telegram.commands.groups.config.GroupPermissions;
 import org.ryjan.telegram.commands.groups.level.XpService;
@@ -76,8 +79,13 @@ public class GroupGetRank extends BaseCommand {
 
         String url = String.format("https://api.telegram.org/file/bot%s/", botMain.getBotToken()) + filePath;
 
-        InputStream inputStream = getUrlConnection(url).getInputStream();
-        return ImageIO.read(inputStream);
+        OkHttpClient client = new OkHttpClient();
+        Response response = client.newCall(getHttpRequest(url)).execute();
+        if (response.isSuccessful()) {
+            InputStream inputStream = response.body().byteStream();
+            return ImageIO.read(inputStream);
+        }
+        return null;
     }
 
     private String getUserAvatarFieldId(Long userId) {
@@ -97,11 +105,9 @@ public class GroupGetRank extends BaseCommand {
         return null;
     }
 
-    private URLConnection getUrlConnection(String url) throws IOException {
-        URI uri = URI.create(url);
-        URLConnection connection = uri.toURL().openConnection();
-        connection.setConnectTimeout(5000);
-        connection.setReadTimeout(5000);
-        return connection;
+    private Request getHttpRequest(String url) {
+        return new Request.Builder()
+                .url(url)
+                .build();
     }
 }
