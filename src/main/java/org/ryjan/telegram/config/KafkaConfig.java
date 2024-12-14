@@ -17,7 +17,6 @@ import java.util.Map;
 
 @Configuration
 public class KafkaConfig {
-
     private final String bootstrapServers = "kafka:9092";
 
     @Bean

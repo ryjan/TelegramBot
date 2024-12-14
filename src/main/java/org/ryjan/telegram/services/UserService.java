@@ -42,7 +42,7 @@ public class UserService {
 
     public User findUser(String usernameOrId) {
         if (isNumeric(usernameOrId)) {
-            findUser(Long.parseLong(usernameOrId));
+            return findUser(Long.parseLong(usernameOrId));
         }
         return userRepository.findByUsername(usernameOrId);
     }
@@ -51,11 +51,13 @@ public class UserService {
         User user = userRedisTemplate.opsForValue().get(CACHE_KEY + id);
 
         if (user == null) {
-            user = userRepository.findById(id).orElse(null);
-            assert user != null;
-            userRedisTemplate.opsForValue().set(CACHE_KEY + id, user, 10, TimeUnit.MINUTES);
+            userProducer.findUser(id);
         }
         return user;
+    }
+
+    public void setUserInRedis(User user) {
+        userRedisTemplate.opsForValue().set(CACHE_KEY + user.getId(), user, 10, TimeUnit.MINUTES);
     }
 
     public Boolean hasRequiredPermission(Long userId, Permissions requiredPermission) {
@@ -96,6 +98,7 @@ public class UserService {
 
     public void delete(User user) {
         userRepository.delete(user);
+        userRedisTemplate.delete(CACHE_KEY + user.getId());
     }
 
     private boolean isNumeric(String string) {

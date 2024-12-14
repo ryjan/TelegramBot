@@ -52,6 +52,10 @@ public class ChatSettingsService extends ServiceBuilder {
         }
     }
 
+    public boolean isBlacklistEnabled(Long groupId) {
+        return chatSettingsCheckKeyValue(groupId, GroupChatSettings.BLACKLIST.getDisplayname(), GroupSwitch.ON.getDisplayname()) != null;
+    }
+
     public ChatSettings findChatSettings(Long groupId, GroupChatSettings groupChatSettings) {
         return chatSettingsRepository.findByGroupIdAndSettingKey(groupId, groupChatSettings.getDisplayname());
     }

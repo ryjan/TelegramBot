@@ -1,5 +1,6 @@
 package org.ryjan.telegram.controllers;
 
+import org.ryjan.telegram.commands.users.user.UserPermissions;
 import org.ryjan.telegram.model.users.User;
 import org.ryjan.telegram.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,7 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/users")
+@RequestMapping("/api/user")
 public class UsersController {
 
     @Autowired
@@ -24,20 +25,26 @@ public class UsersController {
     public ResponseEntity<String> deleteUser(@RequestParam Long userId) {
         User user = userService.findUser(userId);
         userService.delete(user);
-        redisUserDatabaseTemplate.delete(userService.CACHE_KEY + user);
 
         return ResponseEntity.ok("User deleted successfully");
     }
 
     @GetMapping("{username}")
     public String getIdByUsername(@PathVariable String username) {
-        String userId = redisTemplate.opsForValue().get(username);
+        return String.valueOf(userService.findUser(username).getId());
+    }
 
-        if (userId == null) {
-            userId = String.valueOf(userService.findUser(username).getId());
-            redisTemplate.opsForValue().set(username, userId);
-        }
+    @PatchMapping("{userId}/group")
+    public ResponseEntity<String> setUserGroup(@PathVariable Long userId, @RequestParam String userGroup) {
+        User user = userService.findUser(userId);
+        user.setUserGroup(UserPermissions.valueOf(userGroup.toUpperCase()));
+        userService.setUserInRedis(user);
+        userService.processAndSendUser(user);
+        return ResponseEntity.ok("Successfully!\n User group switched to" + userGroup);
+    }
 
-        return userId;
+    @GetMapping("/get/user-groups")
+    public UserPermissions[] getAllUserGroups() {
+        return UserPermissions.values();
     }
 }
