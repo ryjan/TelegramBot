@@ -1,5 +1,7 @@
 package org.ryjan.telegram.services;
 
+import org.ryjan.telegram.commands.groups.GroupChatSettings;
+import org.ryjan.telegram.commands.groups.GroupSwitch;
 import org.ryjan.telegram.model.groups.Blacklist;
 import org.ryjan.telegram.model.groups.ChatSettings;
 import org.ryjan.telegram.model.groups.Groups;
@@ -38,8 +40,8 @@ public class BlacklistService extends ServiceBuilder {
         groupService.update(group);
     }
 
-    public boolean blacklistStatus(long groupId) {
-        return chatSettingsService.chatSettingsCheckKeyValue(groupId, "blacklist", "enabled") != null;
+    public boolean isBlacklistEnabled(long groupId) {
+        return chatSettingsService.chatSettingsCheckKeyValue(groupId, GroupChatSettings.BLACKLIST.getDisplayname(), GroupSwitch.ON.getDisplayname()) != null;
     }
 
     public void replaceBlacklistValue(long groupId, String settingsKey, String settingsValue) {

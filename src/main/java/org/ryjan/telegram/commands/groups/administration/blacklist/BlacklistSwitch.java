@@ -30,7 +30,7 @@ public class BlacklistSwitch extends BaseCommand {
     protected void executeCommand(String chatId, BotMain bot, CommandsHandler commandHandler) {
         Update update = getUpdate();
 
-        if (blacklistService.blacklistStatus(update.getCallbackQuery().getMessage().getChatId())) {
+        if (blacklistService.isBlacklistEnabled(update.getCallbackQuery().getMessage().getChatId())) {
             blacklistService.replaceBlacklistValue(Long.parseLong(chatId), GroupChatSettings.BLACKLIST.getDisplayname(), GroupSwitch.ON.getDisplayname());
             editMessage("🔒Черный список *включен*", blacklistSwitchOn.getKeyboard());
         } else {

@@ -19,7 +19,7 @@ import org.ryjan.telegram.commands.users.owner.ownerpanel.*;
 import org.ryjan.telegram.commands.users.owner.ownerpanel.groups.*;
 import org.ryjan.telegram.commands.users.owner.ownerpanel.users.OwnerFindUser;
 import org.ryjan.telegram.commands.users.owner.ownerpanel.users.OwnerUserSettings;
-import org.ryjan.telegram.commands.users.user.StartUser;
+import org.ryjan.telegram.commands.users.StartUser;
 import org.ryjan.telegram.commands.users.user.button.bugreport.UserBugReport;
 import org.ryjan.telegram.commands.users.user.button.bugreport.UserSendWishReply;
 import org.ryjan.telegram.model.groups.Groups;

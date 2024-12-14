@@ -17,27 +17,14 @@ import java.util.concurrent.TimeUnit;
 
 @Component
 public class GroupSettings extends BaseCommand {
-
-    @Autowired
-    private GroupService groupService;
-
-    @Autowired
-    private RedisTemplate<String, Groups> redisTemplate;
-
     protected GroupSettings() {
         super("/settings", "⚙️Настройки", GroupPermissions.ADMIN);
     }
 
     @Override
     protected void executeCommand(String chatId, BotMain bot, CommandsHandler commandHandler) {
-        String cacheKey = "groups:" + chatId;
-        Groups group = redisTemplate.opsForValue().get(cacheKey);
+        groupService.findGroup(Long.parseLong(chatId));
         SendMessage message = createSendMessage(chatId);
-
-        if (group == null) {
-            group = groupService.findGroup(Long.valueOf(chatId));
-            redisTemplate.opsForValue().set(cacheKey, group, 15, TimeUnit.MINUTES);
-        }
 
         if (!getUpdate().hasCallbackQuery()) {
             message.setText("⚙️Настройки");

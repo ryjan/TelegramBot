@@ -20,6 +20,7 @@ import java.util.List;
 @Configuration
 public class RedisConfig {
     public static final String USER_CACHE_KEY = "users:";
+    public static final String GROUP_CACHE_KEY = "group:";
 
     @Bean
     public RedisCacheConfiguration cacheConfiguration() {

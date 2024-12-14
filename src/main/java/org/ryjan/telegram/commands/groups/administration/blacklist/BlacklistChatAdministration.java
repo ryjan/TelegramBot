@@ -31,7 +31,7 @@ public class BlacklistChatAdministration extends BaseCommand {
 
         long groupId = update.getMessage().getChat().getId();
 
-        if (!blacklistService.blacklistStatus(groupId)) {
+        if (!blacklistService.isBlacklistEnabled(groupId)) {
             return;
         }
 
@@ -52,7 +52,6 @@ public class BlacklistChatAdministration extends BaseCommand {
         message.setParseMode(ParseMode.MARKDOWN);
         message.setReplyMarkup(getKeyboard());
         sendMessageForCommand(bot, message);
-        System.out.println(getLeftUserId());
     }
 
     private InlineKeyboardMarkup getKeyboard() {

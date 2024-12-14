@@ -3,6 +3,7 @@ package org.ryjan.telegram.services;
 import lombok.Getter;
 import org.ryjan.telegram.commands.groups.GroupStatus;
 import org.ryjan.telegram.commands.groups.config.GroupPermissions;
+import org.ryjan.telegram.config.RedisConfig;
 import org.ryjan.telegram.model.groups.ChatSettings;
 import org.ryjan.telegram.model.groups.Groups;
 import org.ryjan.telegram.interfaces.repos.jpa.GroupsRepository;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.objects.chatmember.ChatMember;
 
 import java.security.Permission;
+import java.util.concurrent.TimeUnit;
 
 @Service
 public class GroupService extends ServiceBuilder {
@@ -19,12 +21,16 @@ public class GroupService extends ServiceBuilder {
     private final String CACHE_KEY = "group_status:";
     @Getter
     private final String OWNER_GROUP_STATE_CACHE_KEY = "owner_group_state:";
+    private final String GROUP_CACHE_KEY = RedisConfig.GROUP_CACHE_KEY;
 
     @Autowired
     private GroupsRepository groupsRepository;
 
     @Autowired
     private RedisTemplate<String, String> redisTemplate;
+
+    @Autowired
+    private RedisTemplate<String, Groups> groupsRedisTemplate;
 
     public GroupPermissions getPermissionFromChat(Long chatId, Long userId) {
         ChatMember chatMember = botService.getChatMember(chatId, userId);
@@ -50,7 +56,14 @@ public class GroupService extends ServiceBuilder {
     }
 
     public Groups findGroup(Long id) {
-        return groupsRepository.findById(id).orElse(null);
+        Groups group = groupsRedisTemplate.opsForValue().get(GROUP_CACHE_KEY + id);
+
+        if (group == null) {
+            group = groupsRepository.findById(id).orElse(null);
+            assert group != null;
+            groupsRedisTemplate.opsForValue().set(GROUP_CACHE_KEY + id, group, 10, TimeUnit.MINUTES);
+        }
+        return group;
     }
 
     public boolean isExistGroup(String groupName) {

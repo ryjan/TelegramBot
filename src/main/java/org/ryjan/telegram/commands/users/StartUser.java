@@ -1,6 +1,7 @@
-package org.ryjan.telegram.commands.users.user;
+package org.ryjan.telegram.commands.users;
 
 import org.ryjan.telegram.commands.groups.BaseCommand;
+import org.ryjan.telegram.commands.users.user.UserPermissions;
 import org.ryjan.telegram.handler.CommandsHandler;
 import org.ryjan.telegram.main.BotMain;
 import org.ryjan.telegram.model.users.User;
@@ -20,9 +21,7 @@ public class StartUser extends BaseCommand {
         SendMessage message = createSendMessage(chatId);
         Message updateMessage = getUpdate().getMessage();
         long userId = updateMessage.getFrom().getId();
-        User user = userService.findUser(userId) == null ? new User(userId, updateMessage.getFrom().getUserName().toLowerCase())
-                : userService.findUser(userId);
-        userService.update(user);
+        userService.createUser(new User(userId, updateMessage.getFrom().getUserName().toLowerCase()));
         message.setText("✨Добавь бота в группу и пропиши в ней /start");
         sendMessageForCommand(bot, message);
     }

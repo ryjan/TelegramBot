@@ -21,7 +21,7 @@ public class XpService extends ServiceBuilder {
     private RedisTemplate<String, User> userRedisTemplate;
 
     public void chatXpListener(String userId, String username, String message) {
-        User user = userRedisTemplate.opsForValue().get(userId);
+        User user = userRedisTemplate.opsForValue().get(CACHE_KEY + userId);
         if (user == null) {
             user = userService.findUser(userId) != null ? userService.findUser(userId) : userService.createUser(new User(Long.valueOf(userId), username.toLowerCase()));
         }

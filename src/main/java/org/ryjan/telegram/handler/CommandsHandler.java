@@ -87,7 +87,8 @@ public class CommandsHandler { // переписать под единый comma
 
         if (command == null) return;
 
-        if ((update.getMessage().getChat().isUserChat() && command.hasPermissionInUserChat(chatId) || command.hasPermissionInGroup(chatId, userId)) && command.hasRequiredLevel(userId)) {
+        if ((update.getMessage().getChat().isUserChat() && command.hasPermissionInUserChat(chatId)
+                || command.hasPermissionInGroup(chatId, userId)) && command.hasRequiredLevel(userId)) {
             command.execute(String.valueOf(chatId), bot, this);
         } else {
             sendNoPermissionMessageToUser(userId, command);

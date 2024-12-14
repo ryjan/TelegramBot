@@ -61,15 +61,10 @@ public class BlacklistBannedUsersList extends BaseCommand {
     private List<Blacklist> getBlacklist(String chatId) {
         String blacklistCacheKey = "groupBlacklist:" + chatId;
         List<Blacklist> blacklistList = redisTemplate.opsForValue().get(blacklistCacheKey);
-        System.out.println(redisTemplate.opsForValue().get(blacklistCacheKey) == null);
 
         if (blacklistList == null) {
             blacklistList = blacklistService.findAllBlacklists(Long.parseLong(chatId));
-            redisTemplate.opsForValue().set(blacklistCacheKey, blacklistList, 30, TimeUnit.MINUTES);
-        }
-
-        for (Blacklist blacklist : blacklistList) {
-            System.out.println(blacklist.getUsername());
+            redisTemplate.opsForValue().set(blacklistCacheKey, blacklistList, 10, TimeUnit.MINUTES);
         }
 
         return blacklistList;
