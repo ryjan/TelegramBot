@@ -1,11 +1,10 @@
 package org.ryjan.telegram.model.groups;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-import org.ryjan.telegram.commands.groups.GroupPrivileges;
+import org.ryjan.telegram.commands.groups.utils.GroupPrivileges;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;

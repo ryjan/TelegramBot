@@ -1,7 +1,7 @@
 package org.ryjan.telegram.services;
 
 import lombok.Getter;
-import org.ryjan.telegram.commands.groups.GroupStatus;
+import org.ryjan.telegram.commands.groups.utils.GroupStatus;
 import org.ryjan.telegram.commands.groups.config.GroupPermissions;
 import org.ryjan.telegram.config.RedisConfig;
 import org.ryjan.telegram.model.groups.ChatSettings;
@@ -12,7 +12,6 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.objects.chatmember.ChatMember;
 
-import java.security.Permission;
 import java.util.concurrent.TimeUnit;
 
 @Service

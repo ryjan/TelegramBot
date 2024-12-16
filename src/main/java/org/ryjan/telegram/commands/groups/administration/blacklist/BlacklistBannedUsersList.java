@@ -63,7 +63,7 @@ public class BlacklistBannedUsersList extends BaseCommand {
         List<Blacklist> blacklistList = redisTemplate.opsForValue().get(blacklistCacheKey);
 
         if (blacklistList == null) {
-            blacklistList = blacklistService.findAllBlacklists(Long.parseLong(chatId));
+            blacklistList = blacklistService.findAllBlacklistsById(Long.parseLong(chatId));
             redisTemplate.opsForValue().set(blacklistCacheKey, blacklistList, 10, TimeUnit.MINUTES);
         }
 

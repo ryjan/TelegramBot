@@ -28,10 +28,6 @@ public class UserService {
     @Autowired
     private UserRepository userRepository;
 
-    public void processAndSendUser(User user) {
-        userProducer.sendUser(user);
-    }
-
     @Transactional
     public User createUser(User user) {
         if (findUser(user.getId()) != null) {
@@ -85,7 +81,7 @@ public class UserService {
     }
 
     public void update(User user) {
-        userRepository.save(user);
+        processAndSendUser(user);
     }
 
     public void saveAll(List<User> users) {
@@ -99,6 +95,10 @@ public class UserService {
     public void delete(User user) {
         userRepository.delete(user);
         userRedisTemplate.delete(CACHE_KEY + user.getId());
+    }
+
+    private void processAndSendUser(User user) {
+        userProducer.sendUser(user);
     }
 
     private boolean isNumeric(String string) {

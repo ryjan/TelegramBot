@@ -1,8 +1,8 @@
 package org.ryjan.telegram.commands.groups.administration.blacklist;
 
 import org.ryjan.telegram.commands.groups.BaseCommand;
-import org.ryjan.telegram.commands.groups.GroupChatSettings;
-import org.ryjan.telegram.commands.groups.GroupSwitch;
+import org.ryjan.telegram.commands.groups.utils.GroupChatSettings;
+import org.ryjan.telegram.commands.groups.utils.GroupSwitch;
 import org.ryjan.telegram.commands.groups.config.GroupPermissions;
 import org.ryjan.telegram.builders.InlineKeyboardBuilder;
 import org.ryjan.telegram.handler.CommandsHandler;

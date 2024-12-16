@@ -1,4 +1,4 @@
-package org.ryjan.telegram.commands.groups;
+package org.ryjan.telegram.commands.groups.utils;
 
 public enum GroupStatus {
     ACTIVE("ACTIVE"),

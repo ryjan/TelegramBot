@@ -21,17 +21,29 @@ import java.util.List;
 public class RedisConfig {
     public static final String USER_CACHE_KEY = "users:";
     public static final String GROUP_CACHE_KEY = "group:";
+    public static final String BLACKLIST_CACHE_KEY = "blacklist:";
 
     @Bean
     public RedisCacheConfiguration cacheConfiguration() {
         return RedisCacheConfiguration.defaultCacheConfig()
-                .entryTtl(Duration.ofHours(1))
+                .entryTtl(Duration.ofMinutes(10))
                 .disableCachingNullValues();
     }
 
     @Bean
-    public RedisTemplate<String, List<Blacklist>> redisBlacklistTemplate(RedisConnectionFactory connectionFactory) {
+    public RedisTemplate<String, List<Blacklist>> redisBlacklistListTemplate(RedisConnectionFactory connectionFactory) {
         RedisTemplate<String, List<Blacklist>> template = new RedisTemplate<>();
+        template.setConnectionFactory(connectionFactory);
+
+        template.setKeySerializer(new StringRedisSerializer());
+        template.setValueSerializer(new GenericJackson2JsonRedisSerializer());
+
+        return template;
+    }
+
+    @Bean
+    public RedisTemplate<String, Blacklist> redisBlacklistTemplate(RedisConnectionFactory connectionFactory) {
+        RedisTemplate<String, Blacklist> template = new RedisTemplate<>();
         template.setConnectionFactory(connectionFactory);
 
         template.setKeySerializer(new StringRedisSerializer());

@@ -43,7 +43,7 @@ public class UsersController {
         User user = userService.findUser(userId);
         user.setUserGroup(UserPermissions.valueOf(userGroup.toUpperCase()));
         userService.setUserInRedis(user);
-        userService.processAndSendUser(user);
+        userService.update(user);
         return ResponseEntity.ok("Successfully!\n User group switched to" + userGroup);
     }
 

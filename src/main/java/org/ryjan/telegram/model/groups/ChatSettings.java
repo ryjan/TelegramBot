@@ -1,8 +1,8 @@
 package org.ryjan.telegram.model.groups;
 
 import jakarta.persistence.*;
-import org.ryjan.telegram.commands.groups.GroupChatSettings;
-import org.ryjan.telegram.commands.groups.GroupSwitch;
+import org.ryjan.telegram.commands.groups.utils.GroupChatSettings;
+import org.ryjan.telegram.commands.groups.utils.GroupSwitch;
 
 @Entity
 @Table(name = "chat_settings", schema = "groups")

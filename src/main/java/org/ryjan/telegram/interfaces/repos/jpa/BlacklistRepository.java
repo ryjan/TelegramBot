@@ -6,7 +6,11 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface BlacklistRepository extends JpaRepository<Blacklist, Long> {
-    Blacklist findByUserId(long userId);
-    List<Blacklist> findByGroupId(long groupId);
-    boolean existsByUserId(long userId);
+    Blacklist findByUserId(Long userId);
+    Blacklist findByUsernameAndGroupId(String username, Long groupId);
+
+    List<Blacklist> findByGroupId(Long groupId);
+    List<Blacklist> findByUserIdIn(List<Long> userIds);
+
+    Boolean existsByUserId(Long userId);
 }

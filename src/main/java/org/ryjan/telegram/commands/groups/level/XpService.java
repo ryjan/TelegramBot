@@ -9,6 +9,7 @@ import org.ryjan.telegram.model.users.User;
 import org.ryjan.telegram.services.ServiceBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.util.concurrent.TimeUnit;
@@ -20,6 +21,7 @@ public class XpService extends ServiceBuilder {
     @Autowired
     private RedisTemplate<String, User> userRedisTemplate;
 
+    @Async
     public void chatXpListener(String userId, String username, String message) {
         User user = userRedisTemplate.opsForValue().get(CACHE_KEY + userId);
         if (user == null) {
@@ -31,7 +33,7 @@ public class XpService extends ServiceBuilder {
         user.setLevel(level);
 
         userRedisTemplate.opsForValue().set(CACHE_KEY + user.getId(), user, 30, TimeUnit.MINUTES);
-        userService.processAndSendUser(user);
+        userService.update(user);
     }
 
     public double xpForNextLevel(int currentLevel) {

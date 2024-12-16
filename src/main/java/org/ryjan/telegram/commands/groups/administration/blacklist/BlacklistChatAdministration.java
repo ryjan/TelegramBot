@@ -1,5 +1,7 @@
 package org.ryjan.telegram.commands.groups.administration.blacklist;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.ryjan.telegram.commands.groups.BaseCommand;
 import org.ryjan.telegram.commands.groups.config.GroupPermissions;
 import org.ryjan.telegram.builders.InlineKeyboardBuilder;
@@ -14,12 +16,14 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMa
 
 import java.text.MessageFormat;
 
+@Getter
+@Setter
 @Component
 public class BlacklistChatAdministration extends BaseCommand {
 
     private String leftUserFirstName;
     private String leftUserUsername;
-    private long leftUserId;
+    private Long leftUserId;
 
     protected BlacklistChatAdministration() {
         super("chatBlacklist", "Черный список", GroupPermissions.CREATOR);
@@ -63,29 +67,5 @@ public class BlacklistChatAdministration extends BaseCommand {
         inlineKeyboardMarkup.setKeyboard(keyboard.build());
 
         return inlineKeyboardMarkup;
-    }
-
-    public String getLeftUserUsername() {
-        return leftUserUsername;
-    }
-
-    public void setLeftUserUsername(String leftUserUsername) {
-        this.leftUserUsername = leftUserUsername;
-    }
-
-    public String getLeftUserFirstName() {
-        return leftUserFirstName;
-    }
-
-    public void setLeftUserFirstName(String leftUserFirstName) {
-        this.leftUserFirstName = leftUserFirstName;
-    }
-
-    public long getLeftUserId() {
-        return leftUserId;
-    }
-
-    public void setLeftUserId(long leftUserId) {
-        this.leftUserId = leftUserId;
     }
 }

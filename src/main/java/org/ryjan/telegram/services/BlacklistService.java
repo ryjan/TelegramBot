@@ -1,12 +1,15 @@
 package org.ryjan.telegram.services;
 
-import org.ryjan.telegram.commands.groups.GroupChatSettings;
-import org.ryjan.telegram.commands.groups.GroupSwitch;
+import org.ryjan.telegram.commands.groups.utils.GroupChatSettings;
+import org.ryjan.telegram.commands.groups.utils.GroupSwitch;
+import org.ryjan.telegram.config.RedisConfig;
+import org.ryjan.telegram.kafka.BlacklistProducer;
 import org.ryjan.telegram.model.groups.Blacklist;
 import org.ryjan.telegram.model.groups.ChatSettings;
 import org.ryjan.telegram.model.groups.Groups;
 import org.ryjan.telegram.interfaces.repos.jpa.BlacklistRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,7 +19,11 @@ import java.util.List;
 public class BlacklistService extends ServiceBuilder {
 
     @Autowired
-    BlacklistRepository blacklistRepository;
+    private BlacklistRepository blacklistRepository;
+    @Autowired
+    private BlacklistProducer blacklistProducer;
+    @Autowired
+    private RedisTemplate<String, Blacklist> blacklistRedisTemplate;
 
     public BlacklistService(MainServices mainServices) {
         this.groupService = mainServices.getGroupService();
@@ -40,22 +47,31 @@ public class BlacklistService extends ServiceBuilder {
         groupService.update(group);
     }
 
-    public boolean isBlacklistEnabled(long groupId) {
+    public boolean isBlacklistEnabled(Long groupId) {
         return chatSettingsService.chatSettingsCheckKeyValue(groupId, GroupChatSettings.BLACKLIST.getDisplayname(), GroupSwitch.ON.getDisplayname()) != null;
     }
 
-    public void replaceBlacklistValue(long groupId, String settingsKey, String settingsValue) {
+    public void replaceBlacklistValue(Long groupId, String settingsKey, String settingsValue) {
         ChatSettings chatSettings = chatSettingsService.findChatSettings(groupId, settingsKey);
         chatSettings.setSettingValue(settingsValue);
         chatSettingsService.update(chatSettings);
     }
 
-    public List<Blacklist> findAllBlacklists(long groupId) {
+    public List<Blacklist> findAllBlacklistsById(Long groupId) {
         return blacklistRepository.findByGroupId(groupId);
     }
 
-    public Blacklist findBlacklist(long id) {
-        return blacklistRepository.findByUserId(id);
+    public Blacklist findBlacklist(Long id) {
+        Blacklist blacklist = blacklistRedisTemplate.opsForValue().get(RedisConfig.BLACKLIST_CACHE_KEY + id);
+
+        if (blacklist == null) {
+            return blacklistRepository.findByUserId(id);
+        }
+        return blacklist;
+    }
+
+    public Blacklist findBlacklist(String username, Long groupId) {
+        return blacklistRepository.findByUsernameAndGroupId(username, groupId);
     }
 
     public boolean isExistBlacklist(Long userId) {
@@ -64,10 +80,14 @@ public class BlacklistService extends ServiceBuilder {
 
 
     public void update(Blacklist blacklist) {
-        blacklistRepository.save(blacklist);
+        processAndSendBlacklist(blacklist);
     }
 
     public void delete(Blacklist blacklist) {
         blacklistRepository.delete(blacklist);
+    }
+
+    private void processAndSendBlacklist(Blacklist blacklist) {
+        blacklistProducer.sendBlacklist(blacklist);
     }
 }

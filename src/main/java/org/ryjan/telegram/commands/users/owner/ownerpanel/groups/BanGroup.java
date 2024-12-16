@@ -1,7 +1,7 @@
 package org.ryjan.telegram.commands.users.owner.ownerpanel.groups;
 
 import org.ryjan.telegram.commands.groups.BaseCommand;
-import org.ryjan.telegram.commands.groups.GroupStatus;
+import org.ryjan.telegram.commands.groups.utils.GroupStatus;
 import org.ryjan.telegram.commands.users.user.UserPermissions;
 import org.ryjan.telegram.handler.CommandsHandler;
 import org.ryjan.telegram.main.BotMain;

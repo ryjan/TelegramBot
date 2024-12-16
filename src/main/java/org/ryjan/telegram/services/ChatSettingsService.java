@@ -1,7 +1,7 @@
 package org.ryjan.telegram.services;
 
-import org.ryjan.telegram.commands.groups.GroupChatSettings;
-import org.ryjan.telegram.commands.groups.GroupSwitch;
+import org.ryjan.telegram.commands.groups.utils.GroupChatSettings;
+import org.ryjan.telegram.commands.groups.utils.GroupSwitch;
 import org.ryjan.telegram.model.groups.ChatSettings;
 import org.ryjan.telegram.model.groups.Groups;
 import org.ryjan.telegram.interfaces.repos.jpa.ChatSettingsRepository;

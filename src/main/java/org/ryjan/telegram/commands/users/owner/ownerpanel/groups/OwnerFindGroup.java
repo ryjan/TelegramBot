@@ -3,7 +3,7 @@ package org.ryjan.telegram.commands.users.owner.ownerpanel.groups;
 import lombok.Getter;
 import org.ryjan.telegram.builders.InlineKeyboardBuilder;
 import org.ryjan.telegram.commands.groups.BaseCommand;
-import org.ryjan.telegram.commands.groups.GroupStatus;
+import org.ryjan.telegram.commands.groups.utils.GroupStatus;
 import org.ryjan.telegram.commands.users.user.UserPermissions;
 import org.ryjan.telegram.handler.CommandsHandler;
 import org.ryjan.telegram.main.BotMain;
