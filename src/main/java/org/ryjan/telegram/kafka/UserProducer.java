@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class UserProducer {
-    public static final String FIND_USER_TOPIC = "find-user";
+    public static final String FIND_USER_TOPIC = "find-user-topic";
     public static final String USER_RESPONSE_TOPIC = "user-response-topic";
     public static final String USER_CACHE_TOPIC = "user-cache-topic";
 

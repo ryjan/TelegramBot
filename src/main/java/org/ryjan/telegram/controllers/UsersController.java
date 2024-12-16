@@ -24,7 +24,11 @@ public class UsersController {
     @DeleteMapping("/delete")
     public ResponseEntity<String> deleteUser(@RequestParam Long userId) {
         User user = userService.findUser(userId);
-        userService.delete(user);
+        try {
+            userService.delete(user);
+        } catch (Exception e) {
+            return ResponseEntity.notFound().build();
+        }
 
         return ResponseEntity.ok("User deleted successfully");
     }

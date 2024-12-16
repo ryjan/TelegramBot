@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 import static org.ryjan.telegram.kafka.UserProducer.FIND_USER_TOPIC;
 import static org.ryjan.telegram.kafka.UserProducer.USER_CACHE_TOPIC;
@@ -35,18 +36,13 @@ public class UserConsumer extends ServiceBuilder {
     }
 
     @KafkaListener(topics = FIND_USER_TOPIC, groupId = "find-user", containerFactory = "kafkaListenerContainerFactory")
-    public void consumeFindUserRequest(Long userId) {
-        Optional<User> userOptional = userRepository.findById(userId);
-        User user;
+    public void consumeFindUserRequest(List<Long> userId) {
+        List<User> users = userRepository.findAllById(userId);
 
-        if (userOptional.isPresent()) {
-            user = userOptional.get();
-            userProducer.sendUserCache(user);
-        }
-    }
-
-    @KafkaListener(topics = USER_CACHE_TOPIC, groupId = "user-cache-group", containerFactory = "kafkaListenerContainerFactory")
-    public void consumeUserCache(User user) {
-        userRedisTemplate.opsForValue().set(RedisConfig.USER_CACHE_KEY + user.getId(), user, 10, TimeUnit.MINUTES);
+        userRedisTemplate.opsForValue().multiSet(users.stream()
+                .collect(Collectors.toMap(
+                        user -> RedisConfig.USER_CACHE_KEY + user.getId(),
+                        user -> user)
+                ));
     }
 }
