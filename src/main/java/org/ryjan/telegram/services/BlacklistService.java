@@ -48,7 +48,7 @@ public class BlacklistService extends ServiceBuilder {
     }
 
     public boolean isBlacklistEnabled(Long groupId) {
-        return chatSettingsService.chatSettingsCheckKeyValue(groupId, GroupChatSettings.BLACKLIST.getDisplayname(), GroupSwitch.ON.getDisplayname()) != null;
+        return chatSettingsService.isBlacklistEnabled(groupId);
     }
 
     public void replaceBlacklistValue(Long groupId, String settingsKey, String settingsValue) {

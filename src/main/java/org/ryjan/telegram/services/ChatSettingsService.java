@@ -2,10 +2,13 @@ package org.ryjan.telegram.services;
 
 import org.ryjan.telegram.commands.groups.utils.GroupChatSettings;
 import org.ryjan.telegram.commands.groups.utils.GroupSwitch;
+import org.ryjan.telegram.config.RedisConfig;
+import org.ryjan.telegram.kafka.ChatSettingsProducer;
 import org.ryjan.telegram.model.groups.ChatSettings;
 import org.ryjan.telegram.model.groups.Groups;
 import org.ryjan.telegram.interfaces.repos.jpa.ChatSettingsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -13,6 +16,10 @@ public class ChatSettingsService extends ServiceBuilder {
 
     @Autowired
     private ChatSettingsRepository chatSettingsRepository;
+    @Autowired
+    private ChatSettingsProducer chatSettingsProducer;
+    @Autowired
+    private RedisTemplate<String, ChatSettings> chatSettingsRedisTemplate;
 
     public void addChatSettings(Long groupId, GroupChatSettings groupChatSettings, GroupSwitch groupSwitch) {
         Groups group = groupService.findGroup(groupId);
@@ -64,7 +71,16 @@ public class ChatSettingsService extends ServiceBuilder {
         return chatSettingsRepository.findByGroupIdAndSettingKey(groupId, groupChatSettings);
     }
 
-    public ChatSettings chatSettingsCheckKeyValue(long groupId, String key, String value) {
+    public ChatSettings findBlacklistSettings(Long groupId) {
+        ChatSettings chatSettings = chatSettingsRedisTemplate.opsForValue().get(RedisConfig.CHAT_SETTINGS_CACHE_KEY
+                + GroupChatSettings.BLACKLIST.getDisplayname() + groupId);
+        if (chatSettings == null) {
+            chatSettingsProducer.findChatSettingsBlacklist(groupId);
+        }
+        return chatSettings;
+    }
+
+    public ChatSettings chatSettingsCheckKeyValue(Long groupId, String key, String value) {
         return chatSettingsRepository.findByGroupIdAndSettingKeyAndSettingValue(groupId, key, value);
     }
 

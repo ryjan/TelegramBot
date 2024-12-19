@@ -32,7 +32,7 @@ public class XpService extends ServiceBuilder {
         int level = getLevel(user.getLevel(), user.getXp());
         user.setLevel(level);
 
-        userRedisTemplate.opsForValue().set(CACHE_KEY + user.getId(), user, 30, TimeUnit.MINUTES);
+        userRedisTemplate.opsForValue().set(CACHE_KEY + user.getId(), user, 15, TimeUnit.MINUTES);
         userService.update(user);
     }
 

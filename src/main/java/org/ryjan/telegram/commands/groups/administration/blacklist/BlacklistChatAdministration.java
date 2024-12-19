@@ -33,23 +33,17 @@ public class BlacklistChatAdministration extends BaseCommand {
     public void executeCommand(String chatId, BotMain bot, CommandsHandler commandHandler) {
         Update update = getUpdate();
 
-        long groupId = update.getMessage().getChat().getId();
+        Long groupId = update.getMessage().getChat().getId();
 
         if (!blacklistService.isBlacklistEnabled(groupId)) {
             return;
         }
 
-        String groupName = update.getMessage().getChat().getTitle();
         setLeftUserId(update.getMessage().getLeftChatMember().getId());
         setLeftUserUsername(update.getMessage().getLeftChatMember().getUserName()); // добавить кнопку разбанить
         setLeftUserFirstName(update.getMessage().getLeftChatMember().getFirstName());
 
-        //botMain.banUser(chatId, leftUserId);
-        Blacklist blacklist = new Blacklist(groupName, leftUserId, leftUserUsername, leftUserFirstName);
-
-        if (!blacklistService.isExistBlacklist(leftUserId)) {
-            blacklistService.addToBlacklist(groupId, blacklist);
-        }
+        botService.banUser(chatId, leftUserId);
 
         SendMessage message = createSendMessage(chatId);
         message.setText(MessageFormat.format("🥱Пользователь [{0}](https://t.me/{1}) покинул чат", leftUserFirstName, leftUserUsername));
