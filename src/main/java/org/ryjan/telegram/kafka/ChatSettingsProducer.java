@@ -19,6 +19,10 @@ public class ChatSettingsProducer {
         kafkaTemplate.send(SEND_CHAT_SETTINGS_TOPIC, chatSettings);
     }
 
+    public void findChatSettings(Long groupId) {
+        kafkaTemplate.send(FIND_CHAT_SETTINGS_TOPIC, groupId);
+    }
+
     public void findChatSettingsBlacklist(Long groupId) {
         kafkaTemplate.send(FIND_CHAT_SETTINGS_BLACKLIST_TOPIC, groupId);
     }

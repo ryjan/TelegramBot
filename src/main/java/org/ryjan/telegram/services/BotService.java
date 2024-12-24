@@ -136,6 +136,11 @@ public class BotService {
     }
 
     public void autoExecute(Update update) {
+        if (update.hasMessage() && update.getMessage().getLeftChatMember() != null) {
+            String chatId = update.getMessage().getChatId().toString();
+            chatBlacklist.executeCommand(chatId, bot, groupCommandHandler);
+            return;
+        }
 
         bugReportReplies(update);
         ownerFindGroup.sendMessageWithKeyboard(update);
@@ -145,12 +150,6 @@ public class BotService {
         if (update.hasMessage() && !update.getMessage().getChat().isUserChat() && !update.getMessage().getFrom().getIsBot()) {
             Message message = update.getMessage();
             xpService.chatXpListener(String.valueOf(message.getFrom().getId()), message.getFrom().getUserName(), message.getText());
-        }
-
-        if (update.hasMessage() && update.getMessage().getLeftChatMember() != null) {
-            String chatId = update.getMessage().getChatId().toString();
-            chatBlacklist.executeCommand(chatId, bot, groupCommandHandler);
-            return;
         }
 
         if (update.hasMessage() && silenceModeService.isSilenceModeEnabled(update.getMessage().getChatId())) {

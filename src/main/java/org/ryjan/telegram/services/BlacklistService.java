@@ -52,9 +52,7 @@ public class BlacklistService extends ServiceBuilder {
     }
 
     public void replaceBlacklistValue(Long groupId, String settingsKey, String settingsValue) {
-        ChatSettings chatSettings = chatSettingsService.findChatSettings(groupId, settingsKey);
-        chatSettings.setSettingValue(settingsValue);
-        chatSettingsService.update(chatSettings);
+        chatSettingsService.replaceBlacklistValue(groupId, settingsKey, settingsValue);
     }
 
     public List<Blacklist> findAllBlacklistsById(Long groupId) {

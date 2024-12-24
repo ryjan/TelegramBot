@@ -35,13 +35,15 @@ public class ChatSettingsConsumer extends ServiceBuilder {
 
     @KafkaListener(topics = FIND_CHAT_SETTINGS_TOPIC, groupId = FIND_CHAT_SETTINGS_TOPIC, containerFactory = "kafkaListenerContainerFactory")
     public void consumeFindChatSettingsRequest(List<Long> groupId) {
-        List<ChatSettings> chatSettings = chatSettingsRepository.findByGroupIdIn(groupId);
+        List<ChatSettings> chatSettings = chatSettingsRepository.findAllByGroupIdIn(groupId);
 
-        chatSettingsRedisTemplate.opsForValue().multiSet(chatSettings.stream()
-                .collect(Collectors.toMap(
-                        chatSetting -> RedisConfig.BLACKLIST_CACHE_KEY + chatSetting.getGroupId(),
-                        chatSetting -> chatSetting)
-                ));
+        chatSettings.forEach(chatSetting ->
+                chatSettingsRedisTemplate.opsForHash().put(
+                        RedisConfig.CHAT_SETTINGS_CACHE_KEY,
+                        RedisConfig.CHAT_SETTINGS_CACHE_KEY + chatSetting.getSettingKey() + chatSetting.getGroupId(),
+                        chatSetting
+                        )
+        ); // слишком громостко, не подходит.
     }
 
     @KafkaListener(topics = FIND_CHAT_SETTINGS_BLACKLIST_TOPIC, groupId = FIND_CHAT_SETTINGS_BLACKLIST_TOPIC, containerFactory = "kafkaListenerContainerFactory")

@@ -96,13 +96,13 @@ public class CommandsHandler { // переписать под единый comma
     }
 
     private void mergedHandleCallBackQuery(Update update, Map<String, BaseCommand> commands) {
-        String callbackData = update.getCallbackQuery().getData();
-        long chatId = update.getCallbackQuery().getMessage().getChatId();
-        long userId = update.getCallbackQuery().getFrom().getId();
+        String callbackData = update.getCallbackQuery().getData().split(" ")[0];
+        Long chatId = update.getCallbackQuery().getMessage().getChatId();
+        Long userId = update.getCallbackQuery().getFrom().getId();
         boolean isUserChat = update.hasCallbackQuery() && update.getCallbackQuery().getMessage().isUserMessage();
-
+        System.out.println(callbackData);
         BaseCommand command = commands.get(callbackData);
-        //System.out.println("CallbackData: " + command);
+        System.out.println("CallbackData: " + command);
         if (command == null) return;
 
         if (command.hasPermissionInUserChat(chatId) && isUserChat || command.hasPermissionInGroup(chatId, userId) && !groupService.isGroupBanned(chatId)) {

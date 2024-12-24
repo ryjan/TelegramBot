@@ -34,7 +34,11 @@ public class BlacklistChatAdministration extends BaseCommand {
         Update update = getUpdate();
 
         Long groupId = update.getMessage().getChat().getId();
-
+        System.out.println(blacklistService.isBlacklistEnabled(groupId));
+        System.out.println(blacklistService.isBlacklistEnabled(groupId));
+        System.out.println(blacklistService.isBlacklistEnabled(groupId));
+        System.out.println(blacklistService.isBlacklistEnabled(groupId));
+        System.out.println(blacklistService.isBlacklistEnabled(groupId));
         if (!blacklistService.isBlacklistEnabled(groupId)) {
             return;
         }
@@ -48,16 +52,16 @@ public class BlacklistChatAdministration extends BaseCommand {
         SendMessage message = createSendMessage(chatId);
         message.setText(MessageFormat.format("🥱Пользователь [{0}](https://t.me/{1}) покинул чат", leftUserFirstName, leftUserUsername));
         message.setParseMode(ParseMode.MARKDOWN);
-        message.setReplyMarkup(getKeyboard());
+        message.setReplyMarkup(getKeyboard("blacklistUnban " + leftUserId + " " + leftUserFirstName));
         sendMessageForCommand(bot, message);
     }
 
-    private InlineKeyboardMarkup getKeyboard() {
+    private InlineKeyboardMarkup getKeyboard(String callBackDataName) {
         InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
 
         InlineKeyboardBuilder.KeyboardLayer keyboard = new InlineKeyboardBuilder.KeyboardLayer()
                 .addRow(new InlineKeyboardBuilder.ButtonRow()
-                        .addButton("😶‍🌫️Разблокировать", "blacklistUnban"));
+                        .addButton("😶‍🌫️Разблокировать", callBackDataName));
         inlineKeyboardMarkup.setKeyboard(keyboard.build());
 
         return inlineKeyboardMarkup;

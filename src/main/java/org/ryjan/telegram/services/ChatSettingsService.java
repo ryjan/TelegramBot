@@ -13,7 +13,6 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class ChatSettingsService extends ServiceBuilder {
-
     @Autowired
     private ChatSettingsRepository chatSettingsRepository;
     @Autowired
@@ -21,7 +20,7 @@ public class ChatSettingsService extends ServiceBuilder {
     @Autowired
     private RedisTemplate<String, ChatSettings> chatSettingsRedisTemplate;
 
-    public void addChatSettings(Long groupId, GroupChatSettings groupChatSettings, GroupSwitch groupSwitch) {
+    public ChatSettings addChatSettings(Long groupId, GroupChatSettings groupChatSettings, GroupSwitch groupSwitch) {
         Groups group = groupService.findGroup(groupId);
         ChatSettings chatSettings = findChatSettings(groupId, groupChatSettings);
         if (chatSettings == null) {
@@ -32,9 +31,10 @@ public class ChatSettingsService extends ServiceBuilder {
             chatSettings.setSettingValue(groupSwitch);
             update(chatSettings);
         }
+        return chatSettings;
     }
 
-    public void addChatSettings(Groups group, GroupChatSettings groupChatSettings, GroupSwitch groupSwitch) {
+    public ChatSettings addChatSettings(Groups group, GroupChatSettings groupChatSettings, GroupSwitch groupSwitch) {
         ChatSettings chatSettings = findChatSettings(group.getId(), groupChatSettings);
         if (chatSettings == null) {
             chatSettings = new ChatSettings(group, groupChatSettings, groupSwitch);
@@ -44,6 +44,7 @@ public class ChatSettingsService extends ServiceBuilder {
             chatSettings.setSettingValue(groupSwitch);
             update(chatSettings);
         }
+        return chatSettings;
     }
 
     public void addChatSettings(Long groupId, GroupChatSettings groupChatSettings, String settingValue) {
@@ -60,7 +61,19 @@ public class ChatSettingsService extends ServiceBuilder {
     }
 
     public boolean isBlacklistEnabled(Long groupId) {
-        return chatSettingsCheckKeyValue(groupId, GroupChatSettings.BLACKLIST.getDisplayname(), GroupSwitch.ON.getDisplayname()) != null;
+        System.out.println("isBlacklistEnabled " + findBlacklistSettings(groupId).getSettingValue());
+        System.out.println("isBlacklistEnabled " + findBlacklistSettings(groupId).getSettingValue());
+        System.out.println("isBlacklistEnabled " + findBlacklistSettings(groupId).getSettingValue());
+        System.out.println("isBlacklistEnabled " + findBlacklistSettings(groupId).getSettingValue());
+        return findBlacklistSettings(groupId).getSettingValue().equals(GroupSwitch.ON.getDisplayname());
+    }
+
+    public void replaceBlacklistValue(Long groupId, String settingsKey, String settingsValue) {
+        ChatSettings chatSettings = chatSettingsService.findChatSettings(groupId, settingsKey);
+        chatSettings.setSettingValue(settingsValue);
+        chatSettingsRedisTemplate.opsForValue().set(RedisConfig.CHAT_SETTINGS_CACHE_KEY
+                + GroupChatSettings.BLACKLIST.getDisplayname() + groupId, chatSettings);
+        chatSettingsService.update(chatSettings);
     }
 
     public ChatSettings findChatSettings(Long groupId, GroupChatSettings groupChatSettings) {
@@ -76,6 +89,8 @@ public class ChatSettingsService extends ServiceBuilder {
                 + GroupChatSettings.BLACKLIST.getDisplayname() + groupId);
         if (chatSettings == null) {
             chatSettingsProducer.findChatSettingsBlacklist(groupId);
+            chatSettings = chatSettingsRedisTemplate.opsForValue().get(RedisConfig.CHAT_SETTINGS_CACHE_KEY
+                    + GroupChatSettings.BLACKLIST.getDisplayname() + groupId);
         }
         return chatSettings;
     }

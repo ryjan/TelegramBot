@@ -7,10 +7,13 @@ import org.ryjan.telegram.commands.groups.utils.GroupChatSettings;
 import org.ryjan.telegram.commands.groups.utils.GroupPrivileges;
 import org.ryjan.telegram.commands.groups.utils.GroupStatus;
 import org.ryjan.telegram.commands.groups.utils.GroupSwitch;
+import org.ryjan.telegram.config.RedisConfig;
 import org.ryjan.telegram.handler.CommandsHandler;
 import org.ryjan.telegram.main.BotMain;
+import org.ryjan.telegram.model.groups.ChatSettings;
 import org.ryjan.telegram.model.groups.Groups;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
@@ -21,6 +24,8 @@ public class GroupStart extends BaseCommand {
 
     @Autowired
     private GroupSettings settingsGroup;
+    @Autowired
+    private RedisTemplate<String, ChatSettings> chatSettingsRedisTemplate;
 
     public GroupStart() {
         super("/start", "Начать работу бота🤙", GroupPermissions.CREATOR); // добавить при вызове команды inline keyboard с настройками сервера
@@ -44,8 +49,12 @@ public class GroupStart extends BaseCommand {
         String creatorName = update.getMessage().getFrom().getUserName();
         Long creatorId = update.getMessage().getFrom().getId();
         Groups group = new Groups(Long.valueOf(chatId), groupName, GroupPrivileges.BASE, GroupStatus.ACTIVE.getDisplayName(), creatorId.toString(), creatorName);
-        chatSettingsService.addChatSettings(group, GroupChatSettings.BLACKLIST, GroupSwitch.OFF);
+        ChatSettings chatSettingsBlacklist = chatSettingsService.addChatSettings(group, GroupChatSettings.BLACKLIST, GroupSwitch.OFF);
         chatSettingsService.addChatSettings(group, GroupChatSettings.LEVELS, GroupSwitch.ON);
+        chatSettingsRedisTemplate.opsForValue().set(RedisConfig.CHAT_SETTINGS_CACHE_KEY
+                + GroupChatSettings.BLACKLIST.getDisplayname()
+                + group.getId(),
+                chatSettingsBlacklist);
 
         message.setText("Бот успешно зарегистрирован🤙\n⚙️Настройки:");
         message.setReplyMarkup(settingsGroup.getKeyboard());
