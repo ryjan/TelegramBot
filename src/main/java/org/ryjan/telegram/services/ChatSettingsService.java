@@ -11,6 +11,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
+
 @Service
 public class ChatSettingsService extends ServiceBuilder {
     @Autowired
@@ -61,10 +66,6 @@ public class ChatSettingsService extends ServiceBuilder {
     }
 
     public boolean isBlacklistEnabled(Long groupId) {
-        System.out.println("isBlacklistEnabled " + findBlacklistSettings(groupId).getSettingValue());
-        System.out.println("isBlacklistEnabled " + findBlacklistSettings(groupId).getSettingValue());
-        System.out.println("isBlacklistEnabled " + findBlacklistSettings(groupId).getSettingValue());
-        System.out.println("isBlacklistEnabled " + findBlacklistSettings(groupId).getSettingValue());
         return findBlacklistSettings(groupId).getSettingValue().equals(GroupSwitch.ON.getDisplayname());
     }
 
@@ -85,12 +86,24 @@ public class ChatSettingsService extends ServiceBuilder {
     }
 
     public ChatSettings findBlacklistSettings(Long groupId) {
-        ChatSettings chatSettings = chatSettingsRedisTemplate.opsForValue().get(RedisConfig.CHAT_SETTINGS_CACHE_KEY
-                + GroupChatSettings.BLACKLIST.getDisplayname() + groupId);
+        String redisKey = RedisConfig.CHAT_SETTINGS_CACHE_KEY
+                + GroupChatSettings.BLACKLIST.getDisplayname()
+                + groupId;
+        ChatSettings chatSettings = chatSettingsRedisTemplate.opsForValue().get(redisKey);
         if (chatSettings == null) {
-            chatSettingsProducer.findChatSettingsBlacklist(groupId);
-            chatSettings = chatSettingsRedisTemplate.opsForValue().get(RedisConfig.CHAT_SETTINGS_CACHE_KEY
-                    + GroupChatSettings.BLACKLIST.getDisplayname() + groupId);
+            CompletableFuture<Void> future = chatSettingsProducer.findChatSettingsBlacklist(groupId);
+
+            try {
+                future.get(1, TimeUnit.SECONDS);
+            } catch (InterruptedException | ExecutionException | TimeoutException e) {
+                throw new RuntimeException("Failed to fetch chat settings from Kafka", e);
+            }
+
+            chatSettings = chatSettingsRedisTemplate.opsForValue().get(redisKey);
+        }
+
+        if (chatSettings == null) {
+            chatSettings = addChatSettings(groupId, GroupChatSettings.BLACKLIST, GroupSwitch.OFF);
         }
         return chatSettings;
     }

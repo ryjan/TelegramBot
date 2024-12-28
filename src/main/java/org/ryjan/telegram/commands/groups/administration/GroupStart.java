@@ -48,9 +48,12 @@ public class GroupStart extends BaseCommand {
         String groupName = update.getMessage().getChat().getTitle();
         String creatorName = update.getMessage().getFrom().getUserName();
         Long creatorId = update.getMessage().getFrom().getId();
+
         Groups group = new Groups(Long.valueOf(chatId), groupName, GroupPrivileges.BASE, GroupStatus.ACTIVE.getDisplayName(), creatorId.toString(), creatorName);
+
         ChatSettings chatSettingsBlacklist = chatSettingsService.addChatSettings(group, GroupChatSettings.BLACKLIST, GroupSwitch.OFF);
         chatSettingsService.addChatSettings(group, GroupChatSettings.LEVELS, GroupSwitch.ON);
+        chatSettingsService.addChatSettings(group, GroupChatSettings.BLACKLIST_NOTIFICATIONS, GroupSwitch.ON);
         chatSettingsRedisTemplate.opsForValue().set(RedisConfig.CHAT_SETTINGS_CACHE_KEY
                 + GroupChatSettings.BLACKLIST.getDisplayname()
                 + group.getId(),

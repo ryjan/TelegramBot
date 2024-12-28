@@ -5,6 +5,7 @@ import lombok.Getter;
 @Getter
 public enum GroupChatSettings {
     BLACKLIST("❌Blacklist"),
+    BLACKLIST_NOTIFICATIONS("🔔BlacklistNotifications"),
     SILENCE_MODE("🤫SilenceMode"),
     SILENCE_MODE_END_TIME("⏳SilenceModeEndTime"),
     LEVELS("🎫Levels");

@@ -12,15 +12,10 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 
 @Component
 public class BlacklistSwitch extends BaseCommand {
-
     @Autowired
-    BlacklistChatAdministration chatBlacklist;
-
+    private BlacklistSwitchOn blacklistSwitchOn;
     @Autowired
-    BlacklistSwitchOn blacklistSwitchOn;
-
-    @Autowired
-    BlacklistSwitchOff blacklistSwitchOff;
+    private BlacklistSwitchOff blacklistSwitchOff;
 
     public BlacklistSwitch() {
         super("/blacklist", "Включение/Отключение черного списка\nПо началу включен.", GroupPermissions.CREATOR);

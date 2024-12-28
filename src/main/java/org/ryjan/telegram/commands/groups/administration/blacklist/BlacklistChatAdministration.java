@@ -34,11 +34,6 @@ public class BlacklistChatAdministration extends BaseCommand {
         Update update = getUpdate();
 
         Long groupId = update.getMessage().getChat().getId();
-        System.out.println(blacklistService.isBlacklistEnabled(groupId));
-        System.out.println(blacklistService.isBlacklistEnabled(groupId));
-        System.out.println(blacklistService.isBlacklistEnabled(groupId));
-        System.out.println(blacklistService.isBlacklistEnabled(groupId));
-        System.out.println(blacklistService.isBlacklistEnabled(groupId));
         if (!blacklistService.isBlacklistEnabled(groupId)) {
             return;
         }
@@ -48,6 +43,7 @@ public class BlacklistChatAdministration extends BaseCommand {
         setLeftUserFirstName(update.getMessage().getLeftChatMember().getFirstName());
 
         botService.banUser(chatId, leftUserId);
+        //if ... == false, то все что ниже игнорируется.
 
         SendMessage message = createSendMessage(chatId);
         message.setText(MessageFormat.format("🥱Пользователь [{0}](https://t.me/{1}) покинул чат", leftUserFirstName, leftUserUsername));

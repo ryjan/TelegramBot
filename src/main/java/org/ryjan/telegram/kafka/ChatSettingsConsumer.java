@@ -13,7 +13,11 @@ import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
 import static org.ryjan.telegram.kafka.ChatSettingsProducer.*;
@@ -21,6 +25,7 @@ import static org.ryjan.telegram.kafka.ChatSettingsProducer.*;
 
 @Service
 public class ChatSettingsConsumer extends ServiceBuilder {
+    private final Map<Long, CompletableFuture<Void>> futureMap = new ConcurrentHashMap<>();
 
     @Autowired
     private ChatSettingsRepository chatSettingsRepository;
@@ -47,13 +52,26 @@ public class ChatSettingsConsumer extends ServiceBuilder {
     }
 
     @KafkaListener(topics = FIND_CHAT_SETTINGS_BLACKLIST_TOPIC, groupId = FIND_CHAT_SETTINGS_BLACKLIST_TOPIC, containerFactory = "kafkaListenerContainerFactory")
-    public void consumeFindChatSettingsBlacklistRequest(List<Long> groupId) {
-        List<ChatSettings> chatSettings = chatSettingsRepository.findByGroupIdInAndSettingKey(groupId, GroupChatSettings.BLACKLIST.getDisplayname());
+    public void consumeFindChatSettingsBlacklistRequest(List<Long> groupIds) {
+        List<ChatSettings> chatSettings = chatSettingsRepository.findByGroupIdInAndSettingKey(groupIds, GroupChatSettings.BLACKLIST.getDisplayname());
 
         chatSettingsRedisTemplate.opsForValue().multiSet(chatSettings.stream()
                 .collect(Collectors.toMap(
                         chatSetting -> RedisConfig.CHAT_SETTINGS_CACHE_KEY + GroupChatSettings.BLACKLIST.getDisplayname() + chatSetting.getGroupId(),
                         chatSetting -> chatSetting)
                 ));
+
+        for (Long groupId : groupIds) {
+            CompletableFuture<Void> future = futureMap.remove(groupId);
+            if (future != null) {
+                future.complete(null);
+            }
+        }
+    }
+
+    public CompletableFuture<Void> registerFuture(Long groupId) {
+        CompletableFuture<Void> future = new CompletableFuture<>();
+        futureMap.put(groupId, future);
+        return future;
     }
 }

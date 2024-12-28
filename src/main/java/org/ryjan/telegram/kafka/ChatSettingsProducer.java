@@ -5,6 +5,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
+import java.util.concurrent.CompletableFuture;
+
 @Service
 public class ChatSettingsProducer {
     public static final String FIND_CHAT_SETTINGS_TOPIC = "find-chat-settings-topic";
@@ -14,6 +16,8 @@ public class ChatSettingsProducer {
 
     @Autowired
     private KafkaTemplate<String, Object> kafkaTemplate;
+    @Autowired
+    private ChatSettingsConsumer chatSettingsConsumer;
 
     public void sendChatSettings(ChatSettings chatSettings) {
         kafkaTemplate.send(SEND_CHAT_SETTINGS_TOPIC, chatSettings);
@@ -23,8 +27,10 @@ public class ChatSettingsProducer {
         kafkaTemplate.send(FIND_CHAT_SETTINGS_TOPIC, groupId);
     }
 
-    public void findChatSettingsBlacklist(Long groupId) {
+    public CompletableFuture<Void> findChatSettingsBlacklist(Long groupId) {
+        CompletableFuture<Void> future = chatSettingsConsumer.registerFuture(groupId);
         kafkaTemplate.send(FIND_CHAT_SETTINGS_BLACKLIST_TOPIC, groupId);
+        return future;
     }
 
     public void findChatSettingsLevels(Long groupId) {
