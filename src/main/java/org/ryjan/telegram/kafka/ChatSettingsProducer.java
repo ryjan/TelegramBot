@@ -1,5 +1,6 @@
 package org.ryjan.telegram.kafka;
 
+import org.ryjan.telegram.commands.groups.utils.GroupChatSettings;
 import org.ryjan.telegram.model.groups.ChatSettings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.core.KafkaTemplate;
@@ -27,9 +28,10 @@ public class ChatSettingsProducer {
         kafkaTemplate.send(FIND_CHAT_SETTINGS_TOPIC, groupId);
     }
 
-    public CompletableFuture<Void> findChatSettingsBlacklist(Long groupId) {
+    public CompletableFuture<Void> findChatSettingsBlacklist(Long groupId, GroupChatSettings groupChatSettings) {
+        ChatSettingsMessage chatSettingsMessage = new ChatSettingsMessage(groupId, groupChatSettings);
         CompletableFuture<Void> future = chatSettingsConsumer.registerFuture(groupId);
-        kafkaTemplate.send(FIND_CHAT_SETTINGS_BLACKLIST_TOPIC, groupId);
+        kafkaTemplate.send(FIND_CHAT_SETTINGS_BLACKLIST_TOPIC, chatSettingsMessage);
         return future;
     }
 

@@ -64,14 +64,8 @@ public class ChatSettingsConsumer extends ServiceBuilder {
         for (Long groupId : groupIds) {
             CompletableFuture<Void> future = futureMap.remove(groupId);
             if (future != null) {
-                future.complete(null);
+
             }
         }
-    }
-
-    public CompletableFuture<Void> registerFuture(Long groupId) {
-        CompletableFuture<Void> future = new CompletableFuture<>();
-        futureMap.put(groupId, future);
-        return future;
     }
 }
