@@ -42,6 +42,8 @@ public class GroupSettings extends BaseCommand {
                 .addRow(new InlineKeyboardBuilder.ButtonRow()
                         .addButton("🔒Черный список", "blacklistStartGroup"))
                 .addRow(new InlineKeyboardBuilder.ButtonRow()
+                        .addButton("🔔Уведомления", "blacklistNotifications"))
+                .addRow(new InlineKeyboardBuilder.ButtonRow()
                         .addButton("🎃Узнать ID группы", "getGroupId"))
                 .addRow(new InlineKeyboardBuilder.ButtonRow()
                         .addButton("❌Закрыть", "closeMessage"));

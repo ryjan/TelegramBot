@@ -77,6 +77,14 @@ public class ChatSettingsService extends ServiceBuilder {
         chatSettingsService.update(chatSettings);
     }
 
+    public void replaceSettingValue(Long groupId, GroupChatSettings settingKey, String settingValue) {
+        ChatSettings chatSettings = chatSettingsService.findChatSettings(groupId, settingKey);
+        chatSettings.setSettingValue(settingValue);
+        chatSettingsRedisTemplate.opsForValue().set(RedisConfig.CHAT_SETTINGS_CACHE_KEY
+                + settingKey.getDisplayname() + groupId, chatSettings);
+        chatSettingsService.update(chatSettings);
+    }
+
     public ChatSettings findChatSettings(Long groupId, GroupChatSettings groupChatSettings) {
         return chatSettingsRepository.findByGroupIdAndSettingKey(groupId, groupChatSettings.getDisplayname());
     }

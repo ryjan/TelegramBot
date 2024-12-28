@@ -34,98 +34,69 @@ import java.util.function.Consumer;
 @Setter
 @Component
 public class CommandsBuilder {
-
     @Autowired
     private GroupStart startGroupCommand;
-
     @Autowired
     private StartUser startUserCommand;
-
     @Autowired
     private GroupSettings settingsGroup;
-
     @Autowired
     private InlineGetGroupId inlineGetGroupIdCommand;
-
     @Autowired
     private BlacklistSwitch blacklistSwitch;
-
     @Autowired
     private BlacklistSwitchOn blacklistSwitchOn;
-
     @Autowired
     private BlacklistSwitchOff blacklistSwitchOff;
-
+    @Autowired
+    private BlacklistNotifications blacklistNotifications;
     @Autowired
     private BlacklistUnban blacklistUnban;
-
     @Autowired
     private BlacklistBannedUsersList blacklistBannedUsers;
-
     @Autowired
     private SilenceMode silenceMode;
-
     @Autowired
     private CloseMessage closeMessage;
-
     // UserCommands
     @Autowired
     private SetCoins setCoins;
-
     @Autowired
     private UserBugReport userBugReport;
-
     @Autowired
     private GroupBugReport groupBugReport;
-
     @Autowired
     private UserSendWishReply userSendWishReply;
-
     @Autowired
     private AdminPanel adminPanel;
-
     @Autowired
     private NextArticle nextArticle;
-
     @Autowired
     private LikeArticle likeArticle;
-
     @Autowired
     private DeclineArticle declineArticle;
-
     @Autowired
     private CheckArticles checkArticles;
-
     @Autowired
     private FindWishes findWishes;
-
     @Autowired
     private OwnerPanel ownerPanel;
-
     @Autowired
     private ChangeGroupPrivilege changeGroupPrivilege;
-
     @Autowired
     private OwnerFindGroup findGroupOwner;
-
     @Autowired
     private OwnerFindUser findUserOwner;
-
     @Autowired
     private OwnerGroupSettings ownerGroupSettings;
-
     @Autowired
     private OwnerUserSettings ownerUserSettings;
-
     @Autowired
     private SendMessageToUserArticle sendMessageToUserArticle;
-
     @Autowired
     private SetPrivileges setPrivileges;
-
     @Autowired
     private BanGroup banGroup;
-
     @Autowired
     private GroupGetRank groupGetRank;
 
@@ -159,6 +130,7 @@ public class CommandsBuilder {
 
         buttonCommands.put(blacklistSwitchOn.getCommandName(), blacklistSwitchOn);
         buttonCommands.put(blacklistSwitchOff.getCommandName(), blacklistSwitchOff);
+        buttonCommands.put(blacklistNotifications.getCommandName(), blacklistNotifications);
 
         buttonCommands.put(blacklistUnban.getCommandName(), blacklistUnban);
 
