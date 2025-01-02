@@ -10,6 +10,8 @@ import org.ryjan.telegram.services.ServiceBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.kafka.annotation.KafkaListener;
+import org.springframework.kafka.support.KafkaHeaders;
+import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -51,13 +53,20 @@ public class ChatSettingsConsumer extends ServiceBuilder {
         ); // слишком громостко, не подходит.
     }
 
-    @KafkaListener(topics = FIND_CHAT_SETTINGS_BLACKLIST_TOPIC, groupId = FIND_CHAT_SETTINGS_BLACKLIST_TOPIC, containerFactory = "kafkaListenerContainerFactory")
-    public void consumeFindChatSettingsBlacklistRequest(List<Long> groupIds) {
-        List<ChatSettings> chatSettings = chatSettingsRepository.findByGroupIdInAndSettingKey(groupIds, GroupChatSettings.BLACKLIST.getDisplayname());
+    @KafkaListener(topics = {
+            FIND_CHAT_SETTINGS_BLACKLIST_TOPIC,
+            FIND_CHAT_SETTINGS_LEVELS_TOPIC
+    },
+            groupId = "chat-settings-consumer-group",
+            containerFactory = "kafkaListenerContainerFactory"
+    )
+    public void consumeFindChatSettingsBlacklistRequest(List<Long> groupIds, @Header(KafkaHeaders.RECEIVED_TOPIC) String topic) {
+        GroupChatSettings settingType = getSettingsTypeFromTopic(topic);
+        List<ChatSettings> chatSettings = chatSettingsRepository.findByGroupIdInAndSettingKey(groupIds, settingType.getDisplayname());
 
         chatSettingsRedisTemplate.opsForValue().multiSet(chatSettings.stream()
                 .collect(Collectors.toMap(
-                        chatSetting -> RedisConfig.CHAT_SETTINGS_CACHE_KEY + GroupChatSettings.BLACKLIST.getDisplayname() + chatSetting.getGroupId(),
+                        chatSetting -> RedisConfig.CHAT_SETTINGS_CACHE_KEY + settingType.getDisplayname() + chatSetting.getGroupId(),
                         chatSetting -> chatSetting)
                 ));
 
@@ -73,5 +82,13 @@ public class ChatSettingsConsumer extends ServiceBuilder {
         CompletableFuture<Void> future = new CompletableFuture<>();
         futureMap.put(groupId, future);
         return future;
+    }
+
+    private GroupChatSettings getSettingsTypeFromTopic(String topic) {
+        return switch (topic) {
+            case FIND_CHAT_SETTINGS_BLACKLIST_TOPIC -> GroupChatSettings.BLACKLIST;
+            case FIND_CHAT_SETTINGS_LEVELS_TOPIC -> GroupChatSettings.LEVELS;
+            default -> throw new IllegalArgumentException("Unknown topic: " + topic);
+        };
     }
 }

@@ -66,7 +66,7 @@ public class ChatSettingsService extends ServiceBuilder {
     }
 
     public boolean isBlacklistEnabled(Long groupId) {
-        return findBlacklistSettings(groupId).getSettingValue().equals(GroupSwitch.ON.getDisplayname());
+        return findBlacklistSettings(groupId, GroupChatSettings.BLACKLIST).getSettingValue().equals(GroupSwitch.ON.getDisplayname());
     }
 
     public void replaceBlacklistValue(Long groupId, String settingsKey, String settingsValue) {
@@ -93,13 +93,13 @@ public class ChatSettingsService extends ServiceBuilder {
         return chatSettingsRepository.findByGroupIdAndSettingKey(groupId, groupChatSettings);
     }
 
-    public ChatSettings findBlacklistSettings(Long groupId) {
+    public ChatSettings findBlacklistSettings(Long groupId, GroupChatSettings settingsType) {
         String redisKey = RedisConfig.CHAT_SETTINGS_CACHE_KEY
-                + GroupChatSettings.BLACKLIST.getDisplayname()
+                + settingsType.getDisplayname()
                 + groupId;
         ChatSettings chatSettings = chatSettingsRedisTemplate.opsForValue().get(redisKey);
         if (chatSettings == null) {
-            CompletableFuture<Void> future = chatSettingsProducer.findChatSettingsBlacklist(groupId);
+            CompletableFuture<Void> future = chatSettingsProducer.findChatSetting(groupId, settingsType);
 
             try {
                 future.get(1, TimeUnit.SECONDS);
@@ -111,7 +111,7 @@ public class ChatSettingsService extends ServiceBuilder {
         }
 
         if (chatSettings == null) {
-            chatSettings = addChatSettings(groupId, GroupChatSettings.BLACKLIST, GroupSwitch.OFF);
+            chatSettings = addChatSettings(groupId, settingsType, GroupSwitch.OFF);
         }
         return chatSettings;
     }
