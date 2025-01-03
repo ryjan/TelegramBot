@@ -66,15 +66,7 @@ public class ChatSettingsService extends ServiceBuilder {
     }
 
     public boolean isBlacklistEnabled(Long groupId) {
-        return findBlacklistSettings(groupId, GroupChatSettings.BLACKLIST).getSettingValue().equals(GroupSwitch.ON.getDisplayname());
-    }
-
-    public void replaceBlacklistValue(Long groupId, String settingsKey, String settingsValue) {
-        ChatSettings chatSettings = chatSettingsService.findChatSettings(groupId, settingsKey);
-        chatSettings.setSettingValue(settingsValue);
-        chatSettingsRedisTemplate.opsForValue().set(RedisConfig.CHAT_SETTINGS_CACHE_KEY
-                + GroupChatSettings.BLACKLIST.getDisplayname() + groupId, chatSettings);
-        chatSettingsService.update(chatSettings);
+        return findChatSetting(groupId, GroupChatSettings.BLACKLIST).getSettingValue().equals(GroupSwitch.ON.getDisplayname());
     }
 
     public void replaceSettingValue(Long groupId, GroupChatSettings settingKey, String settingValue) {
@@ -89,11 +81,27 @@ public class ChatSettingsService extends ServiceBuilder {
         return chatSettingsRepository.findByGroupIdAndSettingKey(groupId, groupChatSettings.getDisplayname());
     }
 
-    public ChatSettings findChatSettings(Long groupId, String groupChatSettings) {
-        return chatSettingsRepository.findByGroupIdAndSettingKey(groupId, groupChatSettings);
+    public ChatSettings findBlacklistSettings(Long groupId) {
+        return findChatSetting(groupId, GroupChatSettings.BLACKLIST);
     }
 
-    public ChatSettings findBlacklistSettings(Long groupId, GroupChatSettings settingsType) {
+    public ChatSettings findBlacklistNotifications(Long groupId) {
+        return findChatSetting(groupId, GroupChatSettings.BLACKLIST_NOTIFICATIONS);
+    }
+
+    public ChatSettings findLevelsSettings(Long groupId) {
+        return findChatSetting(groupId, GroupChatSettings.LEVELS);
+    }
+
+    public ChatSettings findSilenceMode(Long groupId) {
+        return findChatSetting(groupId, GroupChatSettings.SILENCE_MODE);
+    }
+
+    public ChatSettings findSilenceModeEndTime(Long groupId) {
+        return findChatSetting(groupId, GroupChatSettings.SILENCE_MODE_END_TIME);
+    }
+
+    private ChatSettings findChatSetting(Long groupId, GroupChatSettings settingsType) {
         String redisKey = RedisConfig.CHAT_SETTINGS_CACHE_KEY
                 + settingsType.getDisplayname()
                 + groupId;
@@ -116,15 +124,11 @@ public class ChatSettingsService extends ServiceBuilder {
         return chatSettings;
     }
 
-    public ChatSettings chatSettingsCheckKeyValue(Long groupId, String key, String value) {
-        return chatSettingsRepository.findByGroupIdAndSettingKeyAndSettingValue(groupId, key, value);
-    }
-
     public void update(ChatSettings chatSettings) {
-        chatSettingsRepository.save(chatSettings);
+        chatSettingsProducer.sendChatSettings(chatSettings);
     }
 
     public void delete(ChatSettings chatSettings) {
-        chatSettingsRepository.delete(chatSettings);
+        chatSettingsProducer.sendToDeleteChatSettings(chatSettings);
     }
 }

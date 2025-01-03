@@ -37,7 +37,7 @@ public class SilenceModeService {
             return GroupSwitch.ON.getDisplayname().equals(cachedValue);
         }
 
-        ChatSettings chatSettings = chatSettingsService.findChatSettings(groupId, SILENCE_MODE_KEY);
+        ChatSettings chatSettings = chatSettingsService.findSilenceMode(groupId);
         if (chatSettings != null && chatSettings.getSettingValue().equals(GroupSwitch.ON.getDisplayname())) {
             redisTemplate.opsForValue().set(SILENCE_MODE_KEY + groupId, GroupSwitch.ON.getDisplayname(), 1, TimeUnit.HOURS);
             return true;

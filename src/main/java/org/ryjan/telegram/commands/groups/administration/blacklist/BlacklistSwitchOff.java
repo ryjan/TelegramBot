@@ -23,7 +23,7 @@ public class BlacklistSwitchOff extends BaseCommand {
 
     @Override
     protected void executeCommand(String chatId, BotMain bot, CommandsHandler commandHandler) {
-        blacklistService.replaceBlacklistValue(Long.parseLong(chatId), GroupChatSettings.BLACKLIST.getDisplayname(), GroupSwitch.OFF.getDisplayname());
+        blacklistService.replaceBlacklistValue(Long.parseLong(chatId), GroupSwitch.OFF.getDisplayname());
         editMessage("🔓Черный список *выключен*", getKeyboard());
     }
 

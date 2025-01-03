@@ -51,8 +51,8 @@ public class BlacklistService extends ServiceBuilder {
         return chatSettingsService.isBlacklistEnabled(groupId);
     }
 
-    public void replaceBlacklistValue(Long groupId, String settingsKey, String settingsValue) {
-        chatSettingsService.replaceBlacklistValue(groupId, settingsKey, settingsValue);
+    public void replaceBlacklistValue(Long groupId, String settingsValue) {
+        chatSettingsService.replaceSettingValue(groupId, GroupChatSettings.BLACKLIST, settingsValue);
     }
 
     public List<Blacklist> findAllBlacklistsById(Long groupId) {

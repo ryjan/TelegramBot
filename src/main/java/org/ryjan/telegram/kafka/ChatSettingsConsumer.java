@@ -40,6 +40,12 @@ public class ChatSettingsConsumer extends ServiceBuilder {
         chatSettingsRepository.saveAll(chatSettings);
     }
 
+    @KafkaListener(topics = SEND_TO_DELETE_CHAT_SETTINGS_TOPIC, groupId = SEND_TO_DELETE_CHAT_SETTINGS_TOPIC, containerFactory = "kafkaListenerContainerFactory")
+    @Transactional
+    public void consumeToDeleteChatSettings(List<ChatSettings> chatSettings) {
+        chatSettingsRepository.deleteAll(chatSettings);
+    }
+
     @KafkaListener(topics = FIND_CHAT_SETTINGS_TOPIC, groupId = FIND_CHAT_SETTINGS_TOPIC, containerFactory = "kafkaListenerContainerFactory")
     public void consumeFindChatSettingsRequest(List<Long> groupId) {
         List<ChatSettings> chatSettings = chatSettingsRepository.findAllByGroupIdIn(groupId);
@@ -55,7 +61,10 @@ public class ChatSettingsConsumer extends ServiceBuilder {
 
     @KafkaListener(topics = {
             FIND_CHAT_SETTINGS_BLACKLIST_TOPIC,
-            FIND_CHAT_SETTINGS_LEVELS_TOPIC
+            FIND_CHAT_SETTINGS_LEVELS_TOPIC,
+            FIND_CHAT_SETTINGS_BLACKLIST_NOTIFICATIONS_TOPIC,
+            FIND_CHAT_SETTINGS_SILENCE_MODE_TOPIC,
+            FIND_CHAT_SETTINGS_SILENCE_MODE_END_TIME_TOPIC
     },
             groupId = "chat-settings-consumer-group",
             containerFactory = "kafkaListenerContainerFactory"
@@ -87,7 +96,9 @@ public class ChatSettingsConsumer extends ServiceBuilder {
     private GroupChatSettings getSettingsTypeFromTopic(String topic) {
         return switch (topic) {
             case FIND_CHAT_SETTINGS_BLACKLIST_TOPIC -> GroupChatSettings.BLACKLIST;
+            case FIND_CHAT_SETTINGS_BLACKLIST_NOTIFICATIONS_TOPIC -> GroupChatSettings.BLACKLIST_NOTIFICATIONS;
             case FIND_CHAT_SETTINGS_LEVELS_TOPIC -> GroupChatSettings.LEVELS;
+            case FIND_CHAT_SETTINGS_SILENCE_MODE_TOPIC -> GroupChatSettings.SILENCE_MODE;
             default -> throw new IllegalArgumentException("Unknown topic: " + topic);
         };
     }

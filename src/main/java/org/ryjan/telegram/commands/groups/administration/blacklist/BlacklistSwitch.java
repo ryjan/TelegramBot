@@ -26,10 +26,10 @@ public class BlacklistSwitch extends BaseCommand {
         Update update = getUpdate();
 
         if (blacklistService.isBlacklistEnabled(update.getCallbackQuery().getMessage().getChatId())) {
-            blacklistService.replaceBlacklistValue(Long.parseLong(chatId), GroupChatSettings.BLACKLIST.getDisplayname(), GroupSwitch.ON.getDisplayname());
+            blacklistService.replaceBlacklistValue(Long.parseLong(chatId), GroupSwitch.ON.getDisplayname());
             editMessage("🔒Черный список *включен*", blacklistSwitchOn.getKeyboard());
         } else {
-            blacklistService.replaceBlacklistValue(Long.parseLong(chatId), GroupChatSettings.BLACKLIST.getDisplayname(), GroupSwitch.ON.getDisplayname());
+            blacklistService.replaceBlacklistValue(Long.parseLong(chatId), GroupSwitch.ON.getDisplayname());
             editMessage("🔓Черный список *выключен*", blacklistSwitchOff.getKeyboard());
         }
     }

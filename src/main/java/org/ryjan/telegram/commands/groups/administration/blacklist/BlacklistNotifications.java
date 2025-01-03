@@ -20,7 +20,7 @@ public class BlacklistNotifications extends BaseCommand {
 
     @Override
     protected void executeCommand(String chatId, BotMain bot, CommandsHandler handler) throws Exception {
-        ChatSettings chatSettings = chatSettingsService.findChatSettings(Long.parseLong(chatId), GroupChatSettings.BLACKLIST_NOTIFICATIONS);
+        ChatSettings chatSettings = chatSettingsService.findBlacklistNotifications(Long.parseLong(chatId));
         if (chatSettings.getSettingValue().equals(GroupSwitch.ON.getDisplayname())) {
             chatSettingsService.replaceSettingValue(Long.parseLong(chatId), GroupChatSettings.BLACKLIST_NOTIFICATIONS,
                     GroupSwitch.OFF.getDisplayname());
