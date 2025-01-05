@@ -35,7 +35,7 @@ public class KafkaConfig {
         config.put(ConsumerConfig.GROUP_ID_CONFIG, "user-xp-topic");
         config.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
         config.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, JsonDeserializer.class);
-        config.put(JsonDeserializer.TRUSTED_PACKAGES, "*");
+        config.put(JsonDeserializer.TRUSTED_PACKAGES, "org.ryjan.telegram.model.groups,org.ryjan.telegram.model.users");
         return new DefaultKafkaConsumerFactory<>(config);
     }
 
