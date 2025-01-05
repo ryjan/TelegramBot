@@ -10,13 +10,19 @@ import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
 import static org.ryjan.telegram.kafka.UserProducer.FIND_USER_TOPIC;
 
 @Service
 public class UserConsumer extends ServiceBuilder {
+    private final Map<Long, CompletableFuture<Void>> futureMap = new ConcurrentHashMap<>();
+
     @Autowired
     private UserRepository userRepository;
     @Autowired
@@ -30,13 +36,26 @@ public class UserConsumer extends ServiceBuilder {
     }
 
     @KafkaListener(topics = FIND_USER_TOPIC, groupId = FIND_USER_TOPIC, containerFactory = "kafkaListenerContainerFactory")
-    public void consumeFindUserRequest(List<Long> userId) {
-        List<User> users = userRepository.findAllById(userId);
+    public void consumeFindUserRequest(List<Long> userIds) {
+        List<User> users = userRepository.findAllById(userIds);
 
         userRedisTemplate.opsForValue().multiSet(users.stream()
                 .collect(Collectors.toMap(
                         user -> RedisConfig.USER_CACHE_KEY + user.getId(),
                         user -> user)
                 ));
+
+        for (Long userId : userIds) {
+            CompletableFuture<Void> future = futureMap.remove(userId);
+            if (future != null) {
+                future.complete(null);
+            }
+        }
+    }
+
+    public CompletableFuture<Void> registerFuture(Long userId) {
+        CompletableFuture<Void> future = new CompletableFuture<>();
+        futureMap.put(userId, future);
+        return future;
     }
 }

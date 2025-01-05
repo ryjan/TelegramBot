@@ -136,7 +136,7 @@ public class BotService {
     }
 
     public void autoExecute(Update update) {
-        if (update.hasMessage() && update.getMessage().getLeftChatMember() != null) {
+        if (update.hasMessage() && !update.getMessage().getChat().isUserChat() && update.getMessage().getLeftChatMember() != null) {
             String chatId = update.getMessage().getChatId().toString();
             chatBlacklist.executeCommand(chatId, bot, groupCommandHandler);
             return;
@@ -152,7 +152,7 @@ public class BotService {
             xpService.chatXpListener(String.valueOf(message.getFrom().getId()), message.getFrom().getUserName(), message.getText());
         }
 
-        if (update.hasMessage() && silenceModeService.isSilenceModeEnabled(update.getMessage().getChatId())) {
+        if (update.hasMessage() && !update.getMessage().getChat().isUserChat() && silenceModeService.isSilenceModeEnabled(update.getMessage().getChatId())) {
             silenceModeService.doDeleteFunction();
         }
 

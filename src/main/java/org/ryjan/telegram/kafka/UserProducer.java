@@ -5,6 +5,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
+import java.util.concurrent.CompletableFuture;
+
 @Service
 public class UserProducer {
     public static final String FIND_USER_TOPIC = "user-find-topic";
@@ -13,13 +15,17 @@ public class UserProducer {
 
     @Autowired
     private KafkaTemplate<String, Object> kafkaTemplate;
+    @Autowired
+    private UserConsumer userConsumer;
 
     public void sendUser(User user) {
         kafkaTemplate.send("user-xp-topic", user);
     }
 
-    public void findUser(Long userId) {
+    public CompletableFuture<Void> findUser(Long userId) {
+        CompletableFuture<Void> future = userConsumer.registerFuture(userId);
         kafkaTemplate.send(FIND_USER_TOPIC, userId);
+        return future;
     }
 
     public void sendUserResponse(User user) {

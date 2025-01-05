@@ -13,7 +13,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 @Service
 public class UserService {
@@ -47,7 +50,15 @@ public class UserService {
         User user = userRedisTemplate.opsForValue().get(CACHE_KEY + id);
 
         if (user == null) {
-            userProducer.findUser(id);
+            CompletableFuture<Void> future = userProducer.findUser(id);
+
+            try {
+                future.get(1, TimeUnit.SECONDS);
+            } catch (InterruptedException | ExecutionException | TimeoutException e) {
+                throw new RuntimeException("Failed to fetch user from Kafka", e);
+            }
+
+            user = userRedisTemplate.opsForValue().get(CACHE_KEY + id);
         }
         return user;
     }

@@ -11,6 +11,7 @@ import org.ryjan.telegram.commands.groups.administration.GroupStart;
 import org.ryjan.telegram.commands.groups.administration.blacklist.*;
 import org.ryjan.telegram.commands.groups.user.GroupBugReport;
 import org.ryjan.telegram.commands.groups.user.GroupGetRank;
+import org.ryjan.telegram.commands.groups.user.GroupInfo;
 import org.ryjan.telegram.commands.users.admin.adminpanel.bugreport.reply.*;
 import org.ryjan.telegram.commands.users.owner.SetCoins;
 import org.ryjan.telegram.commands.users.admin.adminpanel.AdminPanel;
@@ -58,6 +59,8 @@ public class CommandsBuilder {
     private SilenceMode silenceMode;
     @Autowired
     private CloseMessage closeMessage;
+    @Autowired
+    private GroupInfo groupInfo;
     // UserCommands
     @Autowired
     private SetCoins setCoins;
@@ -122,6 +125,7 @@ public class CommandsBuilder {
         commands.put(silenceMode.getCommandName(), silenceMode);
         commands.put(groupBugReport.getCommandName(), groupBugReport);
         commands.put(groupGetRank.getCommandName(), groupGetRank);
+        commands.put(groupInfo.getCommandName(), groupInfo);
     }
 
     private void initializeGroupButtonCommands() {

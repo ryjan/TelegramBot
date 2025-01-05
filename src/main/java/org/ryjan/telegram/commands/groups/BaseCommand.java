@@ -107,6 +107,18 @@ public abstract class BaseCommand implements IBotCommand {
         }
     }
 
+    protected void sendMessageForCommand(String message, String chatId) {
+        SendMessage sendMessage = new SendMessage();
+        sendMessage.setChatId(chatId);
+        sendMessage.setText(message);
+        sendMessage.enableMarkdown(true);
+        try {
+            botService.getBot().execute(sendMessage);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     protected void sendMessageForCommand(BotMain bot, SendMessage message) {
         try {
             bot.execute(message);
