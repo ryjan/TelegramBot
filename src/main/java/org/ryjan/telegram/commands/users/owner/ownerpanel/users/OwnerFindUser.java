@@ -17,10 +17,8 @@ import java.util.concurrent.TimeUnit;
 @Component
 public class OwnerFindUser extends BaseCommand {
     private final String CACHE_KEY = "owner_state:";
-    private final String USER_CACHE_KEY = "owner_user_state:";
 
     private String chatId;
-    private User user;
 
     @Getter
     private SendMessage message;
@@ -53,28 +51,18 @@ public class OwnerFindUser extends BaseCommand {
         if ("waiting_message".equals(ownerState)) {
             SendMessage message = createSendMessage(chatId);
             userId = update.getMessage().getText().trim().replace("@", "").toLowerCase();
+            User user;
 
-            User user = redisGroupsTemplate.opsForValue().get(USER_CACHE_KEY + userId);
-
-            if (user == null) {
-                try {
-                    user = userService.findUser(userId);
-                } catch (NumberFormatException e) {
-                    message.setText("Write the correct username or userId. Try again.");
-                    sendMessageForCommand(message);
-                    redisGroupsTemplate.delete(CACHE_KEY + chatId);
-                    return;
-                }
-                redisGroupsTemplate.opsForValue().set(USER_CACHE_KEY + userId, user, 10, TimeUnit.MINUTES); // дело в кэше
-                if (user == null) {
-                    message.setText("User is not found.");
-                    redisGroupsTemplate.delete(CACHE_KEY + chatId);
-                    sendMessageForCommand(message);
-                    return;
-                }
+            try {
+                user = userService.findUser(userId);
+            } catch (NumberFormatException e) {
+                message.setText("Write the correct username or userId. Try again.");
+                sendMessageForCommand(message);
+                redisGroupsTemplate.delete(CACHE_KEY + chatId);
+                return;
             }
-            this.user = user;
-            message.setText(String.format("ID: %s\nUsername: %s\nUser group: %s\nCreated at: %s", user.getId(), user.getUsername(), user.getUserGroup(), user.getCreatedAt()));
+            message.setText(String.format("ID: *%s*%nUsername: *%s*%nUser group: *%s*%nCreated at: *%s*",
+                    user.getId(), user.getUsername(), user.getUserGroup(), user.getCreatedAt()));
             message.enableMarkdown(true);
             redisGroupsTemplate.delete(CACHE_KEY + chatId);
             sendMessageForCommand(message);

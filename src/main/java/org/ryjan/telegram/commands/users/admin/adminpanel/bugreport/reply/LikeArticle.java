@@ -23,7 +23,7 @@ public class LikeArticle extends BaseCommand {
     protected void executeCommand(String chatId, BotMain bot, CommandsHandler handler) {
         Articles articles = nextArticle.getCurrentArticle();
         articles.setStatus("🩷Одобрено");
-        articlesService.addArticleToRedisQueue(articles);
+        articlesService.update(articles);
         SendMessage message = createSendMessage(articles.getUserId());
         message.setText("Ваше обращение было 🩷Одобрено :)\n\n" + nextArticle.getArticleParsedText());
         message.enableMarkdown(true);

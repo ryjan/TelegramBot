@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardRemove;
 
 import java.text.MessageFormat;
 import java.util.List;
@@ -17,8 +18,8 @@ import java.util.concurrent.TimeUnit;
 
 @Component
 public class NextArticle extends BaseCommand {
-    private final String FIND_WISHES_CACHE_KEY;
-    private final String CACHE_KEY;
+    private final String FIND_WISHES_CACHE_KEY = ArticlesService.CHECK_ARTICLES_ANSWER;
+    private final String CACHE_KEY = ArticlesService.CHECK_ARTICLES_LIST_ANSWER;
     private Articles article;
     private String parsedText;
 
@@ -28,11 +29,8 @@ public class NextArticle extends BaseCommand {
     @Autowired
     private RedisTemplate<String, List<Articles>> redisArticlesTemplate;
 
-    @Autowired
-    protected NextArticle(ArticlesService articlesService) {
+    protected NextArticle() {
         super("⏭️", "Следующий артикуль", UserPermissions.ADMINISTRATOR);
-        FIND_WISHES_CACHE_KEY = articlesService.getCHECK_ARTICLES_ANSWER();
-        CACHE_KEY = articlesService.getCHECK_ARTICLES_LIST_ANSWER();
     }
 
     @Override
@@ -52,6 +50,7 @@ public class NextArticle extends BaseCommand {
 
             if (number >= articles.size()) {
                 message.setText("👾Пожелания закончились");
+                message.setReplyMarkup(new ReplyKeyboardRemove(true));
                 sendMessageForCommand(bot, message);
                 return;
             }
@@ -88,7 +87,7 @@ public class NextArticle extends BaseCommand {
         List<Articles> articles = redisArticlesTemplate.opsForValue().get(CACHE_KEY + chatId);
 
         if (articles == null) {
-            articles = articlesService.getFirstTenArticles();
+            articles = articlesService.findFirstTenArticles();
             redisArticlesTemplate.opsForValue().set(CACHE_KEY + chatId, articles, 3, TimeUnit.MINUTES);
         }
         return articles;

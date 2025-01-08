@@ -15,7 +15,7 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMar
 
 @Component
 public class FindWishes extends BaseCommand {
-    private final String CACHE_KEY;
+    private final String CACHE_KEY = ArticlesService.CHECK_ARTICLES_ANSWER;
 
     @Autowired
     private RedisTemplate<String, String> redisTemplate;
@@ -23,9 +23,8 @@ public class FindWishes extends BaseCommand {
     @Autowired
     private NextArticle nextArticle;
 
-    protected FindWishes(ArticlesService articlesService) {
+    protected FindWishes() {
         super("findWishes", "Найти пожелания", UserPermissions.ADMINISTRATOR);
-        CACHE_KEY = articlesService.getCHECK_ARTICLES_ANSWER();
     }
 
     @Override

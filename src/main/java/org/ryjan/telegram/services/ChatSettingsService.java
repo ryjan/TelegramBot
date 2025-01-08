@@ -110,7 +110,7 @@ public class ChatSettingsService extends ServiceBuilder {
             CompletableFuture<Void> future = chatSettingsProducer.findChatSetting(groupId, settingsType);
 
             try {
-                future.get(1, TimeUnit.SECONDS);
+                future.get(5, TimeUnit.SECONDS);
             } catch (InterruptedException | ExecutionException | TimeoutException e) {
                 throw new RuntimeException("Failed to fetch chat settings from Kafka", e);
             }

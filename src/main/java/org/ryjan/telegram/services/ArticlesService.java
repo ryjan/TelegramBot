@@ -1,85 +1,42 @@
 package org.ryjan.telegram.services;
 
-import lombok.Getter;
-import org.ryjan.telegram.interfaces.repos.jpa.ArticlesRepository;
+import org.ryjan.telegram.config.RedisConfig;
+import org.ryjan.telegram.kafka.ArticlesProducer;
 import org.ryjan.telegram.model.users.Articles;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.RedisCallback;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.scheduling.TaskScheduler;
-import org.springframework.scheduling.concurrent.SimpleAsyncTaskScheduler;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.*;
 
 @Service
 public class ArticlesService extends ServiceBuilder {
-
-    @Getter
-    private final String CHECK_ARTICLES_ANSWER = "checkArticlesAnswer:";
-    @Getter
-    private final String CHECK_ARTICLES_LIST_ANSWER = "checkArticlesListAnswer:";
-    @Getter
-    private final String CHECK_ARTICLES_LIST_QUEUE = "checkArticlesListQueue:";
-
-    private ScheduledFuture<?> scheduledFuture;
-
-    @Autowired
-    private ArticlesRepository articlesRepository;
+    public static final String CHECK_ARTICLES_ANSWER = "checkArticlesAnswer:";
+    public static final String CHECK_ARTICLES_LIST_ANSWER = "checkArticlesListAnswer:";
 
     @Autowired
     private RedisTemplate<String, List<Articles>> redisTemplate;
-
     @Autowired
-    private TaskScheduler taskScheduler;
+    private ArticlesProducer articlesProducer;
 
-    public void startScheduledTask() {
-        if (scheduledFuture == null || scheduledFuture.isCancelled()) {
-            scheduledFuture = taskScheduler.scheduleAtFixedRate(this::saveArticlesListToDatabase, 900000);
-            System.out.println("Redis: scheduled task started");
+    public List<Articles> findFirstTenArticles() {
+        CompletableFuture<Void> future = articlesProducer.findFirstTenArticles();
+
+        try {
+            future.get(5, TimeUnit.SECONDS);
+        } catch (InterruptedException | ExecutionException | TimeoutException e) {
+            throw new RuntimeException("Failed to fetch article from Kafka", e);
         }
-    }
-
-    public void stopScheduledTask() {
-        if (scheduledFuture != null && !scheduledFuture.isCancelled()) {
-            scheduledFuture.cancel(true);
-            System.out.println("Redis: scheduled task stopped");
-        }
-    }
-
-    public void saveArticlesListToDatabase() {
-        List<Articles> articlesList = redisTemplate.opsForValue().get(CHECK_ARTICLES_LIST_QUEUE);
-        if (articlesList != null && !articlesList.isEmpty()) {
-            articlesRepository.saveAll(articlesList);
-            redisTemplate.delete(CHECK_ARTICLES_LIST_QUEUE);
-        } else {
-            stopScheduledTask();
-        }
-    }
-
-    public void addArticleToRedisQueue(Articles article) {
-        List<Articles> articlesList = redisTemplate.opsForValue().get(CHECK_ARTICLES_LIST_QUEUE);
-        if (articlesList == null || articlesList.isEmpty()) {
-            articlesList = new ArrayList<>();
-        }
-        articlesList.add(article);
-        redisTemplate.opsForValue().set(CHECK_ARTICLES_LIST_QUEUE, articlesList);
-
-        startScheduledTask();
-    }
-
-    public List<Articles> getFirstTenArticles() {
-        return articlesRepository.findFirst10ByStatusOrderByIdAsc("review");
+        return redisTemplate.opsForValue().get(RedisConfig.ARTICLES_REVIEW_CACHE_KEY);
     }
 
     public void update(Articles articles) {
-        articlesRepository.save(articles);
+        articlesProducer.sendArticle(articles);
     }
 
     public void delete(Articles articles) {
-        articlesRepository.delete(articles);
+        articlesProducer.sendToDeleteArticle(articles);
     }
 
 }

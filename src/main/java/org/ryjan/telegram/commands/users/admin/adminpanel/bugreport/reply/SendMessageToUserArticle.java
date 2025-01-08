@@ -62,7 +62,7 @@ public class SendMessageToUserArticle extends BaseCommand {
                 message.setChatId(chatId);
 
                 articles.setStatus("✨Рассмотрено");
-                articlesService.addArticleToRedisQueue(articles);
+                articlesService.update(articles);
 
                 redisTemplate.delete("admin_state:" + update.getMessage().getChatId());
                 sendMessageForCommand(message);

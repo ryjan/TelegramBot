@@ -1,5 +1,6 @@
 package org.ryjan.telegram.config;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.ryjan.telegram.model.groups.Blacklist;
 import org.ryjan.telegram.model.groups.ChatSettings;
 import org.ryjan.telegram.model.groups.Groups;
@@ -24,6 +25,7 @@ public class RedisConfig {
     public static final String GROUP_CACHE_KEY = "group:";
     public static final String BLACKLIST_CACHE_KEY = "blacklist:";
     public static final String CHAT_SETTINGS_CACHE_KEY = "chatSettings:";
+    public static final String ARTICLES_REVIEW_CACHE_KEY = "articles_review:";
 
     @Bean
     public RedisCacheConfiguration cacheConfiguration() {
@@ -33,82 +35,24 @@ public class RedisConfig {
     }
 
     @Bean
-    public RedisTemplate<String, List<Blacklist>> redisBlacklistListTemplate(RedisConnectionFactory connectionFactory) {
-        RedisTemplate<String, List<Blacklist>> template = new RedisTemplate<>();
+    public <T> RedisTemplate<String, T> redisTemplate(RedisConnectionFactory connectionFactory) {
+        RedisTemplate<String, T> template = new RedisTemplate<>();
         template.setConnectionFactory(connectionFactory);
 
-        template.setKeySerializer(new StringRedisSerializer());
-        template.setValueSerializer(new GenericJackson2JsonRedisSerializer());
+        ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.activateDefaultTyping(
+                objectMapper.getPolymorphicTypeValidator(),
+                ObjectMapper.DefaultTyping.NON_FINAL
+        );
 
-        return template;
-    }
-
-    @Bean
-    public RedisTemplate<String, Blacklist> redisBlacklistTemplate(RedisConnectionFactory connectionFactory) {
-        RedisTemplate<String, Blacklist> template = new RedisTemplate<>();
-        template.setConnectionFactory(connectionFactory);
+        GenericJackson2JsonRedisSerializer serializer = new GenericJackson2JsonRedisSerializer(objectMapper);
 
         template.setKeySerializer(new StringRedisSerializer());
-        template.setValueSerializer(new GenericJackson2JsonRedisSerializer());
-
-        return template;
-    }
-
-    @Bean
-    public RedisTemplate<String, ChatSettings> redisChatSettingsTemplate(RedisConnectionFactory connectionFactory) {
-        RedisTemplate<String, ChatSettings> template = new RedisTemplate<>();
-        template.setConnectionFactory(connectionFactory);
-
-        template.setKeySerializer(new StringRedisSerializer());
-        template.setValueSerializer(new GenericJackson2JsonRedisSerializer());
+        template.setValueSerializer(serializer);
         template.setHashKeySerializer(new StringRedisSerializer());
-        template.setHashValueSerializer(new GenericJackson2JsonRedisSerializer());
+        template.setHashValueSerializer(serializer);
 
-        return template;
-    }
-
-
-    @Bean
-    public RedisTemplate<String, List<Articles>> redisArticlesTemplate(RedisConnectionFactory connectionFactory) {
-        RedisTemplate<String, List<Articles>> template = new RedisTemplate<>();
-        template.setConnectionFactory(connectionFactory);
-
-        template.setKeySerializer(new StringRedisSerializer());
-        template.setValueSerializer(new GenericJackson2JsonRedisSerializer());
-
-        return template;
-    }
-
-    @Bean
-    public RedisTemplate<String, Groups> redisGroupsTemplate(RedisConnectionFactory connectionFactory) {
-        RedisTemplate<String, Groups> template = new RedisTemplate<>();
-        template.setConnectionFactory(connectionFactory);
-
-        template.setKeySerializer(new StringRedisSerializer());
-        template.setValueSerializer(new GenericJackson2JsonRedisSerializer());
-
-        return template;
-    }
-
-    @Bean
-    public RedisTemplate<String, User> redisUserDatabaseTemplate(RedisConnectionFactory connectionFactory) {
-        RedisTemplate<String, User> template = new RedisTemplate<>();
-        template.setConnectionFactory(connectionFactory);
-
-        template.setKeySerializer(new StringRedisSerializer());
-        template.setValueSerializer(new GenericJackson2JsonRedisSerializer());
-
-        return template;
-    }
-
-    @Bean
-    public RedisTemplate<String, Bank> redisBankDatabaseTemplate(RedisConnectionFactory connectionFactory) {
-        RedisTemplate<String, Bank> template = new RedisTemplate<>();
-        template.setConnectionFactory(connectionFactory);
-
-        template.setKeySerializer(new StringRedisSerializer());
-        template.setValueSerializer(new GenericJackson2JsonRedisSerializer());
-
+        template.afterPropertiesSet();
         return template;
     }
 }

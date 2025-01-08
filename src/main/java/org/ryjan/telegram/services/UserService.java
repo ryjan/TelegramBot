@@ -53,7 +53,7 @@ public class UserService {
             CompletableFuture<Void> future = userProducer.findUser(id);
 
             try {
-                future.get(1, TimeUnit.SECONDS);
+                future.get(5, TimeUnit.SECONDS);
             } catch (InterruptedException | ExecutionException | TimeoutException e) {
                 throw new RuntimeException("Failed to fetch user from Kafka", e);
             }
