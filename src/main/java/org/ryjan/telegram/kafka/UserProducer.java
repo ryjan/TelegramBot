@@ -9,7 +9,7 @@ import java.util.concurrent.CompletableFuture;
 
 @Service
 public class UserProducer {
-    public static final String FIND_USER_TOPIC = "user-find-topic";
+    public static final String USER_FIND_TOPIC = "user-find-topic";
     public static final String USER_RESPONSE_TOPIC = "user-response-topic";
     public static final String USER_CACHE_TOPIC = "user-cache-topic";
 
@@ -24,7 +24,7 @@ public class UserProducer {
 
     public CompletableFuture<Void> findUser(Long userId) {
         CompletableFuture<Void> future = userConsumer.registerFuture(userId);
-        kafkaTemplate.send(FIND_USER_TOPIC, userId);
+        kafkaTemplate.send(USER_FIND_TOPIC, userId);
         return future;
     }
 

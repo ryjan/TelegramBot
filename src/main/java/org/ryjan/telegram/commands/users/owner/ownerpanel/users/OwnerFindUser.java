@@ -17,11 +17,7 @@ import java.util.concurrent.TimeUnit;
 @Component
 public class OwnerFindUser extends BaseCommand {
     private final String CACHE_KEY = "owner_state:";
-
     private String chatId;
-
-    @Getter
-    private SendMessage message;
 
     @Autowired
     private RedisTemplate<String, String> redisTemplate;
@@ -38,7 +34,7 @@ public class OwnerFindUser extends BaseCommand {
     @Override
     protected void executeCommand(String chatId, BotMain bot, CommandsHandler handler) {
         this.chatId = chatId;
-        message = createSendMessage(chatId);
+        SendMessage message = createSendMessage(chatId);
         message.setText("Write the username or userId");
         redisTemplate.opsForValue().set(CACHE_KEY + chatId, "waiting_message", 15, TimeUnit.MINUTES);
         sendMessageForCommand(message);
@@ -64,6 +60,7 @@ public class OwnerFindUser extends BaseCommand {
             message.setText(String.format("ID: *%s*%nUsername: *%s*%nUser group: *%s*%nCreated at: *%s*",
                     user.getId(), user.getUsername(), user.getUserGroup(), user.getCreatedAt()));
             message.enableMarkdown(true);
+
             redisGroupsTemplate.delete(CACHE_KEY + chatId);
             sendMessageForCommand(message);
         }

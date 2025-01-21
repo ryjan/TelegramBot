@@ -56,6 +56,10 @@ public class Bank {
         return this;
     }
 
+    public void addGems(BigDecimal gems) {
+        this.gems = this.gems.add(gems);
+    }
+
     @Override
     public int hashCode() {
         return Objects.hash(id, username, gems, coins, user);

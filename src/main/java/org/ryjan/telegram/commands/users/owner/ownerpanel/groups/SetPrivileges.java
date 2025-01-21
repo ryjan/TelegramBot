@@ -14,7 +14,7 @@ import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 
 @Component
 public class SetPrivileges extends BaseCommand {
-    private final String GROUP_CACHE_KEY;
+    private final String GROUP_CACHE_KEY = GroupService.OWNER_GROUP_STATE_CACHE_KEY;
 
     @Autowired
     private RedisTemplate<String, Groups> redisGroupsTemplate;
@@ -22,9 +22,8 @@ public class SetPrivileges extends BaseCommand {
     @Autowired
     private OwnerFindGroup ownerFindGroup;
 
-    public SetPrivileges(GroupService groupService) {
+    public SetPrivileges() {
         super("setPrivilege", "Set privilege", UserPermissions.OWNER);
-        GROUP_CACHE_KEY = groupService.getOWNER_GROUP_STATE_CACHE_KEY();
     }
 
     @Override
@@ -35,7 +34,7 @@ public class SetPrivileges extends BaseCommand {
         if (group != null) {
             String privilege = callbackQuery.getData().split(":")[1];
             group.setPrivileges(privilege);
-            groupService.update(group);
+            groupService.save(group);
             redisGroupsTemplate.opsForValue().set(GROUP_CACHE_KEY + ownerFindGroup.getGroupId(), group);
             message.setText("Group privilege has been updated to *" + privilege + "* successfully");
             message.enableMarkdown(true);

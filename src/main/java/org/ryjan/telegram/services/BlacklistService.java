@@ -1,11 +1,9 @@
 package org.ryjan.telegram.services;
 
 import org.ryjan.telegram.commands.groups.utils.GroupChatSettings;
-import org.ryjan.telegram.commands.groups.utils.GroupSwitch;
 import org.ryjan.telegram.config.RedisConfig;
 import org.ryjan.telegram.kafka.BlacklistProducer;
 import org.ryjan.telegram.model.groups.Blacklist;
-import org.ryjan.telegram.model.groups.ChatSettings;
 import org.ryjan.telegram.model.groups.Groups;
 import org.ryjan.telegram.interfaces.repos.jpa.BlacklistRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,7 +34,7 @@ public class BlacklistService extends ServiceBuilder {
         Groups group = groupService.findGroup(groupId);
         blacklist.setGroup(group);
         group.getBlacklists().add(blacklist);
-        groupService.update(group); // попробовать привязать BlacklistList группы и добавить туда blacklist
+        groupService.save(group); // попробовать привязать BlacklistList группы и добавить туда blacklist
     }
 
     public void addToBlacklist(Groups group, Blacklist blacklist) {
@@ -44,7 +42,7 @@ public class BlacklistService extends ServiceBuilder {
         list.add(blacklist);
         group.setBlacklists(list);
         blacklist.setGroup(group);
-        groupService.update(group);
+        groupService.save(group);
     }
 
     public boolean isBlacklistEnabled(Long groupId) {
@@ -77,7 +75,7 @@ public class BlacklistService extends ServiceBuilder {
     }
 
 
-    public void update(Blacklist blacklist) {
+    public void save(Blacklist blacklist) {
         processAndSendBlacklist(blacklist);
     }
 

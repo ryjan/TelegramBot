@@ -23,7 +23,7 @@ public class DeclineArticle extends BaseCommand {
     protected void executeCommand(String chatId, BotMain bot, CommandsHandler handler) {
         Articles articles = nextArticle.getCurrentArticle();
         articles.setStatus("👎Отклонено");
-        articlesService.update(articles);
+        articlesService.save(articles);
         SendMessage message = createSendMessage(articles.getUserId());
         message.setText("Ваше обращение было 💔Отклонено :(\n\n" + nextArticle.getArticleParsedText());
         message.enableMarkdown(true);

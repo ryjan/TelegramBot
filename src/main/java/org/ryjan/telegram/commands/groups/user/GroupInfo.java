@@ -19,6 +19,6 @@ public class GroupInfo extends BaseCommand {
         Groups group = groupService.findGroup(Long.parseLong(chatId));
         String message = String.format("✨Группа: *%s*\n🪪ID: *%s*\n💖Привелегия: *%s*\n🎭Статус: *%s*",
                 group.getGroupName(), group.getId(), group.getPrivileges(), group.getStatus());
-        sendMessageForCommand(message, chatId);
+        sendMessageForCommand(chatId, message);
     }
 }

@@ -31,7 +31,7 @@ public class ArticlesService extends ServiceBuilder {
         return redisTemplate.opsForValue().get(RedisConfig.ARTICLES_REVIEW_CACHE_KEY);
     }
 
-    public void update(Articles articles) {
+    public void save(Articles articles) {
         articlesProducer.sendArticle(articles);
     }
 

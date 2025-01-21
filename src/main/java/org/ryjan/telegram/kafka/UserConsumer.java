@@ -10,14 +10,13 @@ import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
-import static org.ryjan.telegram.kafka.UserProducer.FIND_USER_TOPIC;
+import static org.ryjan.telegram.kafka.UserProducer.USER_FIND_TOPIC;
 
 @Service
 public class UserConsumer extends ServiceBuilder {
@@ -35,7 +34,7 @@ public class UserConsumer extends ServiceBuilder {
         //userService.flush();
     }
 
-    @KafkaListener(topics = FIND_USER_TOPIC, groupId = FIND_USER_TOPIC, containerFactory = "kafkaListenerContainerFactory")
+    @KafkaListener(topics = USER_FIND_TOPIC, groupId = USER_FIND_TOPIC, containerFactory = "kafkaListenerContainerFactory")
     public void consumeFindUserRequest(List<Long> userIds) {
         List<User> users = userRepository.findAllById(userIds);
 

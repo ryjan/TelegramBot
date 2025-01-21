@@ -2,9 +2,7 @@ package org.ryjan.telegram.kafka;
 
 import org.ryjan.telegram.config.RedisConfig;
 import org.ryjan.telegram.interfaces.repos.jpa.BlacklistRepository;
-import org.ryjan.telegram.interfaces.repos.jpa.UserRepository;
 import org.ryjan.telegram.model.groups.Blacklist;
-import org.ryjan.telegram.model.users.User;
 import org.ryjan.telegram.services.ServiceBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -17,7 +15,6 @@ import java.util.stream.Collectors;
 
 import static org.ryjan.telegram.kafka.BlacklistProducer.FIND_BLACKLIST_TOPIC;
 import static org.ryjan.telegram.kafka.BlacklistProducer.SEND_BLACKLIST_TOPIC;
-import static org.ryjan.telegram.kafka.UserProducer.FIND_USER_TOPIC;
 
 @Service
 public class BlacklistConsumer extends ServiceBuilder {

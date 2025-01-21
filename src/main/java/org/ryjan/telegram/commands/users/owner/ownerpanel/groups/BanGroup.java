@@ -16,47 +16,43 @@ import java.util.concurrent.TimeUnit;
 
 @Component
 public class BanGroup extends BaseCommand {
-    private final String GROUP_CACHE_KEY;
-
-    private String chatId;
+    private final String GROUP_CACHE_KEY = GroupService.OWNER_GROUP_STATE_CACHE_KEY;
 
     @Autowired
     private RedisTemplate<String, Groups> redisGroupsTemplate;
 
     @Autowired
-    private OwnerFindGroup findGroupOwner;
+    private OwnerFindGroup ownerFindGroup;
 
     protected BanGroup(GroupService groupService) {
         super("banGroup", "Ban the group", UserPermissions.TRUSTED);
-        GROUP_CACHE_KEY = groupService.getOWNER_GROUP_STATE_CACHE_KEY();
     }
 
     @Override
     protected void executeCommand(String chatId, BotMain bot, CommandsHandler handler) {
-        this.chatId = chatId;
         if (getUpdate().hasCallbackQuery() && getUpdate().getCallbackQuery().getData().equals("banGroup")) {
-            banGroup(true);
+            banGroup(chatId, true);
         } else if (getUpdate().hasCallbackQuery() && getUpdate().getCallbackQuery().getData().equals(unbanGroupCallback())) {
-            banGroup(false);
+            banGroup(chatId, false);
         }
     }
 
-    private void banGroup(boolean status) {
+    private void banGroup(String chatId, boolean status) {
         SendMessage message = createSendMessage(chatId);
         message.enableMarkdown(true);
         String textStatus = status ? "BANNED" : "UNBANNED";
-        Groups group = redisGroupsTemplate.opsForValue().get(GROUP_CACHE_KEY + findGroupOwner.getGroupId());
+        Groups group = redisGroupsTemplate.opsForValue().get(GROUP_CACHE_KEY + ownerFindGroup.getGroupId());
         if (status) {
             group.setStatus(GroupStatus.BANNED.getDisplayName());
             message.setText("✨Group status been has changed to *" + textStatus + "* successfully!");
-            editMessage(findGroupOwner.getParsedMessageWithStatus(group.getStatus()), findGroupOwner.getKeyboard(true));
+            editMessage(ownerFindGroup.getParsedMessageWithStatus(group.getStatus()), ownerFindGroup.getKeyboard(true));
         } else {
             group.setStatus(GroupStatus.ACTIVE.getDisplayName());
             message.setText("✨Group status been has changed to *" + textStatus + "* successfully!");
-            editMessage(findGroupOwner.getParsedMessageWithStatus(group.getStatus()), findGroupOwner.getKeyboard(false));
+            editMessage(ownerFindGroup.getParsedMessageWithStatus(group.getStatus()), ownerFindGroup.getKeyboard(false));
         }
-        groupService.update(group);
-        redisGroupsTemplate.opsForValue().set(GROUP_CACHE_KEY + findGroupOwner.getGroupId(), group, 15, TimeUnit.MINUTES);
+        groupService.save(group);
+        redisGroupsTemplate.opsForValue().set(GROUP_CACHE_KEY + ownerFindGroup.getGroupId(), group, 15, TimeUnit.MINUTES);
         sendMessageForCommand(message);
     }
 

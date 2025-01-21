@@ -139,12 +139,11 @@ public class BotService {
         if (update.hasMessage() && !update.getMessage().getChat().isUserChat() && update.getMessage().getLeftChatMember() != null) {
             String chatId = update.getMessage().getChatId().toString();
             chatBlacklist.executeCommand(chatId, bot, groupCommandHandler);
-            return;
         }
 
         bugReportReplies(update);
         ownerFindGroup.sendMessageWithKeyboard(update);
-        ownerFindUser.sendMessageWithKeyboard(update);
+        ownerFindUser.sendMessageWithKeyboard(update); // проверить
         sendMessageToUserArticle.processArticleAndNotifyUser(update);
 
         if (update.hasMessage() && !update.getMessage().getChat().isUserChat() && !update.getMessage().getFrom().getIsBot()) {

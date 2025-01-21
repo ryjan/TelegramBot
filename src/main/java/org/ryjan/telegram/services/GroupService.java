@@ -4,6 +4,7 @@ import lombok.Getter;
 import org.ryjan.telegram.commands.groups.utils.GroupStatus;
 import org.ryjan.telegram.commands.groups.config.GroupPermissions;
 import org.ryjan.telegram.config.RedisConfig;
+import org.ryjan.telegram.kafka.GroupsProducer;
 import org.ryjan.telegram.model.groups.ChatSettings;
 import org.ryjan.telegram.model.groups.Groups;
 import org.ryjan.telegram.interfaces.repos.jpa.GroupsRepository;
@@ -18,8 +19,7 @@ import java.util.concurrent.TimeUnit;
 public class GroupService extends ServiceBuilder {
     @Getter
     private final String CACHE_KEY = "group_status:";
-    @Getter
-    private final String OWNER_GROUP_STATE_CACHE_KEY = "owner_group_state:";
+    public static final String OWNER_GROUP_STATE_CACHE_KEY = "owner_group_state:";
     private final String GROUP_CACHE_KEY = RedisConfig.GROUP_CACHE_KEY;
 
     @Autowired
@@ -30,6 +30,9 @@ public class GroupService extends ServiceBuilder {
 
     @Autowired
     private RedisTemplate<String, Groups> groupsRedisTemplate;
+
+    @Autowired
+    private GroupsProducer groupProducer;
 
     public GroupPermissions getPermissionFromChat(Long chatId, Long userId) {
         ChatMember chatMember = botService.getChatMember(chatId, userId);
@@ -65,28 +68,17 @@ public class GroupService extends ServiceBuilder {
         return group;
     }
 
-    public boolean isExistGroup(String groupName) {
-        return groupsRepository.existsByGroupName(groupName);
+    public void save(Groups group) {
+        groupProducer.sendGroup(group);
     }
 
-    public boolean isExistGroup(Long groupId) {
-        return groupsRepository.existsById(groupId);
-    }
-
-    public boolean groupIsExist(Long id) {
-        return groupsRepository.existsById(id);
-    }
-
-    public void update(Groups group) {
-        groupsRepository.save(group);
-    }
-
-    public void update(Groups group, ChatSettings chatSettings) {
-        update(group);
-        chatSettingsService.update(chatSettings);
+    public void save(Groups group, ChatSettings chatSettings) {
+        save(group);
+        chatSettingsService.save(chatSettings);
     }
 
     public void delete(Groups group) {
-        groupsRepository.delete(group);
+        groupProducer.sendToDelete(group);
+        groupsRedisTemplate.delete(GROUP_CACHE_KEY + group.getId());
     }
 }

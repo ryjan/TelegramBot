@@ -31,10 +31,10 @@ public class ChatSettingsService extends ServiceBuilder {
         if (chatSettings == null) {
             chatSettings = new ChatSettings(group, groupChatSettings, groupSwitch);
             group.addChatSetting(chatSettings);
-            groupService.update(group);
+            groupService.save(group);
         } else {
             chatSettings.setSettingValue(groupSwitch);
-            update(chatSettings);
+            save(chatSettings);
         }
         return chatSettings;
     }
@@ -44,10 +44,10 @@ public class ChatSettingsService extends ServiceBuilder {
         if (chatSettings == null) {
             chatSettings = new ChatSettings(group, groupChatSettings, groupSwitch);
             group.addChatSetting(chatSettings);
-            groupService.update(group);
+            groupService.save(group);
         } else {
             chatSettings.setSettingValue(groupSwitch);
-            update(chatSettings);
+            save(chatSettings);
         }
         return chatSettings;
     }
@@ -58,10 +58,10 @@ public class ChatSettingsService extends ServiceBuilder {
         if (chatSettings == null) {
             chatSettings = new ChatSettings(group, groupChatSettings, settingValue);
             group.addChatSetting(chatSettings);
-            groupService.update(group);
+            groupService.save(group);
         } else {
             chatSettings.setSettingValue(settingValue);
-            update(chatSettings);
+            save(chatSettings);
         }
     }
 
@@ -74,7 +74,7 @@ public class ChatSettingsService extends ServiceBuilder {
         chatSettings.setSettingValue(settingValue);
         chatSettingsRedisTemplate.opsForValue().set(RedisConfig.CHAT_SETTINGS_CACHE_KEY
                 + settingKey.getDisplayname() + groupId, chatSettings);
-        chatSettingsService.update(chatSettings);
+        chatSettingsService.save(chatSettings);
     }
 
     public ChatSettings findChatSettings(Long groupId, GroupChatSettings groupChatSettings) {
@@ -124,7 +124,7 @@ public class ChatSettingsService extends ServiceBuilder {
         return chatSettings;
     }
 
-    public void update(ChatSettings chatSettings) {
+    public void save(ChatSettings chatSettings) {
         chatSettingsProducer.sendChatSettings(chatSettings);
     }
 

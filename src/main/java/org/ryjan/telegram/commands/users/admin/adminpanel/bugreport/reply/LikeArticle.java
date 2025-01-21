@@ -1,6 +1,7 @@
 package org.ryjan.telegram.commands.users.admin.adminpanel.bugreport.reply;
 
 import org.ryjan.telegram.commands.groups.BaseCommand;
+import org.ryjan.telegram.commands.users.admin.adminpanel.AdminPanelService;
 import org.ryjan.telegram.commands.users.user.UserPermissions;
 import org.ryjan.telegram.handler.CommandsHandler;
 import org.ryjan.telegram.main.BotMain;
@@ -14,6 +15,8 @@ public class LikeArticle extends BaseCommand {
 
     @Autowired
     private NextArticle nextArticle;
+    @Autowired
+    private AdminPanelService adminPanelService;
 
     protected LikeArticle() {
         super("🩷", "Поставить одобрение артиклю", UserPermissions.ADMINISTRATOR);
@@ -23,11 +26,12 @@ public class LikeArticle extends BaseCommand {
     protected void executeCommand(String chatId, BotMain bot, CommandsHandler handler) {
         Articles articles = nextArticle.getCurrentArticle();
         articles.setStatus("🩷Одобрено");
-        articlesService.update(articles);
+        articlesService.save(articles);
         SendMessage message = createSendMessage(articles.getUserId());
         message.setText("Ваше обращение было 🩷Одобрено :)\n\n" + nextArticle.getArticleParsedText());
         message.enableMarkdown(true);
         sendMessageForCommand(bot, message);
+        adminPanelService.sendAdminRewards(Long.valueOf(chatId));
         nextArticle.execute(chatId, bot, handler);
     }
 }

@@ -28,20 +28,16 @@ public class GroupStart extends BaseCommand {
     private RedisTemplate<String, ChatSettings> chatSettingsRedisTemplate;
 
     public GroupStart() {
-        super("/start", "Начать работу бота🤙", GroupPermissions.CREATOR); // добавить при вызове команды inline keyboard с настройками сервера
-        // а лучше отдельный класс с этой командой, которая будет использоваться тут. SettingsGroup
+        super("/start", "Начать работу бота🤙", GroupPermissions.CREATOR);
     }
 
     @Override
     protected void executeCommand(String chatId, BotMain bot, CommandsHandler commandHandler) {
         Update update = getUpdate();
         SendMessage message = createSendMessage(chatId);
-        //String groupName = update.getMessage().getLeftChatMember();
-        // Добавить проверку на админа
 
-        if (groupService.groupIsExist(update.getMessage().getChatId())) {
-            message.setText("Группа уже зарегистрирована😊");
-            sendMessageForCommand(bot, message);
+        if (groupService.findGroup(update.getMessage().getChatId()) != null) {
+            sendMessageForCommand(chatId, "Группа уже зарегистрирована😊");
             return;
         }
 
@@ -51,13 +47,7 @@ public class GroupStart extends BaseCommand {
 
         Groups group = new Groups(Long.valueOf(chatId), groupName, GroupPrivileges.BASE, GroupStatus.ACTIVE.getDisplayName(), creatorId.toString(), creatorName);
 
-        ChatSettings chatSettingsBlacklist = chatSettingsService.addChatSettings(group, GroupChatSettings.BLACKLIST, GroupSwitch.OFF);
-        chatSettingsService.addChatSettings(group, GroupChatSettings.LEVELS, GroupSwitch.ON);
-        chatSettingsService.addChatSettings(group, GroupChatSettings.BLACKLIST_NOTIFICATIONS, GroupSwitch.ON);
-        chatSettingsRedisTemplate.opsForValue().set(RedisConfig.CHAT_SETTINGS_CACHE_KEY
-                + GroupChatSettings.BLACKLIST.getDisplayname()
-                + group.getId(),
-                chatSettingsBlacklist);
+        addChatSettingsToDatabase(group);
 
         message.setText("Бот успешно зарегистрирован🤙\n⚙️Настройки:");
         message.setReplyMarkup(settingsGroup.getKeyboard());
@@ -66,15 +56,14 @@ public class GroupStart extends BaseCommand {
         sendMessageForCommand(bot, message);
     }
 
-    private InlineKeyboardMarkup getKeyboard() {
-        InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
-
-        InlineKeyboardBuilder.KeyboardLayer keyboard = new InlineKeyboardBuilder.KeyboardLayer()
-                .addRow(new InlineKeyboardBuilder.ButtonRow()
-                        .addButton("🔒Черный список", "/settings"));
-        inlineKeyboardMarkup.setKeyboard(keyboard.build());
-
-        return inlineKeyboardMarkup;
+    private void addChatSettingsToDatabase(Groups group) {
+        ChatSettings chatSettingsBlacklist = chatSettingsService.addChatSettings(group, GroupChatSettings.BLACKLIST, GroupSwitch.OFF);
+        chatSettingsService.addChatSettings(group, GroupChatSettings.LEVELS, GroupSwitch.ON);
+        chatSettingsService.addChatSettings(group, GroupChatSettings.BLACKLIST_NOTIFICATIONS, GroupSwitch.ON);
+        chatSettingsRedisTemplate.opsForValue().set(RedisConfig.CHAT_SETTINGS_CACHE_KEY
+                        + GroupChatSettings.BLACKLIST.getDisplayname()
+                        + group.getId(),
+                chatSettingsBlacklist);
     }
 }
 

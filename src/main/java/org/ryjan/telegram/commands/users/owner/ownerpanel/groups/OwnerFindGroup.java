@@ -72,7 +72,7 @@ public class OwnerFindGroup extends BaseCommand {
                     redisGroupsTemplate.delete(CACHE_KEY + chatId);
                     return;
                 }
-                redisGroupsTemplate.opsForValue().set(GROUP_CACHE_KEY + groupId, group, 1, TimeUnit.HOURS);
+                redisGroupsTemplate.opsForValue().set(GROUP_CACHE_KEY + groupId, group, 15, TimeUnit.MINUTES);
                 if (group == null) {
                     message.setText("Group is not found.");
                     redisGroupsTemplate.delete(CACHE_KEY + chatId);
@@ -80,16 +80,19 @@ public class OwnerFindGroup extends BaseCommand {
                     return;
                 }
             }
+
             this.group = group;
             message.setText(String.format("Group id: *%s*\nGroup name: *%s*\nCreator id: *%s*\nCreator username: *%s*\nCurrent privilege: *%s*\nStatus: *%s*\nCreated at: *%s*",
                     group.getId(), group.getGroupName(), group.getCreatorId(), group.getCreatorUsername(),
                     group.getPrivileges(), group.getStatus(), group.getCreatedAt()));
             message.enableMarkdown(true);
+
             if (group.getStatus().equals(GroupStatus.BANNED.getDisplayName())) {
                 message.setReplyMarkup(getKeyboard(true));
             } else {
                 message.setReplyMarkup(getKeyboard(false));
             }
+
             redisGroupsTemplate.delete(CACHE_KEY + chatId);
             sendMessageForCommand(message);
         }

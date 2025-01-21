@@ -90,6 +90,6 @@ public class NextArticle extends BaseCommand {
             articles = articlesService.findFirstTenArticles();
             redisArticlesTemplate.opsForValue().set(CACHE_KEY + chatId, articles, 3, TimeUnit.MINUTES);
         }
-        return articles;
+        return articles; // переписать логику
     }
 }
