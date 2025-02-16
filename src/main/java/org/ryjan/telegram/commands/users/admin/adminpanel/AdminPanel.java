@@ -17,7 +17,7 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMar
 public class AdminPanel extends BaseCommand {
 
     protected AdminPanel() {
-        super("/adminpanel", "🔑Панель администратора", UserPermissions.ADMINISTRATOR);
+        super("/adminpanel", "🔑Панель администратора", UserPermissions.ADMIN);
     }
 
     @Override

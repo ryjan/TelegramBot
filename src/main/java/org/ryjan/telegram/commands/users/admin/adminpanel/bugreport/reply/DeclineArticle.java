@@ -11,23 +11,22 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 
 @Component
 public class DeclineArticle extends BaseCommand {
+    private final ReplyService replyService;
 
-    @Autowired
-    private NextArticle nextArticle;
-
-    protected DeclineArticle() {
-        super("👎", "Отклонить обращение", UserPermissions.ADMINISTRATOR);
+    protected DeclineArticle(ReplyService replyService) {
+        super("👎", "Отклонить обращение", UserPermissions.ADMIN);
+        this.replyService = replyService;
     }
 
     @Override
     protected void executeCommand(String chatId, BotMain bot, CommandsHandler handler) {
-        Articles articles = nextArticle.getCurrentArticle();
+        Articles articles = replyService.getCurrentArticle();
         articles.setStatus("👎Отклонено");
         articlesService.save(articles);
         SendMessage message = createSendMessage(articles.getUserId());
-        message.setText("Ваше обращение было 💔Отклонено :(\n\n" + nextArticle.getArticleParsedText());
+        message.setText("Ваше обращение было 💔Отклонено :(\n\n" + replyService.getParsedText());
         message.enableMarkdown(true);
-        sendMessageForCommand(bot, message);
-        nextArticle.execute(chatId, bot, handler);
+        messageSender.sendMessage(message);
+        replyService.nextArticle(chatId);
     }
 }

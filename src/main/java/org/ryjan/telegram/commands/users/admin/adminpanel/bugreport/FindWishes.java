@@ -1,8 +1,9 @@
-package org.ryjan.telegram.commands.users.admin.adminpanel.bugreport.wishes;
+package org.ryjan.telegram.commands.users.admin.adminpanel.bugreport;
 
 import org.ryjan.telegram.builders.ReplyKeyboardBuilder;
 import org.ryjan.telegram.commands.groups.BaseCommand;
 import org.ryjan.telegram.commands.users.admin.adminpanel.bugreport.reply.NextArticle;
+import org.ryjan.telegram.commands.users.admin.adminpanel.bugreport.reply.ReplyService;
 import org.ryjan.telegram.commands.users.user.UserPermissions;
 import org.ryjan.telegram.handler.CommandsHandler;
 import org.ryjan.telegram.main.BotMain;
@@ -16,15 +17,14 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMar
 @Component
 public class FindWishes extends BaseCommand {
     private final String CACHE_KEY = ArticlesService.CHECK_ARTICLES_ANSWER;
+    private final ReplyService replyService;
 
     @Autowired
     private RedisTemplate<String, String> redisTemplate;
 
-    @Autowired
-    private NextArticle nextArticle;
-
-    protected FindWishes() {
-        super("findWishes", "Найти пожелания", UserPermissions.ADMINISTRATOR);
+    protected FindWishes(ReplyService replyService) {
+        super("findWishes", "Найти пожелания", UserPermissions.ADMIN);
+        this.replyService = replyService;
     }
 
     @Override
@@ -34,7 +34,7 @@ public class FindWishes extends BaseCommand {
         redisTemplate.opsForValue().set(CACHE_KEY + chatId, "wish:0");
         message.setReplyMarkup(getReplyKeyboard());
         sendMessageForCommand(bot, message);
-        nextArticle.execute(chatId, bot, handler);
+        replyService.nextArticle(chatId);
     }
 
     private ReplyKeyboardMarkup getReplyKeyboard() {

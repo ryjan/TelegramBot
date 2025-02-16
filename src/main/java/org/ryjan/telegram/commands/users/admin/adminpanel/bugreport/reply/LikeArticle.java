@@ -12,26 +12,28 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 
 @Component
 public class LikeArticle extends BaseCommand {
+    private final ReplyService replyService;
+    private final AdminPanelService adminPanelService;
 
     @Autowired
     private NextArticle nextArticle;
-    @Autowired
-    private AdminPanelService adminPanelService;
 
-    protected LikeArticle() {
-        super("🩷", "Поставить одобрение артиклю", UserPermissions.ADMINISTRATOR);
+    protected LikeArticle(ReplyService replyService, AdminPanelService adminPanelService) {
+        super("🩷", "Поставить одобрение артиклю", UserPermissions.ADMIN);
+        this.replyService = replyService;
+        this.adminPanelService = adminPanelService;
     }
 
     @Override
     protected void executeCommand(String chatId, BotMain bot, CommandsHandler handler) {
-        Articles articles = nextArticle.getCurrentArticle();
+        Articles articles = replyService.getCurrentArticle();
         articles.setStatus("🩷Одобрено");
         articlesService.save(articles);
         SendMessage message = createSendMessage(articles.getUserId());
-        message.setText("Ваше обращение было 🩷Одобрено :)\n\n" + nextArticle.getArticleParsedText());
+        message.setText("Ваше обращение было 🩷Одобрено :)\n\n" + replyService.getParsedText());
         message.enableMarkdown(true);
         sendMessageForCommand(bot, message);
         adminPanelService.sendAdminRewards(Long.valueOf(chatId));
-        nextArticle.execute(chatId, bot, handler);
+        replyService.nextArticle(chatId);
     }
 }

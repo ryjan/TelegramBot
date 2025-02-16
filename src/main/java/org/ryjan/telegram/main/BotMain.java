@@ -36,7 +36,7 @@ import java.util.List;
 public class BotMain extends TelegramLongPollingBot {
 
     @Autowired
-    BotService botService;
+    private BotService botService;
     @Value("${bot.token}")
     private String token;
     @Value("${bot.username}")

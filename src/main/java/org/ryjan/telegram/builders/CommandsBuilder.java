@@ -15,7 +15,7 @@ import org.ryjan.telegram.commands.groups.user.GroupInfo;
 import org.ryjan.telegram.commands.users.admin.adminpanel.bugreport.reply.*;
 import org.ryjan.telegram.commands.users.owner.SetCoins;
 import org.ryjan.telegram.commands.users.admin.adminpanel.AdminPanel;
-import org.ryjan.telegram.commands.users.admin.adminpanel.bugreport.wishes.FindWishes;
+import org.ryjan.telegram.commands.users.admin.adminpanel.bugreport.FindWishes;
 import org.ryjan.telegram.commands.users.owner.ownerpanel.*;
 import org.ryjan.telegram.commands.users.owner.ownerpanel.groups.*;
 import org.ryjan.telegram.commands.users.owner.ownerpanel.users.OwnerFindUser;

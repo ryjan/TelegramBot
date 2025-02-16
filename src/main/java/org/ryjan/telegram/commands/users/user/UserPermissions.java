@@ -3,15 +3,15 @@ package org.ryjan.telegram.commands.users.user;
 import org.ryjan.telegram.interfaces.Permissions;
 
 public enum UserPermissions implements Permissions {
-    OWNER("Owner"),
-    TRUSTED("Trusted"),
-    FAMILY("Family"),
-    ADMINISTRATOR("Administrator"),
-    MODERATOR("Moderator"),
-    USER("User"),
-    LOW_PRIORITY("Low_priority"),
-    ANY("Any"),
-    BANNED("Banned");
+    OWNER("OWNER"),
+    TRUSTED("TRUSTED"),
+    FAMILY("FAMILY"),
+    ADMIN("ADMIN"),
+    MODERATOR("MODERATOR"),
+    USER("USER"),
+    LOW_PRIORITY("LOW_PRIORITY"),
+    ANY("ANY"),
+    BANNED("BANNED");
 
     private final String displayname;
 

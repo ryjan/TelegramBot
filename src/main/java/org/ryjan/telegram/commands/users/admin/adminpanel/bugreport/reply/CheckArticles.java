@@ -2,7 +2,7 @@ package org.ryjan.telegram.commands.users.admin.adminpanel.bugreport.reply;
 
 import org.ryjan.telegram.builders.InlineKeyboardBuilder;
 import org.ryjan.telegram.commands.groups.BaseCommand;
-import org.ryjan.telegram.commands.users.admin.adminpanel.bugreport.wishes.FindWishes;
+import org.ryjan.telegram.commands.users.admin.adminpanel.bugreport.FindWishes;
 import org.ryjan.telegram.commands.users.user.UserPermissions;
 import org.ryjan.telegram.handler.CommandsHandler;
 import org.ryjan.telegram.main.BotMain;
@@ -17,7 +17,7 @@ public class CheckArticles extends BaseCommand {
     private FindWishes findWishes;
 
     protected CheckArticles() {
-        super("📃Посмотреть обращения", "📃Посмотреть обращения", UserPermissions.ADMINISTRATOR);
+        super("📃Посмотреть обращения", "📃Посмотреть обращения", UserPermissions.ADMIN);
     }
 
     @Override

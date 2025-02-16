@@ -15,26 +15,21 @@ import java.util.concurrent.TimeUnit;
 
 @Component
 public class SendMessageToUserArticle extends BaseCommand {
+    private final ReplyService replyService;
 
     @Autowired
     private RedisTemplate<String, String> redisTemplate;
 
-    @Autowired
-    private NextArticle nextArticle;
-
     private String chatId;
-    private BotMain botMain;
-    private CommandsHandler commandsHandler;
 
-    protected SendMessageToUserArticle() {
-        super("💌", "Отправить сообщение пользователю", UserPermissions.ADMINISTRATOR);
+    protected SendMessageToUserArticle(ReplyService replyService) {
+        super("💌", "Отправить сообщение пользователю", UserPermissions.ADMIN);
+        this.replyService = replyService;
     }
 
     @Override
     protected void executeCommand(String chatId, BotMain bot, CommandsHandler handler) {
         this.chatId = chatId;
-        this.botMain = bot;
-        this.commandsHandler = handler;
 
         SendMessage message = createSendMessage(chatId);
         message.setText("Введите сообщение пользователю:");
@@ -50,11 +45,11 @@ public class SendMessageToUserArticle extends BaseCommand {
 
             if ("waiting_message".equals(userState)) {
                 String adminMessage = update.getMessage().getText();
-                Articles articles = nextArticle.getCurrentArticle();
+                Articles articles = replyService.getCurrentArticle();
                 String userId = articles.getUserId().toString();
 
                 SendMessage message = createSendMessage(userId);
-                message.setText("✨Ответ: " + adminMessage + "\n\n" + nextArticle.getArticleParsedText());
+                message.setText("✨Ответ: " + adminMessage + "\n\n" + replyService.getParsedText());
                 message.enableMarkdown(true);
                 sendMessageForCommand(message);
 
@@ -66,7 +61,7 @@ public class SendMessageToUserArticle extends BaseCommand {
 
                 redisTemplate.delete("admin_state:" + update.getMessage().getChatId());
                 sendMessageForCommand(message);
-                nextArticle.execute(chatId, botMain, commandsHandler);
+                replyService.nextArticle(chatId);
             }
         }
     }

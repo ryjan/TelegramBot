@@ -43,7 +43,7 @@ public class UserService {
         if (isNumeric(usernameOrId)) {
             return findUser(Long.parseLong(usernameOrId));
         }
-        return userRepository.findByUsername(usernameOrId);
+        return userRepository.findByUsername(usernameOrId); // что-то с этим сделать
     }
 
     public User findUser(Long id) {

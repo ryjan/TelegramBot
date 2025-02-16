@@ -30,7 +30,7 @@ public class NextArticle extends BaseCommand {
     private RedisTemplate<String, List<Articles>> redisArticlesTemplate;
 
     protected NextArticle() {
-        super("⏭️", "Следующий артикуль", UserPermissions.ADMINISTRATOR);
+        super("⏭️", "Следующий артикуль", UserPermissions.ADMIN);
     }
 
     @Override
@@ -52,7 +52,7 @@ public class NextArticle extends BaseCommand {
                 message.setText("👾Пожелания закончились");
                 message.setReplyMarkup(new ReplyKeyboardRemove(true));
                 sendMessageForCommand(bot, message);
-                return;
+                return; // illegalArgumentException
             }
             article = articles.get(number);
 
@@ -68,7 +68,7 @@ public class NextArticle extends BaseCommand {
             redisArticlesTemplate.opsForValue().set(CACHE_KEY + chatId, articles);
             redisTemplate.opsForValue().set(FIND_WISHES_CACHE_KEY + chatId, wish);
             sendMessageForCommand(bot, message);
-            if (number == 9) {
+            if (number == 9) { // isEmpty
                 redisArticlesTemplate.delete(CACHE_KEY + chatId);
                 redisTemplate.opsForValue().set(FIND_WISHES_CACHE_KEY + chatId, "wish:0");
             }

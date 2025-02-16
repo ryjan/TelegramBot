@@ -5,6 +5,7 @@ target/
 src/main/resources/botSettings/config.json
 src/main/resources/hibernate.cfg.xml
 src/main/resources/gen-lang-client.json
+ngrok.yml
 
 ### IntelliJ IDEA ###
 .idea/modules.xml

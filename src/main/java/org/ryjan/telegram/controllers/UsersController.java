@@ -6,17 +6,21 @@ import org.ryjan.telegram.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
+
+import java.net.Authenticator;
 
 @RestController
 @RequestMapping("/api/user")
 public class UsersController {
 
     @Autowired
-    RedisTemplate<String, User> redisUserDatabaseTemplate;
+    private RedisTemplate<String, User> redisUserDatabaseTemplate;
 
     @Autowired
-    RedisTemplate<String, String> redisTemplate;
+    private RedisTemplate<String, String> redisTemplate;
 
     @Autowired
     private UserService userService;
@@ -49,6 +53,9 @@ public class UsersController {
 
     @GetMapping("/get/user-groups")
     public UserPermissions[] getAllUserGroups() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        System.out.println("Authenticated user: " + authentication.getName());
+        System.out.println("User roles: " + authentication.getAuthorities());
         return UserPermissions.values();
     }
 }

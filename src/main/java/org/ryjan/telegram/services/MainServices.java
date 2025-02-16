@@ -1,10 +1,12 @@
 package org.ryjan.telegram.services;
 
 import jakarta.annotation.PostConstruct;
+import lombok.Getter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
+@Getter
 @Service
 public class MainServices {
 
@@ -15,13 +17,14 @@ public class MainServices {
     private final UserService userService;
     private final MessageService messageService;
     private final ArticlesService articlesService;
+    private final MessageSender messageSender;
 
     @Autowired
     @Lazy
     public MainServices(BotService botService, BlacklistService blacklistService,
                         ChatSettingsService chatSettingsService, GroupService groupService,
                         UserService userService, MessageService messageService,
-                        ArticlesService articlesService) {
+                        ArticlesService articlesService, MessageSender messageSender) {
         this.botService = botService;
         this.blacklistService = blacklistService;
         this.chatSettingsService = chatSettingsService;
@@ -29,33 +32,7 @@ public class MainServices {
         this.userService = userService;
         this.messageService = messageService;
         this.articlesService = articlesService;
+        this.messageSender = messageSender;
     }
 
-    public BotService getBotService() {
-        return botService;
-    }
-
-    public BlacklistService getBlacklistService() {
-        return blacklistService;
-    }
-
-    public ChatSettingsService getChatSettingsService() {
-        return chatSettingsService;
-    }
-
-    public GroupService getGroupService() {
-        return groupService;
-    }
-
-    public UserService getUserService() {
-        return userService;
-    }
-
-    public MessageService getMessageService() {
-        return messageService;
-    }
-
-    public ArticlesService getArticlesService() {
-        return articlesService;
-    }
 }

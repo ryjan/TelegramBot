@@ -3,7 +3,6 @@ package org.ryjan.telegram.services;
 import org.springframework.beans.factory.annotation.Autowired;
 
 public abstract class ServiceBuilder {
-
     protected BlacklistService blacklistService;
     protected BotService botService;
     protected ChatSettingsService chatSettingsService;
@@ -11,6 +10,7 @@ public abstract class ServiceBuilder {
     protected UserService userService;
     protected MessageService messageService;
     protected ArticlesService articlesService;
+    protected MessageSender messageSender;
 
     @Autowired
     public void setMainServices(MainServices mainServices) {
@@ -21,5 +21,6 @@ public abstract class ServiceBuilder {
         this.userService = mainServices.getUserService();
         this.messageService = mainServices.getMessageService();
         this.articlesService = mainServices.getArticlesService();
+        this.messageSender = mainServices.getMessageSender();
     }
 }

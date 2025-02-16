@@ -27,9 +27,6 @@ public class CommandsHandler { // переписать под единый comma
     @Lazy
     private BotMain bot;
 
-    @Autowired
-    private GroupService groupService;
-
     public CommandsHandler(CommandsBuilder builder) {
         groupCommands = builder.getCommands();
         userCommands = builder.getUserCommands();
@@ -48,67 +45,37 @@ public class CommandsHandler { // переписать под единый comma
         }
     }
 
-    private void handleCallBackQuery(Update update, Boolean isGroup) {
-        if (isGroup) {
-            System.out.println("List group:" + userButtonCommands);
-            mergedHandleCallBackQuery(update, groupButtonCommands);
-        } else {
-            System.out.println("List user:" + userButtonCommands);
-            mergedHandleCallBackQuery(update, userButtonCommands);
+    private void handleCommandExecution(Update update, Map<String, BaseCommand> commands, String commandKey) {
+        long chatId = getChatId(update);
+        long userId = getUserId(update);
+
+        BaseCommand command = commands.get(commandKey);
+        if (command != null) return;
+
+        boolean isUserChat = isUserChat(update);
+        if (hasPermission(command, chatId, userId, isUserChat) && command.hasRequiredLevel(userId)) {
+            command.execute(String.valueOf(chatId), bot, this);
         }
+    }
+
+    private void handleCallBackQuery(Update update, Boolean isGroup) {
+        String callbackData = update.getCallbackQuery().getData().split(" ")[0];
+        Map<String, BaseCommand> commands = isGroup ? groupButtonCommands : userButtonCommands;
+        handleCommandExecution(update, commands, callbackData);
     }
 
     private void handleTextMessage(Update update, Boolean isGroup) {
         String message = update.getMessage().getText();
         String commandKey = message.split(" ")[0].replace(bot.getBotTag(), "");
-        boolean isReplyCommand = false;
 
-        for (String commandName : replyCommands.keySet()) {
-            if (message.replace(bot.getBotTag(), "").equals(commandName)) {
-                commandKey = commandName;
-                isReplyCommand = true;
-                break;
-            }
+        boolean isReplyCommand = replyCommands.containsKey(message.replace(bot.getBotUsername(), ""));
+        if (isReplyCommand) {
+            handleCommandExecution(update, replyCommands, commandKey);
+            return;
         }
 
-        if (isGroup) {
-            mergedHandleTextMessage(update, groupCommands, commandKey);
-        } else if (isReplyCommand) {
-            mergedHandleTextMessage(update, replyCommands, commandKey);
-        } else {
-            mergedHandleTextMessage(update, userCommands, commandKey);
-        }
-    }
-
-    private void mergedHandleTextMessage(Update update, Map<String, BaseCommand> commands, String commandKey) {
-        long chatId = update.getMessage().getChatId();
-        long userId = update.getMessage().getFrom().getId();
-        BaseCommand command = commands.get(commandKey);
-
-        if (command == null) return;
-
-        if ((update.getMessage().getChat().isUserChat() && command.hasPermissionInUserChat(chatId)
-                || command.hasPermissionInGroup(chatId, userId)) && command.hasRequiredLevel(userId)) {
-            command.execute(String.valueOf(chatId), bot, this);
-        } else {
-            sendNoPermissionMessageToUser(userId, command);
-        }
-    }
-
-    private void mergedHandleCallBackQuery(Update update, Map<String, BaseCommand> commands) {
-        String callbackData = update.getCallbackQuery().getData().split(" ")[0];
-        Long chatId = update.getCallbackQuery().getMessage().getChatId();
-        Long userId = update.getCallbackQuery().getFrom().getId();
-        boolean isUserChat = update.hasCallbackQuery() && update.getCallbackQuery().getMessage().isUserMessage();
-        System.out.println(callbackData);
-        BaseCommand command = commands.get(callbackData);
-        System.out.println("CallbackData: " + command);
-        if (command == null) return;
-
-        if (command.hasPermissionInUserChat(chatId) && isUserChat || command.hasPermissionInGroup(chatId, userId) && !groupService.isGroupBanned(chatId)) {
-            command.execute(String.valueOf(chatId), bot, this);
-        }
-
+        Map<String, BaseCommand> commands = isGroup ? groupCommands : userCommands;
+        handleCommandExecution(update, commands, commandKey);
     }
 
     /*
@@ -132,5 +99,25 @@ public class CommandsHandler { // переписать под единый comma
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    private long getChatId(Update update) {
+        return update.getMessage() != null ? update.getMessage().getChatId() :
+                update.getCallbackQuery() != null ? update.getCallbackQuery().getMessage().getChatId() : -1;
+    }
+
+    private long getUserId(Update update) {
+        return update.getMessage() != null ? update.getMessage().getFrom().getId() :
+                update.getCallbackQuery() != null ? update.getCallbackQuery().getFrom().getId() : -1;
+    }
+
+    private boolean isUserChat(Update update) {
+        return update.getMessage() != null ? update.getMessage().getChat().isUserChat() :
+                update.getCallbackQuery() != null ? update.getCallbackQuery().getMessage().isUserMessage() : false;
+    }
+
+    private boolean hasPermission(BaseCommand command, long chatId, long userId, boolean isUserChat) {
+        return (isUserChat && command.hasPermissionInUserChat(chatId)) ||
+                (!isUserChat && command.hasPermissionInGroup(chatId, userId));
     }
 }
