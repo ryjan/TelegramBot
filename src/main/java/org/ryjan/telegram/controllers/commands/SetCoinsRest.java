@@ -21,7 +21,7 @@ public class SetCoinsRest {
 
         Bank bank = user.getBanks();
         bank.setCoins(amount);
-        userService.update(user);
+        userService.save(user);
         return "Operation successful!";
     }
 }

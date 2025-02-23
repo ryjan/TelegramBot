@@ -24,36 +24,24 @@ public class TelegramAuthValidator {
     }
 
     public boolean validateTelegramData(Map<String, String> data) {
-        // Извлекаем hash из данных
-        System.out.println("BOT_TOKEN: " + BOT_TOKEN);
         String hash = data.remove("hash");
-        System.out.println("Received hash: " + hash);
 
-        // Формируем строку для проверки подписи
         String dataCheckString = data.entrySet().stream()
                 .sorted(Map.Entry.comparingByKey())
                 .map(entry -> entry.getKey() + "=" + entry.getValue())
                 .collect(Collectors.joining("\n"));
-        System.out.println("Data check string: " + dataCheckString);
 
         byte[] secretKey = sha256();
 
-        // Генерируем хэш HMAC-SHA256
         String generatedHash = hmacSha256ToHex(secretKey, dataCheckString);
-        System.out.println("DatacheckString: " + dataCheckString.substring(dataCheckString.indexOf("=") + 1));
-        System.out.println("Generated hash: " + generatedHash);
-        System.out.println("Is valid: " + generatedHash.equals(hash));
 
-        // Сравниваем хэши
         return hash.equals(generatedHash);
     }
 
     private byte[] sha256() {
         try {
             MessageDigest digest = MessageDigest.getInstance("SHA-256");
-            byte[] hashBytes = digest.digest(BOT_TOKEN.getBytes(StandardCharsets.UTF_8));
-            System.out.println("Generated secret key: " + Base64.getEncoder().encodeToString(hashBytes));
-            return hashBytes;
+            return digest.digest(BOT_TOKEN.getBytes(StandardCharsets.UTF_8));
         } catch (Exception e) {
             throw new RuntimeException("Error generating SHA-256", e);
         }

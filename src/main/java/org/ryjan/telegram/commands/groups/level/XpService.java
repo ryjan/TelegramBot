@@ -33,7 +33,7 @@ public class XpService extends ServiceBuilder {
         user.setLevel(level);
 
         userRedisTemplate.opsForValue().set(CACHE_KEY + user.getId(), user, 15, TimeUnit.MINUTES);
-        userService.update(user);
+        userService.save(user);
     }
 
     public double xpForNextLevel(int currentLevel) {

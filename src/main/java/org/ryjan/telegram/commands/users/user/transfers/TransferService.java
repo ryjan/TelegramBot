@@ -39,8 +39,8 @@ public class TransferService {
 
         transferLimitService.recordTransfer(fromUser, amount); //
 
-        userService.update(fromUser);
-        userService.update(toUser);
+        userService.save(fromUser);
+        userService.save(toUser);
 
         return "Успешно!";
     }

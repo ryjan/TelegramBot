@@ -12,6 +12,6 @@ public class AdminPanelService extends ServiceBuilder {
     public void sendAdminRewards(Long administratorId) {
         User administrator = userService.findUser(administratorId);
         administrator.getBanks().addGems(new BigDecimal("1.5"));
-        userService.update(administrator);
+        userService.save(administrator);
     }
 }

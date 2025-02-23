@@ -36,7 +36,9 @@ public class UserService {
         if (findUser(user.getId()) != null) {
             return findUser(user.getId());
         }
-        return userRepository.save(user);
+        save(user);
+
+        return user;
     }
 
     public User findUser(String usernameOrId) {
@@ -91,7 +93,7 @@ public class UserService {
         userRepository.flush();
     }
 
-    public void update(User user) {
+    public void save(User user) {
         processAndSendUser(user);
     }
 

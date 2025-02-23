@@ -28,9 +28,7 @@ public class JwtService {
     public String generateToken(Long userId, UserPermissions userGroup) {
         Map<String, Object> claims = new HashMap<>();
         claims.put("roles", Collections.singletonList("ROLE_" + userGroup.getName()));
-        String token = createToken(claims, String.valueOf(userId));
-        System.out.println("Generated token: " + token);
-        return token;
+        return createToken(claims, String.valueOf(userId));
     }
 
     private String createToken(Map<String, Object> claims, String subject) {
@@ -49,9 +47,7 @@ public class JwtService {
 
     public List<String> extractRoles(String token) {
         Claims claims = extractAllClaims(token);
-        List<String> roles = claims.get("roles", List.class);
-        System.out.println("Extracted roles: " + roles);
-        return roles;
+        return claims.get("roles", List.class);
     }
 
     public Date extractExpiration(String token) {
